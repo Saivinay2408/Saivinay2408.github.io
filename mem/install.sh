@@ -30,7 +30,7 @@ set -eu
 # Where the package comes from. Point at a PyPI name once it is published; a
 # source tarball until then. Overridable so a fork or a release candidate can
 # be tested without editing this file.
-MEM_SRC="${MEM_SRC:-https://saivinay.me/mem/mem-latest.tar.gz}"
+MEM_SRC="${MEM_SRC:-https://saivinay.me/mem/mem-20260820-223037-ab8d7a2.tar.gz}"
 PREFIX="${MEM_PREFIX:-$HOME/Library/Application Support/Mem}"
 
 APP_NAME="Mem"
@@ -183,6 +183,23 @@ fi
   || die "pywebview would not install, so the app has no window to open.
     The dashboard still works in a browser:  $VENV/bin/mem voice"
 ok "mem installed"
+
+# DID THE VERSION WE MEANT TO INSTALL ACTUALLY LAND?
+#
+# The tarball URL now carries the build id, so it cannot be served stale. This
+# script can be, though -- it lives at one address and a CDN edge may hold it
+# for a few minutes. A stale copy points at an older tarball and installs it
+# perfectly, and the only symptom is that a fix "did not work". That cost
+# three rounds, so it is checked rather than assumed.
+GOT="$("$VENV/bin/python" -c 'from mem._build import BUILD; print(BUILD)' 2>/dev/null || echo none)"
+WANT="$(curl -fsSL "https://saivinay.me/mem/BUILD?nocache=$$" 2>/dev/null || echo "")"
+if [ -n "$WANT" ] && [ "$GOT" != "$WANT" ]; then
+  printf '  %s!%s installed build %s, but %s is current.\n' "$Y" "$Z" "$GOT" "$WANT"
+  printf '      This script was itself served from a cache. Run this instead:\n'
+  printf '        curl -fsSL "https://saivinay.me/mem/install.sh?n=$$" | sh\n'
+else
+  ok "build $GOT"
+fi
 
 # CERTIFICATES, before anything tries to download 365 MB over https.
 #
