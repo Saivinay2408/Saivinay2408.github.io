@@ -230,6 +230,18 @@ if ! "$VENV/bin/python" -m mem models --fetch --whisper; then
   printf '      open Mem, go to Setup, and press Get them. It resumes.\n'
 fi
 
+# ---- 5b. stop anything still running the OLD code --------------------------
+# New code on disk is not new code in memory. Upgrading while the app is open
+# leaves the running process on the version it started with, so the next thing
+# the user presses runs the bug they just installed the fix for -- and the
+# error they get back is the OLD wording, which makes it look like the update
+# never happened. That is exactly how this was reported.
+if pgrep -f "mem voice" >/dev/null 2>&1; then
+  step "closing the running app so the new version is what starts"
+  pkill -f "mem voice" 2>/dev/null || true
+  sleep 1
+fi
+
 # ---- 6. the icon -----------------------------------------------------------
 # PRINT THE PATH IT ACTUALLY USED, not the one this script guesses at.
 #
