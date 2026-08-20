@@ -153,7 +153,72 @@ fi
   || die "could not install from:
       $MEM_SRC
     If that address is wrong, set MEM_SRC and run this again."
+
+# VERIFY THE EXTRAS ACTUALLY LANDED. pip exiting 0 is not the same as the
+# window existing: on a tester's machine pip reported success and pywebview
+# was simply absent, so the app started, served its UI to nobody, and looked
+# dead. Extras on a direct-URL requirement are quietly dropped by some pip
+# versions, and --quiet hid every word of it.
+#
+# So this asks the interpreter what it can actually import, and repairs what
+# is missing by name rather than trusting the resolver.
+MISSING=""
+"$VENV/bin/python" -c "import webview" 2>/dev/null || MISSING="$MISSING pywebview"
+"$VENV/bin/python" -c "import aiohttp" 2>/dev/null || MISSING="$MISSING aiohttp>=3.9"
+"$VENV/bin/python" -c "import numpy"   2>/dev/null || MISSING="$MISSING numpy>=1.24"
+"$VENV/bin/python" -c "import certifi" 2>/dev/null || MISSING="$MISSING certifi"
+
+if [ -n "$MISSING" ]; then
+  printf '  %s·%s repairing:%s\n' "$D" "$Z" "$MISSING"
+  # Not --quiet. If this fails the reason has to be on screen, because it is
+  # the difference between an app that opens and one that does not.
+  # shellcheck disable=SC2086
+  "$VENV/bin/python" -m pip install --no-cache-dir --upgrade $MISSING \
+    || die "could not install:$MISSING"
+fi
+
+# The window is not optional for the .app, so refuse to claim success without
+# it. Better a clear failure here than a Dock icon that bounces and dies.
+"$VENV/bin/python" -c "import webview" 2>/dev/null \
+  || die "pywebview would not install, so the app has no window to open.
+    The dashboard still works in a browser:  $VENV/bin/mem voice"
 ok "mem installed"
+
+# CERTIFICATES, before anything tries to download 365 MB over https.
+#
+# The python.org installer ships no root CA store: its bundled OpenSSL looks
+# somewhere the system does not populate, and every https fetch fails with
+# CERTIFICATE_VERIFY_FAILED on a perfectly healthy network. Apple's python3
+# and Homebrew's are fine. A tester on python.org 3.10 lost all four model
+# downloads to this at once.
+#
+# The check is a real request, not a guess about which Python this is.
+cert_ok() {
+  "$VENV/bin/python" - <<'PYCHECK' >/dev/null 2>&1
+import ssl, urllib.request
+try:
+    import certifi
+    ctx = ssl.create_default_context(cafile=certifi.where())
+except ImportError:
+    ctx = ssl.create_default_context()
+urllib.request.urlopen("https://pypi.org/simple/", timeout=15, context=ctx)
+PYCHECK
+}
+
+if ! cert_ok; then
+  printf '  %s!%s this Python cannot verify https certificates yet\n' "$Y" "$Z"
+  for c in /Applications/Python*/Install\ Certificates.command; do
+    [ -f "$c" ] || continue
+    sh "$c" >/dev/null 2>&1 || true
+    break
+  done
+  if cert_ok; then
+    ok "certificates installed"
+  else
+    printf '  %s!%s downloads may fail. If they do, run this and try again:\n' "$Y" "$Z"
+    printf '      %s -m pip install --upgrade certifi\n' "$VENV/bin/python"
+  fi
+fi
 
 # ---- 5. the speech models --------------------------------------------------
 # The step whose absence made every install but the author's come up with a
