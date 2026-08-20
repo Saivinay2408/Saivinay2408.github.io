@@ -24,6 +24,7 @@ echo "running   : $(pgrep -f 'mem voice' | wc -l | tr -d ' ') process(es)"
 
 if [ -x "$V" ]; then
   echo "python    : $("$V" -c 'import sys,platform;print(sys.version.split()[0], platform.machine())' 2>&1 | head -1)"
+  echo "pip       : $("$V" -m pip --version 2>&1 | awk '{print $2}')"
   for m in webview numpy certifi sounddevice; do
     if "$V" -c "import $m" 2>/dev/null; then echo "import $m: ok"
     else echo "import $m: FAILED"; fi

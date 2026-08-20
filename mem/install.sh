@@ -30,7 +30,7 @@ set -eu
 # Where the package comes from. Point at a PyPI name once it is published; a
 # source tarball until then. Overridable so a fork or a release candidate can
 # be tested without editing this file.
-MEM_SRC="${MEM_SRC:-https://saivinay.me/mem/mem-20260820-223037-ab8d7a2.tar.gz}"
+MEM_SRC="${MEM_SRC:-https://saivinay.me/mem/mem-20260820-225912-261739d.tar.gz}"
 PREFIX="${MEM_PREFIX:-$HOME/Library/Application Support/Mem}"
 
 APP_NAME="Mem"
@@ -182,6 +182,23 @@ fi
 "$VENV/bin/python" -c "import webview" 2>/dev/null \
   || die "pywebview would not install, so the app has no window to open.
     The dashboard still works in a browser:  $VENV/bin/mem voice"
+# AND REPLACE THE PACKAGE ITSELF, UNCONDITIONALLY.
+#
+# The version never changes -- everything is 0.1.0 -- and older pips treat a
+# direct-URL requirement whose version is already installed as satisfied, so
+# the command above becomes a no-op and the machine keeps running whatever it
+# first installed. A current pip reinstalls; the pip bundled with python.org's
+# 3.10 is years old, and `pip install --upgrade pip` above is allowed to fail
+# quietly. That is a machine on which no fix can ever land, which is exactly
+# what a tester reported three times running.
+#
+# --no-deps keeps this to seconds: the dependency tree was resolved by the
+# command above, and this only has to guarantee that mem's own files on disk
+# are the ones just downloaded.
+"$VENV/bin/python" -m pip install --quiet --no-cache-dir --force-reinstall \
+  --no-deps "$SPEC" || die "could not replace mem from:
+      $MEM_SRC"
+
 ok "mem installed"
 
 # DID THE VERSION WE MEANT TO INSTALL ACTUALLY LAND?
