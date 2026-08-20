@@ -184,7 +184,9 @@ fi
 
 if [ -n "$APP_PATH" ]; then
   printf '\n  %sDone.%s %s\n' "$B" "$Z" "$APP_PATH"
-  printf '  Press %s\u2318 Space%s and type Mem, or open it from the folder above.\n\n' "$B" "$Z"
+  # A literal glyph, not \u2318: POSIX printf does not expand \u escapes and
+  # bash's builtin printed it verbatim on the first live run.
+  printf '  Press %s⌘ Space%s and type Mem, or open it from the folder above.\n\n' "$B" "$Z"
 else
   printf '\n  %sDone.%s Run: %s\n\n' "$B" "$Z" "$VENV/bin/mem voice"
 fi
