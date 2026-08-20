@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mem — a model of you that any agent can read</title>
+<meta name="description" content="A model of you, stored as plain markdown in a git repository you own. Claude Code, Codex and Gemini all read the same vault. Plus one window you talk to by holding the space bar.">
+
+<!-- Open Graph. The poster is the launch film's own frame, so the card and
+     the video agree with each other. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="mem — a model of you that any agent can read">
+<meta property="og:description" content="Plain markdown, in a git repo you own. Claude Code, Codex and Gemini all read the same vault.">
+<meta property="og:image" content="og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- ===================================================================
+     THE THREE URLS THIS PAGE NEEDS.
+
+     Kept together, at the top, in the markup rather than in a script:
+     they are the only thing about this file that changes between "built"
+     and "shipped", and they should be one edit, not a hunt.
+     =================================================================== -->
+<link rel="canonical" href="https://saivinay.me/mem/">
+
+<style>
+/*
+  mem — one page.
+
+  IT IS THE APP'S OWN GRAMMAR, NOT A SECOND IDENTITY.
+  Everything here is read from mem/voice/ui/style.css, including the rule that
+  governs it: two inks, and yellow is THE THING ITSELF — the product, the
+  claim, the button you came to press. White is everything *about* it: the
+  labels, the counts, the small print. The eye lands on the yellow.
+
+  The one exception is the serif, and it is the same exception the app makes.
+  In the window, the machine speaks in mono and the one serif line is the
+  spoken half of the conversation. So there is exactly one serif line on this
+  page, and it is the thing a person says out loud.
+
+  Dark only, deliberately. A light mode would be a second identity for a
+  product whose whole surface is a black window.
+*/
+:root {
+  /* surfaces */
+  --void:    #08090b;
+  --surface: #0d0f12;
+  --raised:  #16191e;
+  --line:    #262b33;
+  --line-lit:#3a424c;
+
+  /* the inks */
+  --bone:  #ecd79b;   /* the thing itself */
+  --mute:  #e4e0d8;   /* the note about it */
+  --faint: #b0aca4;   /* the note you only read when you go looking */
+
+  /* signals — the only color in the system */
+  --s-you:   #c9a227;
+  --s-speak: #7d9b76;
+
+  /* Structural punctuation: the `$` before a command, the "or" between two
+     ways of getting the thing. Not text you read, so it sits below the inks --
+     but --line-lit is a BORDER color, and at 2.5:1 these were invisible rather
+     than quiet, which reads as a rendering fault. */
+  --glyph: #6d737c;
+
+  --mono: "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --prose: "New York", "Iowan Old Style", Palatino, Georgia, serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  min-height: 100svh;
+  background: var(--void);
+  color: var(--mute);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  /* The window's own vignette: a single warm bloom behind the orb, so the
+     page has a light source instead of being flat black. */
+  background-image:
+    radial-gradient(58rem 34rem at 50% 8%, rgba(236,215,155,0.055), transparent 70%);
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+}
+
+a { color: inherit; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+
+:focus-visible { outline: 1px solid var(--bone); outline-offset: 3px; border-radius: 2px; }
+
+/* ------------------------------------------------------------------ rail */
+/* The app's top-left mark, in the app's position. Somebody who has seen the
+   window recognises the page before they have read a word of it. */
+header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 15px 22px;
+  font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--faint);
+}
+.mark { display: flex; align-items: center; gap: 8px; color: var(--bone); }
+.mark i {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--s-speak);
+  box-shadow: 0 0 8px rgba(125,155,118,0.7);
+}
+.rail-flex { flex: 1; }
+header a {
+  color: var(--faint); text-decoration: none;
+  padding: 3px 0; border-bottom: 1px solid transparent;
+}
+header a:hover { color: var(--mute); border-bottom-color: var(--line-lit); }
+header .sep { color: var(--line-lit); }
+
+/* ------------------------------------------------------------------ main */
+/* ONE SCREEN. Everything the page has to say fits above the fold, because
+   the page has exactly one thing to ask of you and asking it below the fold
+   is asking it of the people who scroll. The gaps are the tightest rhythm
+   that still reads as air rather than as a stack. */
+main {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 4px 22px 22px;
+  text-align: center;
+}
+
+/* ---- the orb.
+   The app's signature, at rest. It does not bounce, spin or pulse for
+   attention: in the window this shape means "listening", and a decorative
+   version that performed would be the page telling a small lie about the
+   product. It drifts, which is what the real one does when nobody is
+   talking. */
+.orb {
+  position: relative;
+  width: 80px; height: 80px;
+  flex: none;
+}
+.orb .ring {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line-lit);
+}
+.orb .glow {
+  position: absolute; inset: 12%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(236,215,155,0.30), rgba(236,215,155,0.05) 55%, transparent 72%);
+  animation: drift 9s ease-in-out infinite;
+}
+.orb .core {
+  position: absolute; left: 50%; top: 50%;
+  width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: var(--bone);
+  box-shadow: 0 0 14px rgba(236,215,155,0.85);
+}
+@keyframes drift {
+  0%, 100% { transform: scale(1);    opacity: 0.85; }
+  50%      { transform: scale(1.06); opacity: 1; }
+}
+
+/* ---- the words */
+.eyebrow {
+  color: var(--faint);
+  font-size: 12.5px; letter-spacing: 0.10em;
+}
+h1 {
+  color: var(--bone);
+  font-weight: 400;
+  font-size: clamp(28px, 4.7vw, 50px);
+  line-height: 1.14;
+  letter-spacing: -0.005em;
+  max-width: 26ch;
+}
+/* Broken where the sentence breaks, not where the column runs out. Left to
+   the margin it split as "...that any / agent can read", which puts the seam
+   in the middle of the claim. Below the breakpoint the margin is tighter than
+   the clause, so the manual break is dropped and it wraps naturally. */
+h1 .brk { display: none; }
+@media (min-width: 560px) { h1 .brk { display: inline; } }
+.sub {
+  color: var(--mute);
+  font-size: clamp(13px, 1.5vw, 15px);
+  max-width: 62ch;
+}
+.sub b { color: var(--bone); font-weight: 400; }
+
+/* ---- the call to action.
+   THE BUTTON IS THE COMMAND.
+
+   It was "Download for macOS" over a quieter pip line. That shape is a
+   promise this project cannot keep for free: a .dmg that is not notarised —
+   and notarising needs a paid Apple Developer ID — makes macOS say the
+   developer cannot be verified, and since Sequoia the Control-click-to-open
+   escape is gone, so the way through is System Settings, Privacy & Security,
+   Open Anyway. Five steps and a frightening dialog to reach a window whose
+   entire audience already has a terminal open, because they installed Claude
+   Code or Codex or Gemini in one.
+
+   So the primary action stays exactly where it was, at button weight, and is
+   simply the true one. One click still does one thing: it copies. */
+.cta { display: flex; flex-direction: column; align-items: center; gap: 13px; }
+
+.dl {
+  display: inline-flex; align-items: center; gap: 14px;
+  background: var(--bone); color: #14100a;
+  padding: 14px 22px;
+  border-radius: 4px;
+  font-size: 15px; letter-spacing: 0.01em;
+  border: none;
+  transition: transform 0.12s ease, box-shadow 0.18s ease;
+  box-shadow: 0 0 0 0 rgba(236,215,155,0);
+}
+.dl:hover { transform: translateY(-1px); box-shadow: 0 6px 26px rgba(236,215,155,0.18); }
+.dl:active { transform: translateY(0); }
+/* Dark enough to read on the yellow, light enough to stay punctuation. */
+.dl .dollar { color: rgba(20,16,10,0.42); }
+/* The install line is long. It wraps rather than overflowing, and shrinks a
+   step on narrow screens -- a command with its tail cut off is a command
+   somebody cannot check before they run it. */
+.dl > span:first-child { overflow-wrap: anywhere; text-align: left; }
+.dl .tag {
+  color: rgba(20,16,10,0.55);
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+}
+.dl.done .tag { color: #14100a; }
+
+.fine { color: var(--faint); font-size: 11.5px; letter-spacing: 0.06em; }
+
+/* ---- the proof.
+   Three commands, typed. It is the shortest honest answer to "what is this",
+   it is the same three lines the README opens with, and it is in the app's
+   own vernacular — so the page argues in the product's voice instead of
+   describing it in a marketing one. */
+.term {
+  width: min(560px, 100%);
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.term-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  color: var(--faint);
+  font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+}
+.term-head i {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--s-speak);
+}
+.term-body {
+  padding: 14px 16px 16px;
+  font-size: 12.5px; line-height: 1.72;
+  /* Reserved so the card does not grow line by line while it types and shove
+     the page around under the cursor. */
+  min-height: 150px;
+}
+.term-body .cmd { color: var(--bone); }
+.term-body .cmd::before { content: "$ "; color: var(--glyph); }
+.term-body .out { color: var(--faint); padding-left: 1.2ch; }
+.term-body .out .lit { color: var(--mute); }
+.caret {
+  display: inline-block; width: 7px; height: 1.05em;
+  background: var(--bone); vertical-align: -0.18em;
+  margin-left: 2px;
+  animation: blink 1.05s steps(1) infinite;
+}
+.caret.gone { display: none; }
+@keyframes blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+
+/* ---- the one human line on the page */
+.said {
+  font-family: var(--prose);
+  font-style: italic;
+  font-size: clamp(15px, 2vw, 19px);
+  color: var(--mute);
+}
+.said kbd {
+  font-family: var(--mono); font-style: normal;
+  font-size: 0.72em; letter-spacing: 0.06em;
+  border: 1px solid var(--line-lit); border-radius: 3px;
+  padding: 2px 6px; margin: 0 2px;
+  color: var(--bone);
+}
+
+/* ---------------------------------------------------------------- footer */
+footer {
+  display: flex; align-items: center; justify-content: center;
+  gap: 14px; flex-wrap: wrap;
+  padding: 14px 22px 20px;
+  color: var(--faint);
+  font-size: 11.5px; letter-spacing: 0.06em;
+}
+footer a { color: var(--faint); text-decoration: none; border-bottom: 1px solid var(--line); }
+footer a:hover { color: var(--mute); border-bottom-color: var(--line-lit); }
+footer .sep { color: var(--line-lit); }
+
+/* ---- SHORT SCREENS, WHICH IS MOST LAPTOPS.
+   A 13-inch browser viewport is about 1280x750 once the chrome is taken out,
+   and the page has one job: be one screen. Rather than shrink everything for
+   everybody so the smallest case fits, the whole composition steps down when
+   there is not enough height — the only dimension that was ever the problem.
+   Measured at 1280x820, where the full-size layout ran 55px over. */
+@media (max-height: 860px) and (min-width: 621px) {
+  main { gap: 13px; padding-bottom: 14px; }
+  .orb { width: 62px; height: 62px; }
+  h1 { font-size: clamp(26px, 3.9vw, 42px); }
+  .eyebrow { font-size: 11.5px; }
+  .sub { font-size: 13px; }
+  .term-body { font-size: 12px; line-height: 1.6; min-height: 0; padding: 11px 14px 13px; }
+  .cta { gap: 10px; }
+  header { padding: 12px 22px; }
+  footer { padding: 10px 22px 16px; }
+}
+
+/* ------------------------------------------------------------ responsive */
+@media (max-width: 620px) {
+  main { gap: 16px; padding-bottom: 18px; }
+  .orb { width: 68px; height: 68px; }
+  .eyebrow { font-size: 11px; letter-spacing: 0.06em; }
+  h1 { max-width: 15ch; }
+  .sub { max-width: 40ch; font-size: 12.5px; }
+  .dl { width: 100%; justify-content: center; font-size: 13.5px; padding: 14px 12px; }
+  /* Smaller, so a command still occupies one line at 375pt. An output line
+     that wraps stops reading as terminal output and starts reading as prose
+     that happens to be indented. */
+  .term-body { font-size: 11px; line-height: 1.7; min-height: 0; padding: 12px 13px 14px; }
+  .said { font-size: 15px; }
+  footer { gap: 10px; font-size: 11px; }
+}
+
+/* Motion here is ornament, and ornament is the first thing to go. The typed
+   sequence has a finished state; reduced motion gets it immediately, which is
+   the same information without the performance. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <span class="mark"><i></i> mem</span>
+  <span class="rail-flex"></span>
+  <a id="lnk-github" href="#">github</a>
+  <span class="sep">·</span>
+  <a id="lnk-pypi" href="#">pypi</a>
+</header>
+
+<main>
+  <div class="orb" aria-hidden="true">
+    <span class="ring"></span>
+    <span class="glow"></span>
+    <span class="core"></span>
+  </div>
+
+  <p class="eyebrow">every agent you open starts from nothing</p>
+
+  <h1>A model of you<br class="brk"> that any agent can read.</h1>
+
+  <p class="sub">
+    Plain markdown, in a git repository <b>you own</b>. Claude Code, Codex and
+    Gemini all read the same vault — so what you tell one, the others know.
+  </p>
+
+  <div class="cta">
+    <button class="dl" id="copy" type="button" title="Copy to clipboard">
+      <span><span class="dollar">$</span> <span id="cmd-text">curl -fsSL mem.sh/install | sh</span></span>
+      <span class="tag" id="copy-tag">copy</span>
+    </button>
+      <p class="fine" id="dl-fine">macOS &nbsp;·&nbsp; installs in about three minutes &nbsp;·&nbsp; free and open source</p>
+  </div>
+
+  <!-- The proof. Typed once, then still. -->
+  <div class="term" role="img" aria-label="Three commands: mem backfill --apply reads the coding sessions you already had; mem init wires claude, codex and gemini; mem voice opens one window with your sessions tiled underneath.">
+    <div class="term-head"><i></i> mem</div>
+    <div class="term-body" id="term" aria-hidden="true"></div>
+  </div>
+
+  <p class="said">“hold <kbd>space</kbd> and talk.”</p>
+</main>
+
+<footer>
+  <span>MIT</span>
+  <span class="sep">·</span>
+  <span>your machine, your files, your repo</span>
+  <span class="sep">·</span>
+  <a id="lnk-github-2" href="#">source</a>
+</footer>
+
+<script>
+/* ------------------------------------------------------------------------
+   THE THREE URLS. One edit, at the top, before this ships.
+
+   Left obviously unset rather than pointed at a plausible-looking address:
+   a download button that 404s is worse than one that is visibly not wired
+   yet, because only the second one gets fixed.
+   ------------------------------------------------------------------------ */
+const LINKS = {
+  github: "",
+  pypi:   "",
+};
+
+for (const [id, href] of [
+  ["lnk-github", LINKS.github],
+  ["lnk-github-2", LINKS.github], ["lnk-pypi", LINKS.pypi],
+]) {
+  const el = document.getElementById(id);
+  if (!el) continue;
+  if (href) { el.href = href; continue; }
+  /* Not wired. Say so where it will be seen — in the thing itself — rather
+     than letting it look shipped and fail on the click. */
+  el.setAttribute("href", "#");
+  el.setAttribute("aria-disabled", "true");
+  el.addEventListener("click", (e) => {
+    e.preventDefault();
+    const fine = document.getElementById("dl-fine");
+    if (fine) fine.textContent = "not wired yet — set LINKS in site/index.html";
+  });
+}
+
+/* ---- copy the install line -------------------------------------------- */
+const copyBtn = document.getElementById("copy");
+const copyTag = document.getElementById("copy-tag");
+/* THE COMMAND SHOWN AND THE COMMAND COPIED ARE THE SAME STRING.
+
+   Not a nicety. A page that displays a friendly short command and puts a
+   different one on the clipboard is the exact shape of a clipboard-hijack
+   attack, and people have been taught -- correctly -- to distrust it. So this
+   is one constant, rendered verbatim, including the full host. If it is too
+   long to be pretty, the answer is a shorter domain, not a prettier lie. */
+const INSTALL_CMD = "curl -fsSL https://saivinay.me/mem/install.sh | sh";
+document.getElementById("cmd-text").textContent = INSTALL_CMD;
+
+copyBtn.addEventListener("click", async () => {
+  const cmd = INSTALL_CMD;
+  try {
+    await navigator.clipboard.writeText(cmd);
+  } catch (e) {
+    /* clipboard is permission-gated and blocked outright on file:// in some
+       browsers. Selecting the text is a worse experience than copying and a
+       much better one than nothing happening. */
+    const r = document.createRange();
+    r.selectNodeContents(copyBtn.firstElementChild);
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+  }
+  copyBtn.classList.add("done");
+  copyTag.textContent = "copied";
+  setTimeout(() => {
+    copyBtn.classList.remove("done");
+    copyTag.textContent = "copy";
+  }, 1600);
+});
+
+/* ---- the typed proof ---------------------------------------------------
+   The same three commands the README opens with, in the same order, because
+   that order IS the product: learn from what you already did, wire it into
+   the agents you already have, then open the window.
+   ---------------------------------------------------------------------- */
+const SCRIPT = [
+  { k: "cmd", t: "mem backfill --apply" },
+  { k: "out", t: "read the coding sessions you already had" },
+  { k: "cmd", t: "mem init" },
+  { k: "out", t: "wired  claude · codex · gemini" },
+  { k: "cmd", t: "mem voice" },
+  { k: "out", t: "one window · your sessions tiled underneath" },
+];
+
+const term = document.getElementById("term");
+const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function finished() {
+  term.innerHTML = SCRIPT
+    .map((l) => `<div class="${l.k}">${l.t}</div>`).join("");
+}
+
+async function type() {
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const caret = document.createElement("span");
+  caret.className = "caret";
+
+  for (const line of SCRIPT) {
+    const row = document.createElement("div");
+    row.className = line.k;
+    term.appendChild(row);
+
+    if (line.k === "out") {
+      /* Output does not type. A machine prints its answer all at once, and
+         typing it would be the animation contradicting what it depicts. */
+      await sleep(230);
+      row.textContent = line.t;
+      await sleep(430);
+      continue;
+    }
+
+    row.appendChild(caret);
+    for (const ch of line.t) {
+      caret.insertAdjacentText("beforebegin", ch);
+      /* Uneven, because even is the tell. A human types in bursts and stalls
+         on punctuation. */
+      await sleep(ch === " " ? 60 : 26 + Math.random() * 44);
+    }
+    await sleep(240);
+  }
+  caret.remove();
+}
+
+if (still) {
+  finished();
+} else {
+  /* TWO GATES, AND THE SECOND ONE IS THE ONE THAT BITES.
+
+     On screen: typing into a card nobody has scrolled to means arriving at a
+     finished terminal and wondering what you missed.
+
+     And VISIBLE: browsers clamp setTimeout to about one second in a
+     background tab, so a page opened in a background tab and switched to
+     later is found halfway through a sequence crawling at a second a
+     character. Measured, not assumed -- eleven seconds in a hidden tab typed
+     a single letter. Waiting for the tab to be looked at costs nothing and
+     is the difference between an animation and a glitch. */
+  let started = false;
+  let onScreen = false;
+
+  const maybe = () => {
+    if (started || !onScreen || document.visibilityState !== "visible") return;
+    started = true;
+    document.removeEventListener("visibilitychange", maybe);
+    type();
+  };
+
+  document.addEventListener("visibilitychange", maybe);
+
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      onScreen = true;
+      io.disconnect();
+      maybe();
+    }, { threshold: 0.4 });
+    io.observe(term);
+  } else {
+    onScreen = true;
+    maybe();
+  }
+}
+</script>
+
+</body>
+</html>
