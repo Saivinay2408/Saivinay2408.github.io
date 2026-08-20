@@ -119,14 +119,23 @@ if [ ! -x "$VENV/bin/python" ]; then
 fi
 ok "environment ready"
 
-step "installing mem (this pulls onnxruntime, ~2 minutes)"
+step "installing mem (this pulls onnxruntime and pywebview, ~2 minutes)"
 "$VENV/bin/python" -m pip install --quiet --upgrade pip >/dev/null 2>&1 || true
-# The extras marker has to ride along with the URL, hence the `mem[voice] @`
+# The extras marker has to ride along with the URL, hence the `mem[voice,gui] @`
 # form, which is how PEP 508 spells "this distribution, with these extras".
+# BOTH EXTRAS, AND `gui` IS THE ONE THAT MAKES A WINDOW EXIST.
+#
+# `voice` is the microphone and the speech models. `gui` is pywebview, which is
+# what actually opens a desktop window. Installing only `voice` produces an app
+# that starts perfectly, serves its UI on localhost, and never shows anything:
+# cli.py falls back to printing a URL, which in a GUI launch goes to a log file
+# nobody is reading. A tester saw the Dock icon bounce, got the macOS
+# permission prompts -- because the process really had started -- and then
+# nothing at all. That is this line.
 if printf '%s' "$MEM_SRC" | grep -q '://'; then
-  SPEC="mem[voice] @ $MEM_SRC"
+  SPEC="mem[voice,gui] @ $MEM_SRC"
 else
-  SPEC="$MEM_SRC[voice]"
+  SPEC="$MEM_SRC[voice,gui]"
 fi
 # --no-cache-dir IS LOAD-BEARING, NOT TIDINESS.
 #
