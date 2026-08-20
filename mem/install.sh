@@ -128,7 +128,19 @@ if printf '%s' "$MEM_SRC" | grep -q '://'; then
 else
   SPEC="$MEM_SRC[voice]"
 fi
-"$VENV/bin/python" -m pip install --quiet "$SPEC" \
+# --no-cache-dir IS LOAD-BEARING, NOT TIDINESS.
+#
+# pip keys its wheel cache on a distribution's NAME AND VERSION, not on the
+# bytes it was built from. Two different tarballs both called mem-0.1.0 are the
+# same entry, so pip happily rebuilds nothing and installs the wheel it made
+# from the FIRST one -- while the fresh download sits there unused. Caught by a
+# live re-run: the tarball on the server had a fix, the installed copy did not,
+# and there was no error anywhere to say so.
+#
+# For a one-shot install the cache buys nothing and costs exactly this, so it
+# is off. (Bumping the version every release fixes it too, and should also
+# happen -- but an installer must not depend on a human remembering.)
+"$VENV/bin/python" -m pip install --quiet --no-cache-dir --upgrade "$SPEC" \
   || die "could not install from:
       $MEM_SRC
     If that address is wrong, set MEM_SRC and run this again."
