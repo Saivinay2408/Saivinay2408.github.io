@@ -145,11 +145,22 @@ if ! "$VENV/bin/python" -m mem models --fetch --whisper; then
 fi
 
 # ---- 6. the icon -----------------------------------------------------------
+# PRINT THE PATH IT ACTUALLY USED, not the one this script guesses at.
+#
+# This used to swallow the output and print "~/Applications" from a string
+# here. A tester then could not find the app -- because Finder's Applications
+# sidebar item is /Applications, a different folder, and the one this script
+# had named was brand new, in no sidebar, and not yet indexed by Launchpad.
+# The install had worked perfectly and looked like it had not.
 step "building the app"
-"$VENV/bin/python" -m mem app >/dev/null 2>&1 \
-  && ok "$APP_NAME.app → ~/Applications" \
-  || printf '  %s!%s could not build the app. `%s/bin/mem voice` still works.\n' \
-       "$Y" "$Z" "$VENV"
+APP_PATH="$("$VENV/bin/python" -m mem app --no-reveal 2>/dev/null \
+            | sed -n 's/^installed //p')"
+if [ -n "$APP_PATH" ]; then
+  ok "$APP_PATH"
+else
+  printf '  %s!%s could not build the app. `%s/bin/mem voice` still works.\n' \
+    "$Y" "$Z" "$VENV"
+fi
 
 # ---- 7. a `mem` on PATH, if there is somewhere obvious to put it -----------
 # A symlink, not a PATH edit. Rewriting somebody's shell profile from a piped
@@ -159,12 +170,17 @@ if [ -d "$HOME/.local/bin" ]; then
     && ok "\`mem\` on your PATH (~/.local/bin)"
 fi
 
-printf '\n  %sDone.%s Open %s from Spotlight or Launchpad.\n\n' "$B" "$Z" "$APP_NAME"
+if [ -n "$APP_PATH" ]; then
+  printf '\n  %sDone.%s %s\n' "$B" "$Z" "$APP_PATH"
+  printf '  Press %s\u2318 Space%s and type Mem, or open it from the folder above.\n\n' "$B" "$Z"
+else
+  printf '\n  %sDone.%s Run: %s\n\n' "$B" "$Z" "$VENV/bin/mem voice"
+fi
 say "${D}first launch${Z}"
 say "  macOS asks for the microphone once — that is the space bar."
 say "  Then Setup runs itself: it reads the coding sessions already on"
 say "  this machine and wires the result into every agent you have."
 printf '\n'
 say "${D}uninstall${Z}"
-say "  rm -rf \"$PREFIX\" ~/.mem-voice ~/Applications/$APP_NAME.app"
+say "  rm -rf \"$PREFIX\" ~/.mem-voice \"${APP_PATH:-$HOME/Applications/$APP_NAME.app}\""
 printf '\n'
