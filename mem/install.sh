@@ -174,7 +174,15 @@ fi
 # had named was brand new, in no sidebar, and not yet indexed by Launchpad.
 # The install had worked perfectly and looked like it had not.
 step "building the app"
-APP_PATH="$("$VENV/bin/python" -m mem app --no-reveal 2>/dev/null \
+# MEM_APP_TO exists so this can be exercised without replacing a real
+# /Applications/Mem.app -- which is exactly what happened twice while testing
+# this script, to the machine it was being written on.
+if [ -n "${MEM_APP_TO:-}" ]; then
+  APP_ARGS="--no-reveal --to $MEM_APP_TO"
+else
+  APP_ARGS="--no-reveal"
+fi
+APP_PATH="$("$VENV/bin/python" -m mem app $APP_ARGS 2>/dev/null \
             | sed -n 's/^installed //p')"
 if [ -n "$APP_PATH" ]; then
   ok "$APP_PATH"
