@@ -30,7 +30,7 @@ set -eu
 # Where the package comes from. Point at a PyPI name once it is published; a
 # source tarball until then. Overridable so a fork or a release candidate can
 # be tested without editing this file.
-MEM_SRC="${MEM_SRC:-https://saivinay.me/mem/mem-20261114-220938-57da93e.tar.gz}"
+MEM_SRC="${MEM_SRC:-https://saivinay.me/mem/mem-20261115-010713-5721979.tar.gz}"
 PREFIX="${MEM_PREFIX:-$HOME/Library/Application Support/Mem}"
 
 APP_NAME="Mem"
@@ -200,6 +200,20 @@ fi
       $MEM_SRC"
 
 ok "mem installed"
+
+# SPEECH ON THE GPU, Apple Silicon only (mem/voice/gpu.py): about 1.4 s off
+# every spoken reply. --no-deps because these two declare torch, spaCy and
+# transformers -- two gigabytes the inference path never imports; what it does
+# import came with the voice extra above. Pinned, because gpu.py reaches into
+# their internals. Optional: if this fails the CPU path is still there.
+if [ "$(uname -s)" = Darwin ] && [ "$(uname -m)" = arm64 ]; then
+  if "$VENV/bin/python" -m pip install --quiet --no-cache-dir --no-deps \
+       "mlx-whisper==0.4.3" "mlx-audio==0.6.5" >/dev/null 2>&1; then
+    ok "speech on the GPU"
+  else
+    printf '  %s·%s speech stays on the CPU (GPU libraries would not install)\n' "$D" "$Z"
+  fi
+fi
 
 # DID THE VERSION WE MEANT TO INSTALL ACTUALLY LAND?
 #
