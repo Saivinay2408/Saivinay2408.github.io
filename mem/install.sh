@@ -30,7 +30,7 @@ set -eu
 # Where the package comes from. Point at a PyPI name once it is published; a
 # source tarball until then. Overridable so a fork or a release candidate can
 # be tested without editing this file.
-MEM_SRC="${MEM_SRC:-https://saivinay.me/mem/mem-20261115-013802-20a2e6e.tar.gz}"
+MEM_SRC="${MEM_SRC:-https://saivinay.me/mem/mem-20261115-014821-a6b6684.tar.gz}"
 PREFIX="${MEM_PREFIX:-$HOME/Library/Application Support/Mem}"
 
 APP_NAME="Mem"
@@ -316,6 +316,11 @@ fi
 if pgrep -f "mem voice" >/dev/null 2>&1; then
   step "closing the running app so the new version is what starts"
   pkill -f "mem voice" 2>/dev/null || true
+  # Until it has really gone: a window still exiting holds the phone port, and
+  # the new one would come up somewhere the phone link does not point.
+  i=0
+  while pgrep -f "mem voice" >/dev/null 2>&1 && [ $i -lt 20 ]; do sleep 0.5; i=$((i+1)); done
+  pkill -9 -f "mem voice" 2>/dev/null || true
   sleep 1
 fi
 
