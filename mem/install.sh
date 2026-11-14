@@ -30,7 +30,7 @@ set -eu
 # Where the package comes from. Point at a PyPI name once it is published; a
 # source tarball until then. Overridable so a fork or a release candidate can
 # be tested without editing this file.
-MEM_SRC="${MEM_SRC:-https://saivinay.me/mem/mem-20261115-010713-5721979.tar.gz}"
+MEM_SRC="${MEM_SRC:-https://saivinay.me/mem/mem-20261115-013802-20a2e6e.tar.gz}"
 PREFIX="${MEM_PREFIX:-$HOME/Library/Application Support/Mem}"
 
 APP_NAME="Mem"
@@ -213,6 +213,35 @@ if [ "$(uname -s)" = Darwin ] && [ "$(uname -m)" = arm64 ]; then
   else
     printf '  %s·%s speech stays on the CPU (GPU libraries would not install)\n' "$D" "$Z"
   fi
+fi
+
+# THE CLONE'S OWN CURSOR: Cua Driver (github.com/trycua/cua, MIT), see
+# mem/voice/hands.py. A signed app, so its two permissions are granted once and
+# survive updates. Installed with its own verified installer (checksums and
+# code signature), pinned to the release Mem is tested with, and:
+#   --no-connect      it is Mem's alone; your other agents are left as they are
+#   --no-modify-path  ~/.local/bin is already where `mem` lives
+#   telemetry off     before its first run, and switched off for good after
+# Optional: without it Mem works, the clone just has no cursor of its own.
+CUA_PIN="0.49.11"
+if [ "$(uname -s)" = Darwin ]; then
+  CUA="$HOME/.local/bin/cua-driver"
+  HAVE="$("$CUA" --version 2>/dev/null | awk '{print $2}')"
+  if [ "$HAVE" = "$CUA_PIN" ]; then
+    ok "cursor (Cua Driver $HAVE)"
+  else
+    CUA_SH="$(mktemp -t mem-cua.XXXXXX)"
+    if curl -fsSL https://cua.ai/driver/install.sh -o "$CUA_SH" \
+       && CUA_DRIVER_RS_VERSION="$CUA_PIN" CUA_DRIVER_RS_TELEMETRY_ENABLED=0 \
+          CUA_TELEMETRY_ENABLED=0 CUA_DRIVER_NO_CONNECT=1 CUA_DRIVER_NO_TEST=1 \
+          /bin/bash "$CUA_SH" --no-connect --no-test --no-modify-path </dev/null >/dev/null 2>&1; then
+      ok "cursor (Cua Driver $CUA_PIN)"
+    else
+      printf '  %s·%s no cursor of its own for now (Cua Driver would not install)\n' "$D" "$Z"
+    fi
+    rm -f "$CUA_SH"
+  fi
+  "$CUA" telemetry disable >/dev/null 2>&1 || true
 fi
 
 # DID THE VERSION WE MEANT TO INSTALL ACTUALLY LAND?
