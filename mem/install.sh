@@ -30,7 +30,7 @@ set -eu
 # Where the package comes from. Point at a PyPI name once it is published; a
 # source tarball until then. Overridable so a fork or a release candidate can
 # be tested without editing this file.
-MEM_SRC="${MEM_SRC:-https://saivinay.me/mem/mem-20261114-163735-fa57591.tar.gz}"
+MEM_SRC="${MEM_SRC:-https://saivinay.me/mem/mem-20261114-214908-1249b34.tar.gz}"
 PREFIX="${MEM_PREFIX:-$HOME/Library/Application Support/Mem}"
 
 APP_NAME="Mem"
