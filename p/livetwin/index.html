@@ -1,0 +1,290 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LiveTwin | Sai Vinay Bhoomireddy</title><meta name="description" content="Turbofan fleet digital twin on NASA C-MAPSS: agents monitor 20 engines, diagnose degradation and plan maintenance.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#FED176;--navy:#18233F;--ink:#0e1424;--cyan:#13F2EF;--mag:#FF2EC4;--txt:#e9ecf3;--mut:#9aa3b8;--line:#26314f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--txt);font-family:Poppins,system-ui,sans-serif;line-height:1.6}
+a{color:var(--gold)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;font-size:14px}
+.top a{color:var(--mut);text-decoration:none}.top a:hover{color:var(--gold)}
+.badge{display:inline-block;background:rgba(254,209,118,.12);color:var(--gold);border:1px solid rgba(254,209,118,.35);
+ padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(40px,7vw,76px);line-height:1.02;margin:16px 0 10px;letter-spacing:.01em}
+.tag{font-size:clamp(16px,2.2vw,20px);color:#cfd5e3;max-width:820px}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 34px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;text-decoration:none;border:1px solid var(--line);color:var(--txt);background:#141c31}
+.btn svg{width:16px;height:16px}.btn.primary{background:var(--gold);color:#1b1b1b;border-color:var(--gold)}
+.btn:hover{transform:translateY(-1px)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.m{background:linear-gradient(160deg,#18233F,#121a2e);border:1px solid var(--line);border-radius:16px;padding:18px}
+.m b{display:block;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:34px;color:var(--gold);line-height:1.1}
+.m span{font-size:13px;color:var(--mut)}
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.chip{font-size:12px;padding:6px 11px;border-radius:8px;background:#141c31;border:1px solid var(--line);color:#c9d0e0}
+h2{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:28px;letter-spacing:.02em;margin:44px 0 14px;color:#fff}
+.frame{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#000}
+.frame iframe{width:100%;height:720px;border:0;display:block;background:#e6e9ef}
+.frame video{width:100%;display:block}
+.note{font-size:13px;color:var(--mut);margin:10px 2px 0}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.gallery img{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;display:block}
+.readme{background:#111830;border:1px solid var(--line);border-radius:16px;padding:28px;overflow-wrap:anywhere}
+.readme h1,.readme h2,.readme h3{font-family:Poppins,sans-serif;font-weight:700;color:#fff;margin:22px 0 10px;font-size:20px;letter-spacing:0}
+.readme h1{font-size:24px}.readme p,.readme li{color:#cdd3e1;font-size:15px}.readme ul,.readme ol{padding-left:22px;margin:8px 0}
+.readme img{max-width:100%;border-radius:8px}.readme pre{background:#0a0f1d;padding:14px;border-radius:10px;overflow-x:auto;font-size:13px;margin:10px 0}
+.readme code{font-family:ui-monospace,Menlo,monospace;font-size:13px}.readme table{border-collapse:collapse;margin:12px 0;display:block;overflow-x:auto}
+.readme th,.readme td{border:1px solid var(--line);padding:6px 10px;font-size:13px}
+@media(max-width:640px){.frame iframe{height:560px}.readme{padding:18px}}
+</style></head><body><div class="wrap">
+<div class="top"><a href="/">&larr; saivinay.me</a><a href="https://github.com/Saivinay24/hackbricks_livetwin" target="_blank" rel="noopener">github.com/Saivinay24/hackbricks_livetwin</a></div>
+<span class="badge">Databricks HackBricks 2026 · Finalist of 1,000 teams</span><h1>LiveTwin</h1><p class="tag">Turbofan fleet digital twin on NASA C-MAPSS: agents monitor 20 engines, diagnose degradation and plan maintenance.</p>
+<div class="btns"><a class="btn primary" href="app/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Open live app</a><a class="btn" href="https://github.com/Saivinay24/hackbricks_livetwin" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>Source code</a></div><div class="metrics"><div class="m"><b>20</b><span>turbofan engines streamed</span></div><div class="m"><b>4</b><span>agent chain: monitor, diagnose, plan, guardian</span></div><div class="m"><b>RUL</b><span>remaining-useful-life prediction</span></div><div class="m"><b>Live</b><span>fleet replay on real NASA data</span></div></div><div class="stack"><span class="chip">Databricks</span><span class="chip">Delta Live Tables</span><span class="chip">Lakebase</span><span class="chip">MLflow</span><span class="chip">Vector Search</span><span class="chip">FastAPI</span></div><h2>Live app</h2><div class="frame"><iframe src="app/" loading="lazy" title="LiveTwin live app"></iframe></div><p class="note">Live dashboard replaying real NASA C-MAPSS FD001 engines in your browser. Open the Agents tab and hit the demo trigger to run the full chain on Engine 15.</p><h2>How it works</h2><div class="readme"><h1>LiveTwin — Operational AI for Physical Systems</h1>
+<blockquote>
+<p><strong>HackBricks 2026 | MIT Bengaluru | April 11–12, 2026</strong></p>
+</blockquote>
+<p>The first operational digital twin platform built natively on <strong>Databricks Lakehouse</strong> — enabling autonomous agents to monitor, diagnose, plan, and execute maintenance decisions on industrial equipment with full governance and audit trails.</p>
+<p>Not a dashboard. Not a chatbot. Agents that <strong>act</strong> on physical-world data.</p>
+<hr />
+<h2>Quick Navigation</h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>What it covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/Saivinay24/hackbricks_livetwin/blob/HEAD/docs/01_project_plan.md">docs/01_project_plan.md</a></td>
+<td>Why / What / How / When / Where — master document</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Saivinay24/hackbricks_livetwin/blob/HEAD/docs/02_architecture.md">docs/02_architecture.md</a></td>
+<td>Full system architecture, data flows, component decisions</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Saivinay24/hackbricks_livetwin/blob/HEAD/docs/03_data_strategy.md">docs/03_data_strategy.md</a></td>
+<td>Dataset, pipeline design, Delta medallion, streaming setup</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Saivinay24/hackbricks_livetwin/blob/HEAD/docs/04_agent_design.md">docs/04_agent_design.md</a></td>
+<td>All 4 agents: logic, inputs, outputs, interaction patterns</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Saivinay24/hackbricks_livetwin/blob/HEAD/docs/05_databricks_stack.md">docs/05_databricks_stack.md</a></td>
+<td>Every Databricks feature used and exactly why it's there</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Saivinay24/hackbricks_livetwin/blob/HEAD/docs/06_execution_plan.md">docs/06_execution_plan.md</a></td>
+<td>Hour-by-hour hackathon execution plan, roles, checkpoints</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Saivinay24/hackbricks_livetwin/blob/HEAD/docs/07_demo_script.md">docs/07_demo_script.md</a></td>
+<td>Full demo walkthrough + judge Q&amp;A prep</td>
+</tr>
+<tr>
+<td><strong><a href="https://github.com/Saivinay24/hackbricks_livetwin/blob/HEAD/src/">src/</a></strong></td>
+<td><strong>All implementation code</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>The Problem</h2>
+<p>Industrial equipment failure costs <strong>$170B annually</strong>. Existing digital twin platforms are analytical only — they <em>describe</em> what happened, but cannot <em>act</em> on live equipment state. Maintenance teams make manual decisions from stale dashboards.</p>
+<p>The gap: <strong>5 separate systems</strong> are required to close the loop from sensor → autonomous action:</p>
+<table>
+<thead>
+<tr>
+<th>Needed</th>
+<th>Old approach</th>
+<th>LiveTwin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OLTP database</td>
+<td>PostgreSQL</td>
+<td><strong>Lakebase</strong></td>
+</tr>
+<tr>
+<td>Message bus</td>
+<td>Kafka</td>
+<td><strong>Zerobus</strong></td>
+</tr>
+<tr>
+<td>Analytics + ETL</td>
+<td>Separate data lake</td>
+<td><strong>Delta Live Tables</strong></td>
+</tr>
+<tr>
+<td>Agent framework</td>
+<td>Custom code</td>
+<td><strong>Databricks Agent Framework + MCP</strong></td>
+</tr>
+<tr>
+<td>Governance</td>
+<td>Custom RBAC</td>
+<td><strong>Unity Catalog + OBO Auth</strong></td>
+</tr>
+</tbody>
+</table>
+<p>LiveTwin collapses all five into one platform.</p>
+<hr />
+<h2>Architecture</h2>
+<pre><code>┌──────────────────────────────────────────────────────────────────────┐
+│  NASA CMAPSS (20 turbofan engines, 21 sensors)                       │
+│  Replayed as live IoT stream                                         │
+└────────────────────────┬─────────────────────────────────────────────┘
+                         │ Zerobus (no Kafka, direct to Delta)
+                         ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│  Delta Live Tables  Bronze → Silver → Gold                           │
+│  (z-score anomaly flags, rolling stats, health KPIs, RUL estimates) │
+└──────────┬───────────────────────────────────────────────────────────┘
+           │                              │
+           ▼                             ▼
+┌────────────────────┐      ┌─────────────────────────────────────┐
+│   LAKEBASE (OLTP)  │      │   INTELLIGENCE LAYER                │
+│   Sub-10ms reads   │      │   MLflow 3.0:                       │
+│   DB Branching:    │◄─────┤    • Anomaly Detector (IForest)     │
+│   CREATE → TEST    │      │    • RUL Predictor (GBR + 90% CI)   │
+│   → MERGE / DROP   │      │    • Failure Classifier (RF)        │
+└────────┬───────────┘      │   Vector Search: 50 incidents       │
+         │                  └─────────────────────────────────────┘
+         └──────────────────────────────────┐
+                                            ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│  AGENT LAYER  (OBO Authorization + MLflow Tracing)                   │
+│  Monitor(100ms) → Diagnosis(2.1s) → Plan(0.8s) → Guardian(2.0s)    │
+└──────────────────────────────────────────────────────────────────────┘
+                                            │
+                                            ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│  INTERFACE: Genie AI/BI + SQL Dashboard                              │
+│  Unity Catalog ABAC: Plant A / Plant B row-level isolation          │
+└──────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2>Project Structure</h2>
+<pre><code>src/
+├── 00_setup/
+│   ├── 00_catalog_setup.py          # Unity Catalog + ABAC + row-level security
+│   └── 01_lakebase_schema.sql       # 5 tables + seed data (DDL)
+├── 01_data/
+│   ├── 00_download_cmapss.py        # NASA dataset download + feature engineering
+│   ├── 01_zerobus_producer.py       # Live stream simulation (demo + normal modes)
+│   └── 02_synthetic_incidents.py    # 50 maintenance incidents + 5 safety protocols
+├── 02_pipeline/
+│   ├── dlt_pipeline.py              # DLT Bronze → Silver → Gold (declarative)
+│   └── lakebase_sync_job.py         # Silver → Lakebase streaming sync job
+├── 03_ml/
+│   ├── 01_train_anomaly_detector.py # Isolation Forest + serving endpoint
+│   ├── 02_train_rul_predictor.py    # GBR with 90% confidence interval + endpoint
+│   └── 03_train_failure_classifier.py # Random Forest 5-class + endpoint
+├── 04_vector_search/
+│   └── setup_vector_search.py       # Create indexes + verify similarity queries
+├── 05_agents/
+│   ├── monitor_agent.py             # Real-Time Spark fleet scanner (100ms loop)
+│   ├── diagnosis_agent.py           # MLflow + Gold Delta + Vector Search chain
+│   ├── plan_agent.py                # Maintenance window + cost planner
+│   ├── guardian_agent.py            # Branch → validate → commit (ONLY writer)
+│   ├── agent_orchestrator.py        # Demo entry point + full chain test
+│   └── utils/
+│       ├── lakebase_client.py       # OLTP client + LakebaseBranch context manager
+│       ├── mlflow_client.py         # Endpoint callers + AgentTrace
+│       └── vector_search_client.py  # Similarity search for incidents + safety
+├── 06_dashboard/
+│   ├── dashboard_queries.sql        # 10 SQL widgets for Databricks SQL Dashboard
+│   └── genie_setup.py               # Genie Space + context + sample questions
+└── 07_demo/
+    ├── demo_runner.py               # Full 5-scene live demo
+    └── blocked_demo.py              # Guardian BLOCKED scenario (cost violation)
+</code></pre>
+<hr />
+<h2>Setup Guide</h2>
+<h3>Prerequisites</h3>
+<ul>
+<li>Databricks Premium workspace (Lakebase, Zerobus, Agent Framework)</li>
+<li>DBR 15.4+ (Zerobus native format reader)</li>
+<li>Unity Catalog enabled</li>
+<li>Lakebase endpoint provisioned</li>
+<li>Vector Search endpoint created</li>
+</ul>
+<h3>Databricks Secrets</h3>
+<pre><code class="language-bash">databricks secrets create-scope livetwin
+databricks secrets put --scope livetwin --key lakebase_host
+databricks secrets put --scope livetwin --key lakebase_password
+</code></pre>
+<h3>Execution Order</h3>
+<pre><code>1. src/00_setup/00_catalog_setup.py
+2. src/00_setup/01_lakebase_schema.sql    (run against Lakebase connection)
+3. src/01_data/00_download_cmapss.py
+4. src/01_data/02_synthetic_incidents.py
+5. Deploy src/02_pipeline/dlt_pipeline.py as DLT Pipeline (Continuous)
+6. Start src/02_pipeline/lakebase_sync_job.py as Databricks Job (Continuous)
+7. src/03_ml/01_train_anomaly_detector.py
+8. src/03_ml/02_train_rul_predictor.py
+9. src/03_ml/03_train_failure_classifier.py
+10. src/04_vector_search/setup_vector_search.py
+11. src/06_dashboard/genie_setup.py
+12. src/07_demo/demo_runner.py  (widget: mode=demo)
+</code></pre>
+<hr />
+<h2>The Demo (5 Minutes)</h2>
+<table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Scene</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0:00</td>
+<td>Setup</td>
+<td>Dashboard open — all 20 engines green</td>
+</tr>
+<tr>
+<td>0:30</td>
+<td>Scene 1</td>
+<td>Zerobus stream starts, Engine 15 turns red</td>
+</tr>
+<tr>
+<td>1:00</td>
+<td>Scene 2</td>
+<td>Diagnosis: RUL 23.4h, bearing_degradation 87%, 94% match to INC-2019-0042</td>
+</tr>
+<tr>
+<td>1:30</td>
+<td>Scene 3</td>
+<td>Guardian: CREATE BRANCH → INSERT → verify → MERGE → order #1042 committed</td>
+</tr>
+<tr>
+<td>2:00</td>
+<td>Scene 4</td>
+<td>OBO demo + Genie: "How much did LiveTwin save this month?"</td>
+</tr>
+<tr>
+<td>2:30</td>
+<td>Impact</td>
+<td>10 seconds vs 2–6 hours, $170B problem</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key demo moment:</strong> The Guardian branches the production Lakebase database, runs a test INSERT on the clone, verifies the write, then merges to main — live, in under 2 seconds. No other platform can show this.</p>
+<hr />
+<h2>Key Q&amp;A</h2>
+<p><strong>Why Lakebase?</strong> Delta is OLAP. Point lookups on billions of rows are slow even with Z-ordering. Lakebase: sub-10ms indexed reads. Critically: database branching — no Delta feature gives copy-on-write DB clones for safe agent writes.</p>
+<p><strong>Why no Kafka?</strong> Zerobus GA'd February 2026. Direct Delta write, same semantics, zero cluster overhead. Every other team uses Kafka. We don't. That's one question a Databricks engineer can ask that shows platform depth.</p>
+<p><strong>What stops wrong decisions?</strong> The Guardian tests on a branch first. 4 pre-validation checks before touching production. If anything fails — branch is dropped. Production never modified.</p>
+<p><strong>How does it scale?</strong> Zerobus: 10 GB/sec. DLT: horizontal. Lakebase: &gt;10k QPS. Agent Framework: parallel chains. Unity Catalog ABAC: multi-tenant without code changes.</p>
+<hr />
+<h2>Dataset</h2>
+<p>NASA CMAPSS Turbofan Engine Degradation Simulation Dataset — public domain.
+A. Saxena and K. Goebel, NASA Ames Prognostics Data Repository.</p>
+<hr />
+<p><em>Built for HackBricks 2026 — Databricks Lakehouse Hackathon, MIT Bengaluru</em></p></div></div></body></html>

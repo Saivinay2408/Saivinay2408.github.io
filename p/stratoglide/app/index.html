@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StratoGlide</title>
+<meta name="description" content="Balloon-launched stratospheric ISR glider: mission requirements to a build-ready package.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-plane" viewBox="0 0 24 24"><path d="M2 13l8-1 4-8h2l-2 8 6-1 2-3h1.5l-1 4 1 4H22l-2-3-6-1 2 8h-2l-4-8-8-1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+  <symbol id="i-foil" viewBox="0 0 24 24"><path d="M2 13c4-6 12-6 20-1-8 2-16 4-20 1z" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16M8 16l4-6 3 3 5-8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-gyro" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 12h16M12 4c3 3 3 13 0 16M12 4c-3 3-3 13 0 16" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-prop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 10c-1-4 0-7 2-7s1 4-1 7M14 13c4 0 6 2 5 4s-4 0-6-3M10 13c-3 3-6 4-7 2s2-3 6-3" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="5" cy="18" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="19" cy="6" r="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 18h6a3 3 0 000-6h-2a3 3 0 010-6h6" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l4 4 10-10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><svg class="ic"><use href="#i-plane"/></svg><span>StratoGlide</span></div>
+    <nav>
+      <a href="#mission">Mission</a><a href="#geometry">Geometry</a><a href="#airfoil">Airfoil</a><a href="#sizing">Sizing</a>
+      <a href="#stability">Stability</a><a href="#release">Release</a><a href="#prop">Propulsion</a><a href="#perf">Performance</a><a href="#tests">Test cards</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="mission" class="hero">
+    <p class="eyebrow">Balloon-launched stratospheric ISR glider</p>
+    <h1>Mission requirements to a build-ready package</h1>
+    <p class="lede">Flight-ready design package. Every value on this page is read from the pipeline's numbers.json; hover a value to see the key and the script that produced it.</p>
+    <div class="kpis" id="kpis"></div>
+    <p class="hash">numbers.json values hash <code id="hash"></code></p>
+  </section>
+
+  <section id="geometry">
+    <h2><svg class="ic"><use href="#i-plane"/></svg>Three-view geometry</h2>
+    <p class="sub" id="geo-sub"></p>
+    <div class="threeview">
+      <figure><figcaption>Top</figcaption><svg id="v-top" class="draw"></svg></figure>
+      <figure><figcaption>Front</figcaption><svg id="v-front" class="draw"></svg></figure>
+      <figure><figcaption>Side</figcaption><svg id="v-side" class="draw"></svg></figure>
+    </div>
+  </section>
+
+  <section id="airfoil">
+    <h2><svg class="ic"><use href="#i-foil"/></svg>Airfoil polars vs UIUC wind tunnel</h2>
+    <p class="sub" id="foil-sub"></p>
+    <div class="grid4" id="polars"></div>
+  </section>
+
+  <section id="sizing">
+    <h2><svg class="ic"><use href="#i-grid"/></svg>Sizing and constraint diagram</h2>
+    <div class="two">
+      <figure class="fig"><img src="assets/fig/p3_constraint.png" alt="Constraint diagram from the sizing model" loading="lazy"></figure>
+      <div><table class="kv" id="sizing-kv"></table><p class="sub" id="sizing-note"></p></div>
+    </div>
+  </section>
+
+  <section id="stability">
+    <h2><svg class="ic"><use href="#i-gyro"/></svg>Stability: sea level vs 20 km</h2>
+    <p class="sub" id="stab-sub"></p>
+    <div class="two">
+      <table class="tbl" id="modes"></table>
+      <div class="chart" id="zeta-chart"></div>
+    </div>
+  </section>
+
+  <section id="release">
+    <h2><svg class="ic"><use href="#i-drop"/></svg>Release Monte Carlo</h2>
+    <p class="sub" id="rel-sub"></p>
+    <div class="kpis small" id="rel-kpis"></div>
+    <div class="grid3">
+      <div class="chart" id="traj"></div>
+      <div class="chart" id="mach-hist"></div>
+      <div class="chart" id="nz-hist"></div>
+    </div>
+    <p class="note" id="rel-note"></p>
+  </section>
+
+  <section id="prop">
+    <h2><svg class="ic"><use href="#i-prop"/></svg>BEMT: fixed vs variable pitch</h2>
+    <p class="sub" id="prop-sub"></p>
+    <div class="two">
+      <div class="chart" id="eta-chart"></div>
+      <table class="kv" id="prop-kv"></table>
+    </div>
+  </section>
+
+  <section id="perf">
+    <h2><svg class="ic"><use href="#i-route"/></svg>Mission performance</h2>
+    <div class="kpis small" id="perf-kpis"></div>
+    <div class="two">
+      <div class="chart" id="power-chart"></div>
+      <div class="chart" id="foot-chart"></div>
+    </div>
+    <table class="tbl" id="timeline"></table>
+  </section>
+
+  <section id="tests">
+    <h2><svg class="ic"><use href="#i-card"/></svg>Flight-test cards: predicted values</h2>
+    <p class="sub">Bands follow declared rules; FT-5 and FT-6 bands are P5 to P95 of 100-run Monte Carlos at the drop altitude. Drops need DGCA Digital Sky and airspace permission, which is out of scope here.</p>
+    <div class="scroll"><table class="tbl" id="preds"></table></div>
+  </section>
+
+  <section id="checks">
+    <h2><svg class="ic"><use href="#i-check"/></svg>Pre-registered checks</h2>
+    <p class="sub">Failed bars are reported as measured, not loosened.</p>
+    <div id="verify"></div>
+  </section>
+</main>
+<footer class="wrap foot">StratoGlide. Local static build; data in <code>data/</code>.</footer>
+<script src="data/bundle.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

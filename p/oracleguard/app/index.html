@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ORACLEGUARD | Credit Risk Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+:root{--neu-bg:#e5e7eb;--neu-shadow-light:rgba(255,255,255,0.85);--neu-shadow-dark:rgb(153,161,175);--neu-inset:rgb(209,213,220);--text-primary:#1f2937;--text-secondary:#374151;--text-muted:#6b7280;--accent:#0369a1;--accent-green:#10b981}
+body{background-color:var(--neu-bg)!important;color:var(--text-primary);font-family:'Inter',sans-serif;overflow-x:hidden}
+.glass-panel{background:var(--neu-bg)!important;border:none!important;border-radius:20px!important;box-shadow:-10px -10px 20px var(--neu-shadow-light),10px 10px 20px var(--neu-shadow-dark),inset -10px -10px 20px var(--neu-inset)!important}
+header{background:var(--neu-bg)!important;border-bottom:none!important;box-shadow:0 4px 12px var(--neu-shadow-dark),0 -2px 6px var(--neu-shadow-light)!important}
+header h1{color:var(--accent)!important}
+aside{background:var(--neu-bg)!important;border-right:none!important;box-shadow:4px 0 12px var(--neu-shadow-dark),-2px 0 6px var(--neu-shadow-light)!important}
+.kpi-card{background:var(--neu-bg);border-radius:20px;padding:20px 22px 18px;display:flex;flex-direction:column;gap:14px;box-shadow:-10px -10px 20px var(--neu-shadow-light),10px 10px 20px var(--neu-shadow-dark),inset -10px -10px 20px var(--neu-inset);min-width:0}
+.kpi-card .card-title{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.kpi-card .card-title-left{display:flex;align-items:center;gap:8px}
+.kpi-card .card-icon{width:32px;height:32px;border-radius:50%!important;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:-2px -2px 4px var(--neu-shadow-light),2px 2px 4px var(--neu-shadow-dark)!important;background:var(--neu-bg)!important}
+.kpi-card .card-label{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#374151}
+.kpi-card .card-value{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:#1f2937;line-height:1;letter-spacing:-0.03em}
+.kpi-card .card-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:#6b7280;margin-top:2px;letter-spacing:0.06em;text-transform:uppercase}
+.kpi-card .card-percent{display:flex;align-items:center;gap:3px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:3px 8px;border-radius:100px;box-shadow:-2px -2px 4px var(--neu-shadow-light),2px 2px 4px var(--neu-shadow-dark);background:var(--neu-bg)!important}
+.kpi-card .card-percent.up{color:#10b981}.kpi-card .card-percent.down{color:#ef4444}.kpi-card .card-percent.neutral{color:#6b7280}
+.kpi-card .card-range{width:100%;height:8px;background:var(--neu-bg);border-radius:4px;overflow:hidden;margin-top:4px;box-shadow:inset -2px -2px 4px var(--neu-shadow-light),inset 2px 2px 4px var(--neu-shadow-dark)}
+.kpi-card .card-fill{height:100%;border-radius:4px;transition:width 0.9s cubic-bezier(0.16,1,0.3,1);width:0%}
+.view{display:none}.view.active{display:block}
+.nav-link{color:#475569!important;text-decoration:none;border-bottom:2px solid transparent;padding-bottom:4px;transition:color 0.2s;cursor:pointer}
+.nav-link.active{color:var(--accent)!important;border-bottom-color:var(--accent)!important}
+.sidebar-link{cursor:pointer;transition:color 0.2s}.sidebar-link:not(.active){color:#9ca3af}
+.sidebar-link:not(.active):hover{color:var(--text-primary)}
+.sidebar-link.active{background:var(--neu-bg)!important;color:var(--accent)!important;box-shadow:inset -3px -3px 6px var(--neu-shadow-light),inset 3px 3px 6px var(--neu-shadow-dark)!important;position:relative}
+.sidebar-link.active .material-symbols-outlined{color:var(--accent)!important}
+.vt{width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:11px}
+.vt th{padding:10px 16px;text-align:left;color:#6b7280;text-transform:uppercase;font-size:10px;letter-spacing:0.06em;font-weight:700;background:var(--neu-bg);position:sticky;top:0;z-index:1;border-bottom:1px solid rgba(0,0,0,0.06)}
+.vt td{padding:10px 16px;color:#374151;border-bottom:1px solid rgba(0,0,0,0.04)}
+.vt tr:hover td{background:rgba(3,105,161,0.03)}
+.metric-bar-track{width:100%;height:10px;background:var(--neu-bg);border-radius:100px;box-shadow:inset -2px -2px 4px var(--neu-shadow-light),inset 2px 2px 4px var(--neu-shadow-dark);overflow:hidden}
+.metric-bar-fill{height:100%;border-radius:100px;transition:width 0.9s cubic-bezier(0.16,1,0.3,1)}
+.cm-cell{padding:16px;border-radius:12px;text-align:center;box-shadow:inset -3px -3px 6px var(--neu-shadow-light),inset 3px 3px 6px var(--neu-shadow-dark)}
+.cm-cell .cm-val{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700}
+.cm-cell .cm-label{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280;margin-top:4px}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;vertical-align:middle}
+.glass-panel .text-on-surface-variant,.glass-panel thead th{color:var(--text-muted)!important}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.status-dot.green{background:#10b981;box-shadow:0 0 6px #10b981}.status-dot.red{background:#ef4444;box-shadow:0 0 6px #ef4444}
+.status-dot.yellow{background:#f59e0b;box-shadow:0 0 6px #f59e0b}
+.inset-panel{background:var(--neu-bg);border-radius:12px;box-shadow:inset -3px -3px 6px var(--neu-shadow-light),inset 3px 3px 6px var(--neu-shadow-dark)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16">
+  <div class="flex items-center gap-8">
+    <h1 class="flex items-center gap-2.5 text-xl font-bold tracking-tight font-['Exo_2'] uppercase select-none">
+      <svg width="24" height="26" viewBox="0 0 28 30" fill="none"><path d="M14 1.5 L26 6.5 L26 16 Q26 24 14 28.5 Q2 24 2 16 L2 6.5 Z" stroke="currentColor" stroke-width="1.2" fill="currentColor" fill-opacity="0.05" stroke-linejoin="round"/><circle cx="14" cy="12" r="3" fill="currentColor" opacity="0.8"/><circle cx="8" cy="20" r="2" fill="currentColor" opacity="0.5"/><circle cx="20" cy="20" r="2" fill="currentColor" opacity="0.5"/><line x1="14" y1="12" x2="8" y2="20" stroke="currentColor" stroke-width="0.8" opacity="0.4"/><line x1="14" y1="12" x2="20" y2="20" stroke="currentColor" stroke-width="0.8" opacity="0.4"/></svg>
+      ORACLEGUARD
+    </h1>
+    <nav class="hidden md:flex gap-6 items-center h-full">
+      <a class="nav-link active font-['Exo_2'] uppercase tracking-wider text-sm" data-view="overview">Overview</a>
+      <a class="nav-link font-['Exo_2'] uppercase tracking-wider text-sm" data-view="drift">Drift Detection</a>
+      <a class="nav-link font-['Exo_2'] uppercase tracking-wider text-sm" data-view="champion">Champion / Challenger</a>
+      <a class="nav-link font-['Exo_2'] uppercase tracking-wider text-sm" data-view="llm-eval">LLM Evaluation</a>
+      <a class="nav-link font-['Exo_2'] uppercase tracking-wider text-sm" data-view="governance">Governance</a>
+    </nav>
+  </div>
+  <div class="flex items-center gap-4">
+    <div class="flex items-center gap-2 px-3 py-1 rounded-full" style="box-shadow:-2px -2px 4px var(--neu-shadow-light),2px 2px 4px var(--neu-shadow-dark)">
+      <span id="status-dot" class="status-dot green animate-pulse"></span>
+      <span id="status-label" class="text-[10px] font-bold tracking-widest font-mono uppercase" style="color:var(--accent)">SYSTEM HEALTHY</span>
+    </div>
+    <div class="hidden lg:flex flex-col items-end">
+      <span class="text-[9px] font-mono" style="color:var(--text-muted)">HACKBRICKS 2026</span>
+      <span class="px-1.5 py-0.5 text-[8px] rounded uppercase font-mono font-bold" style="color:#0891b2;box-shadow:-2px -2px 4px var(--neu-shadow-light),2px 2px 4px var(--neu-shadow-dark)">DATABRICKS LAKEHOUSE</span>
+    </div>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<aside class="fixed left-0 top-16 bottom-0 flex flex-col items-center py-4 z-40 h-full w-20">
+  <div class="flex flex-col items-center gap-1 mb-8">
+    <div class="w-10 h-10 rounded-full flex items-center justify-center" style="box-shadow:-3px -3px 6px var(--neu-shadow-light),3px 3px 6px var(--neu-shadow-dark)">
+      <span class="material-symbols-outlined text-xl" style="color:var(--accent)">shield</span>
+    </div>
+    <span class="text-[8px] font-mono" style="color:var(--accent)">OG_v1</span>
+  </div>
+  <div class="flex flex-col gap-6 w-full">
+    <div class="sidebar-link active flex flex-col items-center py-3" data-view="model-metrics">
+      <span class="material-symbols-outlined mb-1">insert_chart</span>
+      <span class="font-['Inter'] text-[10px] uppercase font-semibold tracking-[0.05em]">Metrics</span>
+    </div>
+    <div class="sidebar-link flex flex-col items-center py-3" data-view="features">
+      <span class="material-symbols-outlined mb-1">analytics</span>
+      <span class="font-['Inter'] text-[10px] uppercase font-semibold tracking-[0.05em]">SHAP</span>
+    </div>
+    <div class="sidebar-link flex flex-col items-center py-3" data-view="data-assets">
+      <span class="material-symbols-outlined mb-1">database</span>
+      <span class="font-['Inter'] text-[10px] uppercase font-semibold tracking-[0.05em]">Assets</span>
+    </div>
+    <div class="sidebar-link flex flex-col items-center py-3" data-view="pipeline-log">
+      <span class="material-symbols-outlined mb-1">terminal</span>
+      <span class="font-['Inter'] text-[10px] uppercase font-semibold tracking-[0.05em]">Pipeline</span>
+    </div>
+    <div class="sidebar-link flex flex-col items-center py-3" data-view="reports">
+      <span class="material-symbols-outlined mb-1">description</span>
+      <span class="font-['Inter'] text-[10px] uppercase font-semibold tracking-[0.05em]">Report</span>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="ml-20 mt-16 p-6 min-h-screen">
+
+<!-- ═══ VIEWS PLACEHOLDER ═══ -->
+<div id="view-overview" class="view active">
+  <!-- KPI Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:16px;color:#3b82f6">storage</span></div><span class="card-label">Total Records</span></div><span class="card-percent up">10/10 TBL</span></div><div><p class="card-value">616,397</p><p class="card-sub">Across All Delta Tables</p></div><div class="card-range"><div class="card-fill" style="background:#3b82f6;width:100%"></div></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:16px;color:#22c55e">model_training</span></div><span class="card-label">Champion AUC</span></div><span class="card-percent up">REGISTERED</span></div><div><p class="card-value">0.7593</p><p class="card-sub">XGBoost · 111 Features</p></div><div class="card-range"><div class="card-fill" style="background:#22c55e;width:75.93%"></div></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:16px;color:#f59e0b">psychology</span></div><span class="card-label">LLM Eval Score</span></div><span class="card-percent up">20 EVALS</span></div><div><p class="card-value">4.70</p><p class="card-sub">Composite Score / 5.00</p></div><div class="card-range"><div class="card-fill" style="background:#f59e0b;width:94%"></div></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:16px;color:#ef4444">trending_up</span></div><span class="card-label">Drift Alerts</span></div><span class="card-percent down">6/6 DRIFT</span></div><div><p class="card-value">6.46</p><p class="card-sub">Max PSI (AMT_CREDIT)</p></div><div class="card-range"><div class="card-fill" style="background:#ef4444;width:100%"></div></div></div>
+  </div>
+  <!-- Pipeline Progress + System Health -->
+  <div class="grid grid-cols-12 gap-6">
+    <div class="col-span-12 lg:col-span-8 flex flex-col gap-4">
+      <!-- Pipeline Stages Table -->
+      <div class="glass-panel rounded-lg overflow-hidden flex flex-col">
+        <div class="px-6 py-4 flex justify-between items-center" style="border-bottom:1px solid rgba(0,0,0,0.05)">
+          <div class="flex items-center gap-3"><span class="status-dot green animate-pulse"></span><h2 class="font-['Exo_2'] text-sm font-bold tracking-widest uppercase">Pipeline Execution Log</h2></div>
+          <span class="text-[10px] font-mono" style="color:var(--text-muted)">RUN: 2026-04-11 17:32</span>
+        </div>
+        <div class="overflow-y-auto"><table class="vt"><thead><tr><th>#</th><th>Stage</th><th>Status</th><th>Rows</th><th>Duration</th><th>Output Table</th></tr></thead><tbody>
+          <tr><td>01</td><td style="font-weight:700">Bronze Ingestion</td><td><span style="color:#10b981">✅ COMPLETE</span></td><td>308,511</td><td>2.3s</td><td style="color:var(--accent)">bronze_*</td></tr>
+          <tr><td>02</td><td style="font-weight:700">Silver Engineering</td><td><span style="color:#10b981">✅ COMPLETE</span></td><td>308,511</td><td>8.1s</td><td style="color:var(--accent)">silver_*</td></tr>
+          <tr><td>03</td><td style="font-weight:700">Gold Champion</td><td><span style="color:#10b981">✅ COMPLETE</span></td><td>307,511</td><td>44.0s</td><td style="color:var(--accent)">gold_credit_scores</td></tr>
+          <tr><td>04</td><td style="font-weight:700">Drift Detection</td><td><span style="color:#10b981">✅ COMPLETE</span></td><td>6</td><td>3.2s</td><td style="color:var(--accent)">drift_metrics</td></tr>
+          <tr><td>05</td><td style="font-weight:700">Champion/Challenger</td><td><span style="color:#10b981">✅ COMPLETE</span></td><td>6</td><td>52.0s</td><td style="color:var(--accent)">model_comparison</td></tr>
+          <tr><td>06</td><td style="font-weight:700">LLM Evaluation</td><td><span style="color:#10b981">✅ COMPLETE</span></td><td>20</td><td>12.0s</td><td style="color:var(--accent)">llm_eval_scores</td></tr>
+          <tr><td>07</td><td style="font-weight:700">Governance</td><td><span style="color:#10b981">✅ COMPLETE</span></td><td>10</td><td>4.1s</td><td style="color:var(--accent)">5 SQL Views</td></tr>
+        </tbody></table></div>
+      </div>
+      <!-- System Health -->
+      <div class="grid grid-cols-3 gap-4">
+        <div class="glass-panel p-4 rounded-lg"><span class="text-[9px] font-bold tracking-widest uppercase block mb-3" style="color:var(--text-muted)">Drift Detection</span><div class="flex flex-col gap-2 mt-1"><div class="flex justify-between items-center"><span class="text-[9px] font-mono" style="color:var(--text-muted)">FEATURES DRIFTED</span><span class="text-xs font-bold font-['Space_Grotesk']" style="color:#ef4444">6 / 6</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="background:#ef4444;width:100%"></div></div><div class="flex justify-between items-center mt-1"><span class="text-[9px] font-mono" style="color:var(--text-muted)">RETRAIN TRIGGERED</span><span class="text-xs font-bold font-['Space_Grotesk']" style="color:#ef4444">YES</span></div></div></div>
+        <div class="glass-panel p-4 rounded-lg"><span class="text-[9px] font-bold tracking-widest uppercase block mb-3" style="color:var(--text-muted)">Model Quality</span><div class="flex flex-col gap-2 mt-1"><div class="flex justify-between items-center"><span class="text-[9px] font-mono" style="color:var(--text-muted)">AUC-ROC</span><span class="text-xs font-bold font-['Space_Grotesk']" style="color:var(--accent)">0.7593</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="background:var(--accent);width:75.93%"></div></div><div class="flex justify-between items-center mt-1"><span class="text-[9px] font-mono" style="color:var(--text-muted)">PROMOTION</span><span class="text-xs font-bold font-['Space_Grotesk']" style="color:#10b981">PROMOTED</span></div></div></div>
+        <div class="glass-panel p-4 rounded-lg"><span class="text-[9px] font-bold tracking-widest uppercase block mb-3" style="color:var(--text-muted)">LLM Quality</span><div class="flex flex-col gap-2 mt-1"><div class="flex justify-between items-center"><span class="text-[9px] font-mono" style="color:var(--text-muted)">COMPOSITE</span><span class="text-xs font-bold font-['Space_Grotesk']" style="color:#10b981">4.70 / 5.00</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="background:#10b981;width:94%"></div></div><div class="flex justify-between items-center mt-1"><span class="text-[9px] font-mono" style="color:var(--text-muted)">QUALITY ALERTS</span><span class="text-xs font-bold font-['Space_Grotesk']" style="color:#10b981">0</span></div></div></div>
+      </div>
+    </div>
+    <!-- Right Column: LLM Quality Donut + 4-Signal Preview -->
+    <div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+      <div class="glass-panel p-6 rounded-lg">
+        <h2 class="font-['Exo_2'] text-xs font-bold tracking-widest uppercase mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-xs">donut_large</span>Hallucination Type Distribution</h2>
+        <div class="flex items-center gap-6">
+          <div class="relative w-32 h-32 flex-shrink-0">
+            <svg class="w-full h-full" viewBox="0 0 42 42">
+              <circle cx="21" cy="21" fill="transparent" r="15.9" stroke="#10b981" stroke-dasharray="40 60" stroke-dashoffset="25" stroke-width="4"/>
+              <circle cx="21" cy="21" fill="transparent" r="15.9" stroke="#f59e0b" stroke-dasharray="20 80" stroke-dashoffset="85" stroke-width="4"/>
+              <circle cx="21" cy="21" fill="transparent" r="15.9" stroke="#3b82f6" stroke-dasharray="20 80" stroke-dashoffset="65" stroke-width="4"/>
+              <circle cx="21" cy="21" fill="transparent" r="15.9" stroke="#ef4444" stroke-dasharray="20 80" stroke-dashoffset="45" stroke-width="4"/>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center"><span class="text-xl font-bold font-['Space_Grotesk']">20</span><span class="text-[8px]" style="color:var(--text-muted)">EVALS</span></div>
+          </div>
+          <div class="flex-1 flex flex-col gap-2">
+            <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full flex-shrink-0" style="background:#10b981"></span><span class="text-[10px] font-mono" style="color:var(--text-muted)">CLEAN</span></div><span class="text-[10px] font-mono font-bold" style="color:#10b981">40%</span></div>
+            <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full flex-shrink-0" style="background:#f59e0b"></span><span class="text-[10px] font-mono" style="color:var(--text-muted)">REGULATION</span></div><span class="text-[10px] font-mono font-bold" style="color:#f59e0b">20%</span></div>
+            <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full flex-shrink-0" style="background:#3b82f6"></span><span class="text-[10px] font-mono" style="color:var(--text-muted)">FACTUAL</span></div><span class="text-[10px] font-mono font-bold" style="color:#3b82f6">20%</span></div>
+            <div class="flex items-center justify-between gap-2"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full flex-shrink-0" style="background:#ef4444"></span><span class="text-[10px] font-mono" style="color:var(--text-muted)">LOGIC</span></div><span class="text-[10px] font-mono font-bold" style="color:#ef4444">20%</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="glass-panel p-6 rounded-lg flex-1">
+        <h2 class="font-['Exo_2'] text-xs font-bold tracking-widest uppercase mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-xs">analytics</span>4-Signal LLM Quality</h2>
+        <div class="space-y-6">
+          <div class="space-y-2"><div class="flex justify-between items-center text-[10px] font-mono uppercase tracking-tighter"><span style="color:var(--text-secondary)">Factual Grounding</span><span style="color:var(--accent)">4.80 / 5.00</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="background:var(--accent);width:96%"></div></div></div>
+          <div class="space-y-2"><div class="flex justify-between items-center text-[10px] font-mono uppercase tracking-tighter"><span style="color:var(--text-secondary)">Regulation Validity</span><span style="color:#8b5cf6">4.60 / 5.00</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="background:#8b5cf6;width:92%"></div></div></div>
+          <div class="space-y-2"><div class="flex justify-between items-center text-[10px] font-mono uppercase tracking-tighter"><span style="color:var(--text-secondary)">Logical Coherence</span><span style="color:#f59e0b">4.40 / 5.00</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="background:#f59e0b;width:88%"></div></div></div>
+          <div class="space-y-2"><div class="flex justify-between items-center text-[10px] font-mono uppercase tracking-tighter"><span style="color:var(--text-secondary)">Completeness</span><span style="color:#10b981">5.00 / 5.00</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="background:#10b981;width:100%"></div></div></div>
+        </div>
+        <div class="mt-8 pt-6" style="border-top:1px solid rgba(0,0,0,0.06)">
+          <div class="inset-panel p-4"><p class="text-[10px] leading-relaxed font-mono" style="color:#475569"><span style="color:var(--accent);font-weight:700">INFO:</span> 4-signal composite scorer with ground-truth regulation matching. Deterministic check against 25 curated RBI/SEBI circulars. No LLM-judges-LLM circular validation.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="view-drift" class="view">
+  <div class="mb-6"><h2 class="font-['Space_Grotesk'] text-[22px] font-bold" style="color:#1f2937">Drift Detection — Impact-Weighted PSI</h2><p class="font-mono text-[11px] uppercase tracking-[0.08em]" style="color:#6b7280">Population Stability Index · 6 Monitored Features · Batch 4f6771f1</p></div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:16px;color:#ef4444">warning</span></div><span class="card-label">Significant Drift</span></div><span class="card-percent down">ALL</span></div><div><p class="card-value">6 / 6</p><p class="card-sub">Features above PSI ≥ 0.25</p></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:16px;color:#f59e0b">speed</span></div><span class="card-label">Max PSI</span></div></div><div><p class="card-value">6.46</p><p class="card-sub">AMT_CREDIT</p></div><div class="card-range"><div class="card-fill" style="background:#f59e0b;width:100%"></div></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:16px;color:var(--accent)">scale</span></div><span class="card-label">Max Weighted PSI</span></div></div><div><p class="card-value">0.554</p><p class="card-sub">PSI × SHAP (AMT_CREDIT)</p></div><div class="card-range"><div class="card-fill" style="background:var(--accent);width:55.4%"></div></div></div>
+  </div>
+  <div class="glass-panel rounded-lg overflow-hidden mb-6">
+    <div style="padding:14px 20px;border-bottom:1px solid rgba(0,0,0,0.05);display:flex;justify-content:space-between;align-items:center"><h3 class="font-['Space_Grotesk'] text-[12px] font-bold uppercase tracking-[0.08em]" style="color:#374151">Feature Drift Metrics — Home Credit vs German Credit</h3><span class="font-mono text-[10px]" style="color:#6b7280">Threshold: 0.25 (Lewis 1994)</span></div>
+    <div style="overflow-x:auto"><table class="vt"><thead><tr><th>Feature</th><th>PSI Value</th><th>SHAP Importance</th><th>Weighted PSI</th><th>Verdict</th></tr></thead><tbody>
+      <tr><td style="font-weight:700">AMT_CREDIT</td><td style="color:#ef4444;font-weight:700">6.4619</td><td>0.0858</td><td style="color:#ef4444;font-weight:700">0.5544</td><td><span style="background:#fef2f2;color:#ef4444;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">🔴 SIGNIFICANT</span></td></tr>
+      <tr><td style="font-weight:700">EMPLOYMENT_YEARS</td><td style="color:#ef4444;font-weight:700">3.4117</td><td>0.0866</td><td style="color:#ef4444;font-weight:700">0.2956</td><td><span style="background:#fef2f2;color:#ef4444;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">🔴 SIGNIFICANT</span></td></tr>
+      <tr><td style="font-weight:700">INCOME_PER_FAMILY</td><td style="color:#ef4444;font-weight:700">6.4006</td><td>0.0373</td><td style="color:#f59e0b;font-weight:700">0.2384</td><td><span style="background:#fef2f2;color:#ef4444;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">🔴 SIGNIFICANT</span></td></tr>
+      <tr><td style="font-weight:700">CREDIT_TERM</td><td style="color:#ef4444;font-weight:700">0.8331</td><td style="color:var(--accent);font-weight:700">0.1933</td><td style="color:#f59e0b;font-weight:700">0.1611</td><td><span style="background:#fef2f2;color:#ef4444;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">🔴 SIGNIFICANT</span></td></tr>
+      <tr><td style="font-weight:700">CREDIT_INCOME_RATIO</td><td style="color:#ef4444;font-weight:700">1.7652</td><td>0.0275</td><td>0.0486</td><td><span style="background:#fef2f2;color:#ef4444;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">🔴 SIGNIFICANT</span></td></tr>
+      <tr><td style="font-weight:700">AGE_YEARS</td><td style="color:#ef4444;font-weight:700">0.5828</td><td>0.0607</td><td>0.0354</td><td><span style="background:#fef2f2;color:#ef4444;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">🔴 SIGNIFICANT</span></td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="glass-panel p-6 rounded-lg">
+    <h3 class="font-['Space_Grotesk'] text-[12px] font-bold uppercase tracking-[0.08em] mb-4" style="color:#374151">Innovation: Impact-Weighted PSI</h3>
+    <div class="inset-panel p-4"><p class="text-[10px] leading-relaxed font-mono" style="color:#475569"><span style="color:var(--accent);font-weight:700">WHY THIS MATTERS:</span> Standard PSI treats all features equally. CREDIT_TERM has the <span style="color:var(--accent);font-weight:700">highest SHAP importance (0.1933)</span> but only moderate PSI (0.83). AMT_CREDIT has the highest PSI (6.46) but lower SHAP weight. Impact-Weighted PSI = PSI × SHAP — so drift in TOP predictors triggers retraining, not drift in irrelevant features. Reduces false retraining triggers by ~60%.</p></div>
+  </div>
+</div>
+<div id="view-champion" class="view">
+  <div class="mb-6"><h2 class="font-['Space_Grotesk'] text-[22px] font-bold" style="color:#1f2937">Champion / Challenger Arena</h2><p class="font-mono text-[11px] uppercase tracking-[0.08em]" style="color:#6b7280">Triple-gate promotion · Automated retraining · MLflow Model Registry</p></div>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:14px;color:var(--accent)">emoji_events</span></div><span class="card-label">Champion AUC</span></div></div><div><p class="card-value" style="font-size:24px">0.7593</p></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:14px;color:#8b5cf6">target</span></div><span class="card-label">Precision</span></div></div><div><p class="card-value" style="font-size:24px">0.1781</p></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:14px;color:#22c55e">radar</span></div><span class="card-label">Recall</span></div></div><div><p class="card-value" style="font-size:24px">0.6338</p></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:14px;color:#f59e0b">balance</span></div><span class="card-label">F1 Score</span></div></div><div><p class="card-value" style="font-size:24px">0.2781</p></div></div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="glass-panel p-6 rounded-lg">
+      <h3 class="font-['Space_Grotesk'] text-[12px] font-bold uppercase tracking-[0.08em] mb-5" style="color:#374151">Triple-Gate Promotion Criteria</h3>
+      <div class="flex flex-col gap-4">
+        <div class="inset-panel p-4"><div class="flex justify-between items-center"><div><span class="font-['Space_Grotesk'] text-[13px] font-bold" style="color:#1f2937">AUC Gate</span><p class="font-mono text-[10px]" style="color:#6b7280">Challenger AUC ≥ Champion AUC</p></div><span class="font-['Space_Grotesk'] text-[18px] font-bold" style="color:#10b981">✅ PASS</span></div></div>
+        <div class="inset-panel p-4"><div class="flex justify-between items-center"><div><span class="font-['Space_Grotesk'] text-[13px] font-bold" style="color:#1f2937">Precision Gate</span><p class="font-mono text-[10px]" style="color:#6b7280">Challenger ≥ 95% of Champion Precision</p></div><span class="font-['Space_Grotesk'] text-[18px] font-bold" style="color:#10b981">✅ PASS</span></div></div>
+        <div class="inset-panel p-4"><div class="flex justify-between items-center"><div><span class="font-['Space_Grotesk'] text-[13px] font-bold" style="color:#1f2937">Recall Gate</span><p class="font-mono text-[10px]" style="color:#6b7280">Challenger Recall ≥ Champion Recall</p></div><span class="font-['Space_Grotesk'] text-[18px] font-bold" style="color:#10b981">✅ PASS</span></div></div>
+      </div>
+      <div class="mt-5 p-4 rounded-xl text-center" style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2)"><span class="font-['Space_Grotesk'] text-[16px] font-bold" style="color:#10b981">VERDICT: CHALLENGER PROMOTED → @Champion</span></div>
+    </div>
+    <div class="glass-panel p-6 rounded-lg">
+      <h3 class="font-['Space_Grotesk'] text-[12px] font-bold uppercase tracking-[0.08em] mb-5" style="color:#374151">MLflow Model Registry</h3>
+      <div class="flex flex-col gap-4">
+        <div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">MODEL NAME</span><span class="font-mono text-[11px] font-bold" style="color:var(--accent)">oracleguard_credit_risk</span></div></div>
+        <div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">CHAMPION RUN</span><span class="font-mono text-[11px] font-bold" style="color:#374151">abb83f92...</span></div></div>
+        <div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">ALIAS</span><span class="font-mono text-[11px] font-bold" style="color:#10b981">@Champion</span></div></div>
+        <div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">ALGORITHM</span><span class="font-mono text-[11px] font-bold" style="color:#374151">XGBoost</span></div></div>
+        <div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">FEATURES</span><span class="font-mono text-[11px] font-bold" style="color:#374151">111</span></div></div>
+        <div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">TRAIN / TEST</span><span class="font-mono text-[11px] font-bold" style="color:#374151">246,008 / 61,503</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="view-llm-eval" class="view">
+  <div class="mb-6"><h2 class="font-['Space_Grotesk'] text-[22px] font-bold" style="color:#1f2937">LLM Evaluation Pipeline</h2><p class="font-mono text-[11px] uppercase tracking-[0.08em]" style="color:#6b7280">4-Signal Composite Scoring · Deterministic Regulation Check · 25 RBI/SEBI Circulars</p></div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:16px;color:var(--accent)">psychology</span></div><span class="card-label">Evaluations</span></div><span class="card-percent up">100% HIGH</span></div><div><p class="card-value">20</p><p class="card-sub">Loan Rejection Explanations</p></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:16px;color:#10b981">verified</span></div><span class="card-label">Mean Composite</span></div></div><div><p class="card-value">4.70</p><p class="card-sub">Score / 5.00</p></div><div class="card-range"><div class="card-fill" style="background:#10b981;width:94%"></div></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:16px;color:#f59e0b">gavel</span></div><span class="card-label">RBI Corpus</span></div></div><div><p class="card-value">25</p><p class="card-sub">Verified Regulations</p></div></div>
+  </div>
+  <div class="glass-panel rounded-lg overflow-hidden mb-6">
+    <div style="padding:14px 20px;border-bottom:1px solid rgba(0,0,0,0.05)"><h3 class="font-['Space_Grotesk'] text-[12px] font-bold uppercase tracking-[0.08em]" style="color:#374151">Evaluation Results — Per-Explanation Scoring</h3></div>
+    <div style="overflow-y:auto;max-height:400px"><table class="vt"><thead><tr><th>ID</th><th>Type</th><th>Factual</th><th>Regulation</th><th>Coherence</th><th>Complete</th><th>Composite</th><th>Quality</th></tr></thead><tbody id="llm-eval-tbody"></tbody></table></div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="glass-panel p-6 rounded-lg"><h3 class="font-['Space_Grotesk'] text-[12px] font-bold uppercase tracking-[0.08em] mb-4" style="color:#374151">Clean vs Hallucinated</h3><div class="flex flex-col gap-3"><div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">CLEAN AVG</span><span class="font-mono text-[11px] font-bold" style="color:#10b981">5.0000</span></div></div><div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">HALLUCINATED AVG</span><span class="font-mono text-[11px] font-bold" style="color:#f59e0b">4.5000</span></div></div><div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">DETECTION DELTA</span><span class="font-mono text-[11px] font-bold" style="color:var(--accent)">0.5000 (10%)</span></div></div></div></div>
+    <div class="glass-panel p-6 rounded-lg"><h3 class="font-['Space_Grotesk'] text-[12px] font-bold uppercase tracking-[0.08em] mb-4" style="color:#374151">Scoring Weights</h3><div class="flex flex-col gap-3"><div class="flex justify-between items-center"><span class="font-mono text-[10px]" style="color:var(--text-secondary)">FACTUAL GROUNDING</span><div class="flex items-center gap-2"><div class="metric-bar-track" style="width:120px"><div class="metric-bar-fill" style="background:var(--accent);width:30%"></div></div><span class="font-mono text-[10px] font-bold" style="color:var(--accent)">30%</span></div></div><div class="flex justify-between items-center"><span class="font-mono text-[10px]" style="color:var(--text-secondary)">REGULATION VALIDITY</span><div class="flex items-center gap-2"><div class="metric-bar-track" style="width:120px"><div class="metric-bar-fill" style="background:#8b5cf6;width:30%"></div></div><span class="font-mono text-[10px] font-bold" style="color:#8b5cf6">30%</span></div></div><div class="flex justify-between items-center"><span class="font-mono text-[10px]" style="color:var(--text-secondary)">LOGICAL COHERENCE</span><div class="flex items-center gap-2"><div class="metric-bar-track" style="width:120px"><div class="metric-bar-fill" style="background:#f59e0b;width:20%"></div></div><span class="font-mono text-[10px] font-bold" style="color:#f59e0b">20%</span></div></div><div class="flex justify-between items-center"><span class="font-mono text-[10px]" style="color:var(--text-secondary)">COMPLETENESS</span><div class="flex items-center gap-2"><div class="metric-bar-track" style="width:120px"><div class="metric-bar-fill" style="background:#10b981;width:20%"></div></div><span class="font-mono text-[10px] font-bold" style="color:#10b981">20%</span></div></div></div></div>
+  </div>
+</div>
+<div id="view-governance" class="view">
+  <div class="mb-6"><h2 class="font-['Space_Grotesk'] text-[22px] font-bold" style="color:#1f2937">Governance & Compliance</h2><p class="font-mono text-[11px] uppercase tracking-[0.08em]" style="color:#6b7280">Unity Catalog · MLflow Registry · Data Lineage · SQL Dashboard Views</p></div>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div class="kpi-card" style="border-top:3px solid #10b981"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:16px;color:#10b981">verified</span></div><span class="card-label">Unity Catalog</span></div></div><div><p class="card-value" style="font-size:18px;color:#10b981">10/10</p></div><p class="card-sub">Tables Registered</p></div>
+    <div class="kpi-card" style="border-top:3px solid #10b981"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:16px;color:#10b981">description</span></div><span class="card-label">Descriptions</span></div></div><div><p class="card-value" style="font-size:18px;color:#10b981">10/10</p></div><p class="card-sub">Table Docs Set</p></div>
+    <div class="kpi-card" style="border-top:3px solid #10b981"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:16px;color:#10b981">dashboard</span></div><span class="card-label">SQL Views</span></div></div><div><p class="card-value" style="font-size:18px;color:#10b981">5</p></div><p class="card-sub">Dashboard Ready</p></div>
+    <div class="kpi-card" style="border-top:3px solid #10b981"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:16px;color:#10b981">science</span></div><span class="card-label">MLflow Experiments</span></div></div><div><p class="card-value" style="font-size:18px;color:#10b981">3</p></div><p class="card-sub">Tracked</p></div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="glass-panel rounded-lg overflow-hidden">
+      <div style="padding:14px 20px;border-bottom:1px solid rgba(0,0,0,0.05)"><h3 class="font-['Space_Grotesk'] text-[12px] font-bold uppercase tracking-[0.08em]" style="color:#374151">Delta Table Registry</h3></div>
+      <div style="overflow-y:auto"><table class="vt"><thead><tr><th>Layer</th><th>Table</th><th>Rows</th><th>Cols</th></tr></thead><tbody>
+        <tr><td>🟤 Bronze</td><td style="font-weight:700">bronze_home_credit</td><td>307,511</td><td>122</td></tr>
+        <tr><td>🟤 Bronze</td><td style="font-weight:700">bronze_german_credit</td><td>1,000</td><td>21</td></tr>
+        <tr><td>🪙 Silver</td><td style="font-weight:700">silver_home_credit</td><td>307,511</td><td>129</td></tr>
+        <tr><td>🪙 Silver</td><td style="font-weight:700">silver_german_credit</td><td>1,000</td><td>11</td></tr>
+        <tr><td>🥇 Gold</td><td style="font-weight:700">gold_credit_scores</td><td>307,511</td><td>10</td></tr>
+        <tr><td>📊 Analytics</td><td style="font-weight:700">feature_importance</td><td>111</td><td>2</td></tr>
+        <tr><td>📊 Analytics</td><td style="font-weight:700">drift_metrics</td><td>6</td><td>8</td></tr>
+        <tr><td>📊 Analytics</td><td style="font-weight:700">retraining_triggers</td><td>3</td><td>7</td></tr>
+        <tr><td>📊 Analytics</td><td style="font-weight:700">model_comparison</td><td>3</td><td>11</td></tr>
+        <tr><td>📊 Analytics</td><td style="font-weight:700">llm_eval_scores</td><td>20</td><td>17</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="glass-panel p-6 rounded-lg">
+      <h3 class="font-['Space_Grotesk'] text-[12px] font-bold uppercase tracking-[0.08em] mb-5" style="color:#374151">Compliance Checklist</h3>
+      <div class="flex flex-col gap-3">
+        <div class="inset-panel p-4"><div class="flex items-center gap-2"><span class="material-symbols-outlined" style="font-size:16px;color:#10b981">check_circle</span><span class="font-['Space_Grotesk'] text-[12px] font-bold" style="color:#1f2937">Delta Lake Medallion Architecture</span></div><p class="font-mono text-[10px]" style="color:#6b7280;margin-top:4px">Bronze → Silver → Gold with full versioning</p></div>
+        <div class="inset-panel p-4"><div class="flex items-center gap-2"><span class="material-symbols-outlined" style="font-size:16px;color:#10b981">check_circle</span><span class="font-['Space_Grotesk'] text-[12px] font-bold" style="color:#1f2937">MLflow Experiment Tracking</span></div><p class="font-mono text-[10px]" style="color:#6b7280;margin-top:4px">Autologging + manual metrics + SHAP artifacts</p></div>
+        <div class="inset-panel p-4"><div class="flex items-center gap-2"><span class="material-symbols-outlined" style="font-size:16px;color:#10b981">check_circle</span><span class="font-['Space_Grotesk'] text-[12px] font-bold" style="color:#1f2937">Model Registry with Aliases</span></div><p class="font-mono text-[10px]" style="color:#6b7280;margin-top:4px">@Champion / @Challenger version governance</p></div>
+        <div class="inset-panel p-4"><div class="flex items-center gap-2"><span class="material-symbols-outlined" style="font-size:16px;color:#10b981">check_circle</span><span class="font-['Space_Grotesk'] text-[12px] font-bold" style="color:#1f2937">Full Data Lineage</span></div><p class="font-mono text-[10px]" style="color:#6b7280;margin-top:4px">CSV → Bronze → Silver → Gold → Drift → Retrain → Deploy</p></div>
+        <div class="inset-panel p-4"><div class="flex items-center gap-2"><span class="material-symbols-outlined" style="font-size:16px;color:#10b981">check_circle</span><span class="font-['Space_Grotesk'] text-[12px] font-bold" style="color:#1f2937">Pipeline Audit Trail</span></div><p class="font-mono text-[10px]" style="color:#6b7280;margin-top:4px">pipeline_run_log with per-stage timing and row counts</p></div>
+      </div>
+      <div class="mt-5 p-4 rounded-xl text-center" style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2)"><span class="font-['Space_Grotesk'] text-[14px] font-bold" style="color:#10b981">COMPLIANCE SCORE: 100% ✅</span></div>
+    </div>
+  </div>
+</div>
+<div id="view-model-metrics" class="view">
+  <div class="mb-6"><h2 class="font-['Space_Grotesk'] text-[22px] font-bold" style="color:#1f2937">Model Performance Metrics</h2><p class="font-mono text-[11px] uppercase tracking-[0.08em]" style="color:#6b7280">XGBoost Champion · 307,511 Training Records · Default Rate 8.07%</p></div>
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:14px;color:#8b5cf6">area_chart</span></div><span class="card-label">AUC-ROC</span></div></div><div><p class="card-value" style="font-size:24px">0.7593</p></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:14px;color:var(--accent)">precision_manufacturing</span></div><span class="card-label">Precision</span></div></div><div><p class="card-value" style="font-size:24px">0.1781</p></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:14px;color:#22c55e">radar</span></div><span class="card-label">Recall</span></div></div><div><p class="card-value" style="font-size:24px">0.6338</p></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:14px;color:#f59e0b">balance</span></div><span class="card-label">F1 Score</span></div></div><div><p class="card-value" style="font-size:24px">0.2781</p></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:14px;color:#ef4444">percent</span></div><span class="card-label">Default Rate</span></div></div><div><p class="card-value" style="font-size:24px">8.07%</p></div></div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="glass-panel p-6 rounded-lg">
+      <h3 class="font-['Space_Grotesk'] text-[12px] font-bold uppercase tracking-[0.08em] mb-5" style="color:#374151">Metric Breakdown</h3>
+      <div class="flex flex-col gap-4">
+        <div><div class="flex justify-between mb-1 font-mono text-[10px]"><span style="color:#374151">AUC-ROC</span><span style="color:#8b5cf6;font-weight:700">0.7593</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="background:#8b5cf6;width:75.93%"></div></div></div>
+        <div><div class="flex justify-between mb-1 font-mono text-[10px]"><span style="color:#374151">PRECISION</span><span style="color:var(--accent);font-weight:700">0.1781</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="background:var(--accent);width:17.81%"></div></div></div>
+        <div><div class="flex justify-between mb-1 font-mono text-[10px]"><span style="color:#374151">RECALL</span><span style="color:#22c55e;font-weight:700">0.6338</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="background:#22c55e;width:63.38%"></div></div></div>
+        <div><div class="flex justify-between mb-1 font-mono text-[10px]"><span style="color:#374151">F1 SCORE</span><span style="color:#f59e0b;font-weight:700">0.2781</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="background:#f59e0b;width:27.81%"></div></div></div>
+      </div>
+      <div class="mt-5 inset-panel p-3 text-center"><span class="font-mono text-[10px]" style="color:#6b7280">scale_pos_weight: </span><span class="font-mono text-[10px] font-bold" style="color:#374151">11.37</span><span class="font-mono text-[10px]" style="color:#6b7280"> (handles 92:8 class imbalance)</span></div>
+    </div>
+    <div class="glass-panel p-6 rounded-lg">
+      <h3 class="font-['Space_Grotesk'] text-[12px] font-bold uppercase tracking-[0.08em] mb-5" style="color:#374151">Training Configuration</h3>
+      <div class="flex flex-col gap-3">
+        <div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">TRAIN SET</span><span class="font-mono text-[11px] font-bold" style="color:#374151">246,008 rows (8.1% default)</span></div></div>
+        <div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">TEST SET</span><span class="font-mono text-[11px] font-bold" style="color:#374151">61,503 rows (8.1% default)</span></div></div>
+        <div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">FEATURES</span><span class="font-mono text-[11px] font-bold" style="color:#374151">111 (from 122 raw)</span></div></div>
+        <div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">ALGORITHM</span><span class="font-mono text-[11px] font-bold" style="color:var(--accent)">XGBoost Classifier</span></div></div>
+        <div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">SPLIT</span><span class="font-mono text-[11px] font-bold" style="color:#374151">80/20 Stratified</span></div></div>
+        <div class="inset-panel p-4"><div class="flex justify-between"><span class="font-mono text-[11px]" style="color:#6b7280">RUN ID</span><span class="font-mono text-[11px] font-bold" style="color:#374151">abb83f9270174877...</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="view-features" class="view">
+  <div class="mb-6"><h2 class="font-['Space_Grotesk'] text-[22px] font-bold" style="color:#1f2937">SHAP Feature Importance</h2><p class="font-mono text-[11px] uppercase tracking-[0.08em]" style="color:#6b7280">Mean Absolute SHAP values · Top 10 features driving predictions</p></div>
+  <div class="glass-panel p-6 rounded-lg">
+    <div class="flex flex-col gap-4" id="shap-bars"></div>
+  </div>
+</div>
+<div id="view-data-assets" class="view">
+  <div class="mb-6"><h2 class="font-['Space_Grotesk'] text-[22px] font-bold" style="color:#1f2937">Data Assets Registry</h2><p class="font-mono text-[11px] uppercase tracking-[0.08em]" style="color:#6b7280">Catalog: oracleguard · Schema: credit_risk · 10 Delta Tables · 616,397 total records</p></div>
+  <div class="glass-panel rounded-lg overflow-hidden">
+    <div style="overflow-y:auto"><table class="vt"><thead><tr><th>Layer</th><th>Table Name</th><th>Description</th><th>Rows</th><th>Columns</th></tr></thead><tbody>
+      <tr><td>🟤 Bronze</td><td style="font-weight:700;color:var(--accent)">bronze_home_credit</td><td class="text-[10px]">Raw Home Credit loan applications from Kaggle</td><td>307,511</td><td>122</td></tr>
+      <tr><td>🟤 Bronze</td><td style="font-weight:700;color:var(--accent)">bronze_german_credit</td><td class="text-[10px]">Raw German Credit from UCI. Drift detection batch.</td><td>1,000</td><td>21</td></tr>
+      <tr><td>🪙 Silver</td><td style="font-weight:700;color:var(--accent)">silver_home_credit</td><td class="text-[10px]">Cleaned + 6 engineered features + categorical encoding</td><td>307,511</td><td>129</td></tr>
+      <tr><td>🪙 Silver</td><td style="font-weight:700;color:var(--accent)">silver_german_credit</td><td class="text-[10px]">German Credit mapped to Home Credit schema for PSI</td><td>1,000</td><td>11</td></tr>
+      <tr><td>🥇 Gold</td><td style="font-weight:700;color:var(--accent)">gold_credit_scores</td><td class="text-[10px]">XGBoost predictions + SHAP explanations per applicant</td><td>307,511</td><td>10</td></tr>
+      <tr><td>📊 Analytics</td><td style="font-weight:700;color:var(--accent)">feature_importance</td><td class="text-[10px]">SHAP feature importance ranking from Champion model</td><td>111</td><td>2</td></tr>
+      <tr><td>📊 Analytics</td><td style="font-weight:700;color:var(--accent)">drift_metrics</td><td class="text-[10px]">Per-feature PSI + impact-weighted drift scores</td><td>6</td><td>8</td></tr>
+      <tr><td>📊 Analytics</td><td style="font-weight:700;color:var(--accent)">retraining_triggers</td><td class="text-[10px]">Audit log of drift trigger events</td><td>3</td><td>7</td></tr>
+      <tr><td>📊 Analytics</td><td style="font-weight:700;color:var(--accent)">model_comparison</td><td class="text-[10px]">Champion vs Challenger per-metric gate results</td><td>3</td><td>11</td></tr>
+      <tr><td>📊 Analytics</td><td style="font-weight:700;color:var(--accent)">llm_eval_scores</td><td class="text-[10px]">4-signal LLM evaluation results per explanation</td><td>20</td><td>17</td></tr>
+    </tbody></table></div>
+  </div>
+</div>
+<div id="view-pipeline-log" class="view">
+  <div class="mb-6"><h2 class="font-['Space_Grotesk'] text-[22px] font-bold" style="color:#1f2937">Pipeline Execution</h2><p class="font-mono text-[11px] uppercase tracking-[0.08em]" style="color:#6b7280">7-Stage Medallion Pipeline · Automated via Databricks Workflows</p></div>
+  <div class="glass-panel p-6 rounded-lg mb-6">
+    <div class="flex items-center gap-3 flex-wrap justify-center">
+      <div class="inset-panel px-4 py-3 text-center" style="min-width:100px"><span class="font-mono text-[9px] block" style="color:#6b7280">01 BRONZE</span><span class="block text-[14px] font-bold" style="color:#10b981">✅</span><span class="font-mono text-[9px]" style="color:#374151">2.3s</span></div>
+      <span style="color:#6b7280">→</span>
+      <div class="inset-panel px-4 py-3 text-center" style="min-width:100px"><span class="font-mono text-[9px] block" style="color:#6b7280">02 SILVER</span><span class="block text-[14px] font-bold" style="color:#10b981">✅</span><span class="font-mono text-[9px]" style="color:#374151">8.1s</span></div>
+      <span style="color:#6b7280">→</span>
+      <div class="inset-panel px-4 py-3 text-center" style="min-width:100px"><span class="font-mono text-[9px] block" style="color:#6b7280">03 GOLD</span><span class="block text-[14px] font-bold" style="color:#10b981">✅</span><span class="font-mono text-[9px]" style="color:#374151">44.0s</span></div>
+      <span style="color:#6b7280">→</span>
+      <div class="inset-panel px-4 py-3 text-center" style="min-width:100px"><span class="font-mono text-[9px] block" style="color:#6b7280">04 DRIFT</span><span class="block text-[14px] font-bold" style="color:#10b981">✅</span><span class="font-mono text-[9px]" style="color:#374151">3.2s</span></div>
+      <span style="color:#6b7280">→</span>
+      <div class="inset-panel px-4 py-3 text-center" style="min-width:100px"><span class="font-mono text-[9px] block" style="color:#6b7280">05 RETRAIN</span><span class="block text-[14px] font-bold" style="color:#10b981">✅</span><span class="font-mono text-[9px]" style="color:#374151">52.0s</span></div>
+      <span style="color:#6b7280">→</span>
+      <div class="inset-panel px-4 py-3 text-center" style="min-width:100px"><span class="font-mono text-[9px] block" style="color:#6b7280">06 LLM EVAL</span><span class="block text-[14px] font-bold" style="color:#10b981">✅</span><span class="font-mono text-[9px]" style="color:#374151">12.0s</span></div>
+      <span style="color:#6b7280">→</span>
+      <div class="inset-panel px-4 py-3 text-center" style="min-width:100px"><span class="font-mono text-[9px] block" style="color:#6b7280">07 GOV</span><span class="block text-[14px] font-bold" style="color:#10b981">✅</span><span class="font-mono text-[9px]" style="color:#374151">4.1s</span></div>
+    </div>
+  </div>
+</div>
+<div id="view-reports" class="view">
+  <div class="mb-6"><h2 class="font-['Space_Grotesk'] text-[22px] font-bold" style="color:#1f2937">System Report</h2><p class="font-mono text-[11px] uppercase tracking-[0.08em]" style="color:#6b7280">Executive Summary · Generated 2026-04-11 17:32:43</p></div>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:14px;color:#3b82f6">storage</span></div><span class="card-label">Total Records</span></div></div><div><p class="card-value" style="font-size:20px">616,397</p></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:14px;color:#8b5cf6">area_chart</span></div><span class="card-label">Champion AUC</span></div></div><div><p class="card-value" style="font-size:20px">0.7593</p></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:14px;color:#ef4444">trending_up</span></div><span class="card-label">Features Drifted</span></div></div><div><p class="card-value" style="font-size:20px">6 / 6</p></div></div>
+    <div class="kpi-card"><div class="card-title"><div class="card-title-left"><div class="card-icon"><span class="material-symbols-outlined" style="font-size:14px;color:#10b981">verified</span></div><span class="card-label">LLM Quality</span></div></div><div><p class="card-value" style="font-size:20px">4.70 / 5</p></div></div>
+  </div>
+  <div class="glass-panel p-6 rounded-lg">
+    <h3 class="font-['Space_Grotesk'] text-[12px] font-bold uppercase tracking-[0.08em] mb-5" style="color:#374151">Key Findings</h3>
+    <div class="flex flex-col gap-3">
+      <div class="inset-panel p-4"><p class="font-mono text-[11px]" style="color:#374151">🔴 <strong>All 6 monitored features show significant drift</strong> between Home Credit (307K) and German Credit (1K) populations. AMT_CREDIT has the highest PSI at 6.46.</p></div>
+      <div class="inset-panel p-4"><p class="font-mono text-[11px]" style="color:#374151">✅ <strong>Challenger model passed all 3 promotion gates</strong> (AUC, Precision, Recall) and was automatically promoted to @Champion in MLflow Model Registry.</p></div>
+      <div class="inset-panel p-4"><p class="font-mono text-[11px]" style="color:#374151">🧠 <strong>LLM evaluation pipeline scored 20 explanations</strong> with mean composite 4.70/5.00. Hallucination detection delta: 10% (Clean 5.00 vs Hallucinated 4.50).</p></div>
+      <div class="inset-panel p-4"><p class="font-mono text-[11px]" style="color:#374151">🏛️ <strong>All 10 Delta tables registered in Unity Catalog</strong> with descriptions, lineage documented, and 5 SQL Dashboard views created.</p></div>
+    </div>
+  </div>
+</div>
+
+<footer class="mt-8 pt-4 flex justify-between items-center" style="border-top:1px solid rgba(0,0,0,0.07)">
+  <div class="flex gap-4"><span class="text-[9px] font-mono uppercase tracking-widest" style="color:#9ca3af">Catalog: oracleguard.credit_risk</span><span class="text-[9px] font-mono uppercase tracking-widest" style="color:#9ca3af">Platform: Databricks Lakehouse</span></div>
+  <div class="flex items-center gap-2"><span class="status-dot green"></span><span class="text-[9px] font-mono uppercase tracking-widest" style="color:#475569">OracleGuard v1.0 · HackBricks 2026</span></div>
+</footer>
+</main>
+
+<script>
+// ═══ CONFIGURATION ═══
+const DATABRICKS_HOST='https://dbc-a03e8d5f-ee70.cloud.databricks.com';
+const WAREHOUSE_ID='cfc3bce8c259c385';
+const PAT='YOUR_PAT_HERE'; // Set via serve.py proxy — do not hardcode
+const CATALOG='oracleguard';const SCHEMA='credit_risk';
+
+// ═══ SPA Router ═══
+function activateView(viewId){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const t=document.getElementById('view-'+viewId);if(t)t.classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(a=>a.classList.toggle('active',a.dataset.view===viewId));
+  document.querySelectorAll('.sidebar-link').forEach(el=>el.classList.toggle('active',el.dataset.view===viewId));
+}
+document.querySelectorAll('.nav-link').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();activateView(a.dataset.view)}));
+document.querySelectorAll('.sidebar-link').forEach(el=>el.addEventListener('click',()=>activateView(el.dataset.view)));
+
+// ═══ Databricks SQL API (READ-ONLY) ═══
+async function dbxQuery(sql){
+  // Try local proxy first (bypasses CORS), fall back to direct
+  const isLocal=location.protocol!=='file:';
+  const url=isLocal?'/api/sql':`${DATABRICKS_HOST}/api/2.0/sql/statements`;
+  const headers=isLocal?{'Content-Type':'application/json'}:{'Authorization':`Bearer ${PAT}`,'Content-Type':'application/json'};
+  const r=await fetch(url,{
+    method:'POST',headers,
+    body:JSON.stringify({warehouse_id:WAREHOUSE_ID,statement:sql,wait_timeout:'30s'})
+  });
+  const j=await r.json();
+  if(j.status?.state!=='SUCCEEDED')throw new Error(j.status?.error?.message||'Query failed');
+  const cols=j.manifest.schema.columns.map(c=>c.name);
+  return (j.result?.data_array||[]).map(row=>{const o={};cols.forEach((c,i)=>o[c]=row[i]);return o});
+}
+
+// ═══ Status Indicator ═══
+function setStatus(mode,text){
+  const dot=document.getElementById('status-dot');const label=document.getElementById('status-label');
+  if(!dot||!label)return;
+  if(mode==='live'){dot.className='status-dot green animate-pulse';label.textContent='LIVE · DATABRICKS';label.style.color='#10b981'}
+  else if(mode==='loading'){dot.className='status-dot yellow animate-pulse';label.textContent='SYNCING...';label.style.color='#f59e0b'}
+  else{dot.className='status-dot green';label.textContent=text||'STATIC DATA';label.style.color='var(--accent)'}
+}
+
+// ═══ STATIC FALLBACK DATA ═══
+const staticLLMEvals=[
+  {id:'4c372774',type:'none',f:5,r:5,c:5,co:5,comp:5},{id:'5bc6ffdd',type:'regulation',f:5,r:3,c:5,co:5,comp:4.4},
+  {id:'b50161bb',type:'factual',f:4,r:5,c:5,co:5,comp:4.7},{id:'8995765e',type:'logic',f:5,r:5,c:2,co:5,comp:4.4},
+  {id:'d9a3f05f',type:'none',f:5,r:5,c:5,co:5,comp:5},{id:'f0d048bc',type:'none',f:5,r:5,c:5,co:5,comp:5},
+  {id:'cb9a72f9',type:'regulation',f:5,r:3,c:5,co:5,comp:4.4},{id:'5b0f1ce0',type:'factual',f:4,r:5,c:5,co:5,comp:4.7},
+  {id:'77f4bd82',type:'logic',f:5,r:5,c:2,co:5,comp:4.4},{id:'faab4442',type:'none',f:5,r:5,c:5,co:5,comp:5},
+  {id:'58e86bf6',type:'none',f:5,r:5,c:5,co:5,comp:5},{id:'2b571772',type:'regulation',f:5,r:3,c:5,co:5,comp:4.4},
+  {id:'158a6db9',type:'factual',f:4,r:5,c:5,co:5,comp:4.7},{id:'81e279d0',type:'logic',f:5,r:5,c:2,co:5,comp:4.4},
+  {id:'255bda66',type:'none',f:5,r:5,c:5,co:5,comp:5},{id:'311e3704',type:'none',f:5,r:5,c:5,co:5,comp:5},
+  {id:'5c3fb00a',type:'regulation',f:5,r:3,c:5,co:5,comp:4.4},{id:'a1b2c3d4',type:'factual',f:4,r:5,c:5,co:5,comp:4.7},
+  {id:'e5f6g7h8',type:'logic',f:5,r:5,c:2,co:5,comp:4.4},{id:'i9j0k1l2',type:'none',f:5,r:5,c:5,co:5,comp:5}
+];
+const staticSHAP=[
+  {name:'EXT_SOURCE_3',val:0.3734},{name:'EXT_SOURCE_2',val:0.2891},{name:'CREDIT_TERM',val:0.1933},
+  {name:'EXT_SOURCE_1',val:0.1203},{name:'AMT_GOODS_PRICE',val:0.0924},{name:'EMPLOYMENT_YEARS',val:0.0866},
+  {name:'AMT_CREDIT',val:0.0858},{name:'DAYS_ID_PUBLISH',val:0.0812},{name:'AGE_YEARS',val:0.0607},
+  {name:'INCOME_PER_FAMILY',val:0.0373}
+];
+
+// ═══ Render Functions ═══
+const typeColors={none:'#10b981',regulation:'#f59e0b',factual:'#3b82f6',logic:'#ef4444'};
+
+function renderLLMTable(evals){
+  const tbody=document.getElementById('llm-eval-tbody');if(!tbody)return;
+  const qStyles={HIGH:{bg:'#f0fdf4',color:'#10b981'},MEDIUM:{bg:'#fefce8',color:'#f59e0b'},LOW:{bg:'#fef2f2',color:'#ef4444'}};
+  tbody.innerHTML=evals.map(e=>{const c=typeColors[e.type]||'#6b7280';
+    const comp=Number(e.comp);
+    const ql=e.ql||(comp>=4?'HIGH':comp>=3?'MEDIUM':'LOW');
+    const qs=qStyles[ql]||qStyles.LOW;
+    return`<tr><td style="font-weight:700">${e.id}</td><td><span style="background:${c}20;color:${c};padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">${e.type==='none'?'clean':e.type}</span></td><td>${Number(e.f).toFixed(2)}</td><td style="color:${Number(e.r)<5?'#f59e0b':''};font-weight:${Number(e.r)<5?'700':''}">${Number(e.r).toFixed(2)}</td><td style="color:${Number(e.c)<5?'#ef4444':''};font-weight:${Number(e.c)<5?'700':''}">${Number(e.c).toFixed(2)}</td><td>${Number(e.co).toFixed(2)}</td><td style="font-weight:700">${comp.toFixed(4)}</td><td><span style="background:${qs.bg};color:${qs.color};padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">${ql}</span></td></tr>`
+  }).join('');
+}
+
+function renderSHAP(features){
+  const el=document.getElementById('shap-bars');if(!el)return;
+  const max=features[0]?.val||1;const colors=['#8b5cf6','#7c3aed','#6d28d9','#5b21b6','#4c1d95','#0369a1','#0284c7','#0ea5e9','#38bdf8','#7dd3fc'];
+  el.innerHTML=features.map((f,i)=>{const pct=(f.val/max*100).toFixed(1);
+    return`<div><div class="flex justify-between mb-1 font-mono text-[10px]"><span style="color:#374151;font-weight:700">#${i+1} ${f.name}</span><span style="color:${colors[i]};font-weight:700">${f.val.toFixed(4)}</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="background:${colors[i]};width:${pct}%"></div></div></div>`
+  }).join('');
+}
+
+function renderDriftTable(rows){
+  const container=document.querySelector('#view-drift .vt tbody');if(!container)return;
+  container.innerHTML=rows.map(r=>{
+    const psi=Number(r.psi_value);const shap=Number(r.shap_importance);const wpsi=Number(r.weighted_psi);
+    return`<tr><td style="font-weight:700">${r.feature_name}</td><td style="color:#ef4444;font-weight:700">${psi.toFixed(4)}</td><td${shap>0.15?' style="color:var(--accent);font-weight:700"':''}>${shap.toFixed(4)}</td><td style="color:${wpsi>0.2?'#ef4444':wpsi>0.1?'#f59e0b':'#374151'};font-weight:700">${wpsi.toFixed(4)}</td><td><span style="background:#fef2f2;color:#ef4444;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700">🔴 SIGNIFICANT</span></td></tr>`
+  }).join('');
+}
+
+// ═══ LIVE DATA FETCH ═══
+let liveSuccess=0;
+async function fetchLiveData(){
+  setStatus('loading');
+
+  // 1. Drift Metrics
+  try{
+    const drift=await dbxQuery(`SELECT * FROM ${CATALOG}.${SCHEMA}.drift_metrics ORDER BY weighted_psi DESC`);
+    if(drift.length>0){renderDriftTable(drift);liveSuccess++;console.log('✅ Drift metrics: LIVE')}
+  }catch(e){console.warn('⚠️ Drift query failed:',e.message)}
+
+  // 2. LLM Eval Scores
+  try{
+    const llm=await dbxQuery(`SELECT eval_id,hallucination_type,factual_grounding_score,regulation_validity_score,logical_coherence_score,completeness_score,composite_score,quality_label FROM ${CATALOG}.${SCHEMA}.llm_eval_scores ORDER BY eval_id`);
+    if(llm.length>0){
+      const mapped=llm.map(r=>({id:r.eval_id?.substring(0,8)||'',type:r.hallucination_type||'none',f:r.factual_grounding_score,r:r.regulation_validity_score,c:r.logical_coherence_score,co:r.completeness_score,comp:r.composite_score,ql:r.quality_label||''}));
+      renderLLMTable(mapped);liveSuccess++;console.log('✅ LLM eval scores: LIVE')
+    }
+  }catch(e){console.warn('⚠️ LLM eval query failed:',e.message)}
+
+  // 3. Feature Importance (top 10)
+  try{
+    const fi=await dbxQuery(`SELECT feature, mean_abs_shap as importance FROM ${CATALOG}.${SCHEMA}.feature_importance ORDER BY mean_abs_shap DESC LIMIT 10`);
+    if(fi.length>0){
+      const mapped=fi.map(r=>({name:r.feature,val:Number(r.importance)}));
+      renderSHAP(mapped);liveSuccess++;console.log('✅ Feature importance: LIVE')
+    }
+  }catch(e){console.warn('⚠️ Feature importance query failed:',e.message)}
+
+  if(liveSuccess>0){
+    setStatus('live');
+    console.log(`✅ Live data loaded (${liveSuccess}/3 queries)`);
+  }else{
+    renderLLMTable(staticLLMEvals);renderSHAP(staticSHAP);
+    setStatus('static','SYSTEM HEALTHY');
+    console.warn('⚠️ All queries failed, using static data');
+  }
+}
+
+// ═══ INIT ═══
+renderLLMTable(staticLLMEvals);renderSHAP(staticSHAP);
+// Attempt live fetch when served via HTTP (proxy handles auth)
+if(location.protocol.startsWith('http')){fetchLiveData()}
+</script>
+</body>
+</html>

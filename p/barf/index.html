@@ -1,0 +1,145 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BARF: 4D Completion | Sai Vinay Bhoomireddy</title><meta name="description" content="Monocular video to a complete, explorable 360° 4D scene, plus a metric that cannot be gamed by empty points.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#FED176;--navy:#18233F;--ink:#0e1424;--cyan:#13F2EF;--mag:#FF2EC4;--txt:#e9ecf3;--mut:#9aa3b8;--line:#26314f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--txt);font-family:Poppins,system-ui,sans-serif;line-height:1.6}
+a{color:var(--gold)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;font-size:14px}
+.top a{color:var(--mut);text-decoration:none}.top a:hover{color:var(--gold)}
+.badge{display:inline-block;background:rgba(254,209,118,.12);color:var(--gold);border:1px solid rgba(254,209,118,.35);
+ padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(40px,7vw,76px);line-height:1.02;margin:16px 0 10px;letter-spacing:.01em}
+.tag{font-size:clamp(16px,2.2vw,20px);color:#cfd5e3;max-width:820px}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 34px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;text-decoration:none;border:1px solid var(--line);color:var(--txt);background:#141c31}
+.btn svg{width:16px;height:16px}.btn.primary{background:var(--gold);color:#1b1b1b;border-color:var(--gold)}
+.btn:hover{transform:translateY(-1px)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.m{background:linear-gradient(160deg,#18233F,#121a2e);border:1px solid var(--line);border-radius:16px;padding:18px}
+.m b{display:block;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:34px;color:var(--gold);line-height:1.1}
+.m span{font-size:13px;color:var(--mut)}
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.chip{font-size:12px;padding:6px 11px;border-radius:8px;background:#141c31;border:1px solid var(--line);color:#c9d0e0}
+h2{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:28px;letter-spacing:.02em;margin:44px 0 14px;color:#fff}
+.frame{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#000}
+.frame iframe{width:100%;height:720px;border:0;display:block;background:#e6e9ef}
+.frame video{width:100%;display:block}
+.note{font-size:13px;color:var(--mut);margin:10px 2px 0}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.gallery img{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;display:block}
+.readme{background:#111830;border:1px solid var(--line);border-radius:16px;padding:28px;overflow-wrap:anywhere}
+.readme h1,.readme h2,.readme h3{font-family:Poppins,sans-serif;font-weight:700;color:#fff;margin:22px 0 10px;font-size:20px;letter-spacing:0}
+.readme h1{font-size:24px}.readme p,.readme li{color:#cdd3e1;font-size:15px}.readme ul,.readme ol{padding-left:22px;margin:8px 0}
+.readme img{max-width:100%;border-radius:8px}.readme pre{background:#0a0f1d;padding:14px;border-radius:10px;overflow-x:auto;font-size:13px;margin:10px 0}
+.readme code{font-family:ui-monospace,Menlo,monospace;font-size:13px}.readme table{border-collapse:collapse;margin:12px 0;display:block;overflow-x:auto}
+.readme th,.readme td{border:1px solid var(--line);padding:6px 10px;font-size:13px}
+@media(max-width:640px){.frame iframe{height:560px}.readme{padding:18px}}
+</style></head><body><div class="wrap">
+<div class="top"><a href="/">&larr; saivinay.me</a><a href="https://github.com/Saivinay24/barf-4d-completion" target="_blank" rel="noopener">github.com/Saivinay24/barf-4d-completion</a></div>
+<span class="badge">Research paper · team lead of 6</span><h1>BARF: 4D Completion</h1><p class="tag">Monocular video to a complete, explorable 360° 4D scene, plus a metric that cannot be gamed by empty points.</p>
+<div class="btns"><a class="btn primary" href="app/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Open live app</a><a class="btn" href="paper/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></svg>Read the paper</a><a class="btn" href="https://github.com/Saivinay24/barf-4d-completion" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>Source code</a></div><div class="metrics"><div class="m"><b>360°</b><span>consistent generated views</span></div><div class="m"><b>135</b><span>tests passing</span></div><div class="m"><b>6</b><span>person team, led</span></div></div><div class="stack"><span class="chip">PyTorch</span><span class="chip">Diffusion view synthesis</span><span class="chip">Optical flow</span><span class="chip">WebXR</span></div><h2>Live app</h2><div class="frame"><iframe src="app/" loading="lazy" title="BARF: 4D Completion live app"></iframe></div><p class="note">Point-cloud 4D viewer (WebGL). Loads the bundled scene, or drop your own .ply frames.</p><h2>Results</h2><div class="gallery"><img src="img/0.png" alt="BARF: 4D Completion figure" loading="lazy"><img src="img/1.png" alt="BARF: 4D Completion figure" loading="lazy"><img src="img/2.png" alt="BARF: 4D Completion figure" loading="lazy"></div><h2>How it works</h2><div class="readme"><h1>BARF — Binarily Augmented Reality Footage</h1>
+<blockquote>
+<p><strong>Can we transform a single monocular video into a complete, explorable 360° 4D scene by generating everything the camera never saw?</strong></p>
+</blockquote>
+<p><a href=""><img alt="Tests" src="https://img.shields.io/badge/tests-135%20passed-brightgreen" /></a>
+<a href=""><img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10+-blue" /></a>
+<a href=""><img alt="License" src="https://img.shields.io/badge/license-MIT-green" /></a></p>
+<hr />
+<h2>What This Project Is</h2>
+<p>BARF started in February 2026 as an attempt to build a generative 4D completion system — taking a monocular video reconstruction (which only captures what the camera saw) and filling in the rest of the viewing sphere with AI-generated content for VR exploration.</p>
+<p>While building the system, we ran into two problems: (1) the GPU compute needed to train the generative model at scale, and (2) a more fundamental question — <strong>how would we even know if a completion system had actually worked?</strong></p>
+<p>That second question became the focus. We discovered that the obvious evaluation metric (angular coverage) is critically broken, and wrote a paper about it:</p>
+<p>📄 <strong><a href="https://github.com/Saivinay24/barf-4d-completion/blob/HEAD/paper/barf_paper.pdf">Gaming the Sphere: A Gameability Audit of VR-Completeness Metrics for Generative 4D Scene Completion</a></strong></p>
+<h2>What's In This Repo</h2>
+<h3>Completed and working:</h3>
+<ul>
+<li><strong>Gameability audit paper</strong> (<code>paper/barf_paper.pdf</code>) — adversarial attacks on naive coverage metrics, a robust replacement metric (VRC-R), and a fundamental negative result about reference-free evaluation</li>
+<li><strong>VRC-Score / VRC-R metrics</strong> (<code>src/metrics/</code>) — formal VR-completeness metrics, 135 passing tests</li>
+<li><strong>Adversarial attack suite</strong> (<code>src/attacks/</code>) — dust, chaff, flicker chaff, and clone attacks</li>
+<li><strong>Gap detection</strong> (<code>src/gap_detection/</code>) — angular coverage analysis on real reconstructed scenes</li>
+<li><strong>Experiment pipeline</strong> (<code>scripts/</code>) — every number and figure in the paper is generated from committed code and data</li>
+<li><strong>Web viewer</strong> (<code>viewer/</code>) — browser-based point cloud viewer with gap visualization</li>
+<li><strong>Feb 2026 sprint archive</strong> (<code>feb_sprint/</code>) — early benchmarking of D4RT, NeoVerse, CAP4D, and other methods</li>
+</ul>
+<h3>Designed but not yet executed (pending GPU access):</h3>
+<ul>
+<li><strong>Spherical 4D Completion Module</strong> (<code>src/completion/spherical_completion.py</code>) — the generative model itself. Architecture is implemented against the Vivid4D backbone but outputs a pass-through placeholder; real inference requires A100/H100-class compute.</li>
+<li><strong>VR export pipeline</strong> (<code>src/vr/export_splat.py</code>) — Quest-compatible <code>.splat</code> exporter. Code is written but untested on actual hardware.</li>
+</ul>
+<h2>The Paper</h2>
+<p><strong>Key findings from "Gaming the Sphere":</strong></p>
+<ul>
+<li>Inserting just <strong>20 content-free points</strong> can flip a 2.5-million-point scene from 12% to "100% complete" on a naive coverage metric</li>
+<li>We define a taxonomy of degenerate completions: <strong>dust</strong>, <strong>chaff</strong>, <strong>flicker chaff</strong>, and <strong>clone</strong></li>
+<li>We construct <strong>VRC-R</strong>, a robust metric suite that resists all attacks except clone</li>
+<li>We prove a <strong>fundamental negative result</strong>: reference-free metrics can certify that plausible-looking content exists everywhere, but they can never certify it's correct</li>
+</ul>
+<h2>Quick Start</h2>
+<pre><code class="language-bash">git clone https://github.com/Saivinay24/barf-4d-completion
+cd barf-4d-completion
+pip install -r requirements.txt
+
+# Run tests
+python3 -m pytest tests/ -q
+# 135 passed
+
+# Reproduce all paper results
+bash scripts/reproduce.sh
+</code></pre>
+<h2>Repository Structure</h2>
+<pre><code>barf-4d-completion/
+├── src/
+│   ├── gap_detection/              # Angular coverage analysis
+│   ├── metrics/                    # VRC-Score and VRC-R
+│   ├── attacks/                    # Adversarial attacks (dust, chaff, clone)
+│   ├── completion/                 # Completion module (placeholder, pending GPU)
+│   └── vr/                         # Quest .splat exporter (untested on hardware)
+│
+├── scripts/                        # Experiment runner, figure generator, reproduce.sh
+├── tests/                          # 135 tests
+├── paper/                          # Paper PDF + reproducibility docs
+├── viewer/                         # Web-based 3D viewer
+├── data/                           # Test scenes (npz)
+├── results/session/                # Raw result artifacts behind every paper number
+├── BARF_VRC_SCORE.md               # VRC-Score formal mathematical definition
+└── feb_sprint/                     # Archived Feb 2026 sprint work
+</code></pre>
+<h2>Related Work</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>What It Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/google-deepmind/d4rt">D4RT</a></td>
+<td>4D reconstruction + tracking from monocular video</td>
+</tr>
+<tr>
+<td><a href="https://github.com/IamCreateAI/NeoVerse">NeoVerse</a> (CVPR 2026)</td>
+<td>Feed-forward 4DGS from in-the-wild clips</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/2504.11092">Vivid4D</a> (ICCV 2025)</td>
+<td>4D reconstruction via video inpainting</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/2605.25500">Full-4D</a> (2026)</td>
+<td>Full-scope 4D generation from single-view video</td>
+</tr>
+<tr>
+<td><strong>BARF (This repo)</strong></td>
+<td>Evaluation metrics and gameability audit for 4D completion</td>
+</tr>
+</tbody>
+</table>
+<h2>License</h2>
+<p>MIT License, see <a href="https://github.com/Saivinay24/barf-4d-completion/blob/HEAD/LICENSE">LICENSE</a> for details.</p>
+<hr />
+<p><strong>Team:</strong> <a href="https://github.com/Saivinay24">Sai Vinay Bhoomireddy</a>, Aditya, Aryan Srivastava, Shrit Shrivastava, Tanisha, Palak Patnaik</p></div></div></body></html>

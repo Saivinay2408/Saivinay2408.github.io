@@ -1,0 +1,267 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quinian Bootstrapping | Sai Vinay Bhoomireddy</title><meta name="description" content="A program-synthesis engine for ARC-AGI that invents, compresses and reuses its own abstractions across wake-sleep cycles.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#FED176;--navy:#18233F;--ink:#0e1424;--cyan:#13F2EF;--mag:#FF2EC4;--txt:#e9ecf3;--mut:#9aa3b8;--line:#26314f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--txt);font-family:Poppins,system-ui,sans-serif;line-height:1.6}
+a{color:var(--gold)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;font-size:14px}
+.top a{color:var(--mut);text-decoration:none}.top a:hover{color:var(--gold)}
+.badge{display:inline-block;background:rgba(254,209,118,.12);color:var(--gold);border:1px solid rgba(254,209,118,.35);
+ padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(40px,7vw,76px);line-height:1.02;margin:16px 0 10px;letter-spacing:.01em}
+.tag{font-size:clamp(16px,2.2vw,20px);color:#cfd5e3;max-width:820px}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 34px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;text-decoration:none;border:1px solid var(--line);color:var(--txt);background:#141c31}
+.btn svg{width:16px;height:16px}.btn.primary{background:var(--gold);color:#1b1b1b;border-color:var(--gold)}
+.btn:hover{transform:translateY(-1px)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.m{background:linear-gradient(160deg,#18233F,#121a2e);border:1px solid var(--line);border-radius:16px;padding:18px}
+.m b{display:block;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:34px;color:var(--gold);line-height:1.1}
+.m span{font-size:13px;color:var(--mut)}
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.chip{font-size:12px;padding:6px 11px;border-radius:8px;background:#141c31;border:1px solid var(--line);color:#c9d0e0}
+h2{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:28px;letter-spacing:.02em;margin:44px 0 14px;color:#fff}
+.frame{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#000}
+.frame iframe{width:100%;height:720px;border:0;display:block;background:#e6e9ef}
+.frame video{width:100%;display:block}
+.note{font-size:13px;color:var(--mut);margin:10px 2px 0}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.gallery img{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;display:block}
+.readme{background:#111830;border:1px solid var(--line);border-radius:16px;padding:28px;overflow-wrap:anywhere}
+.readme h1,.readme h2,.readme h3{font-family:Poppins,sans-serif;font-weight:700;color:#fff;margin:22px 0 10px;font-size:20px;letter-spacing:0}
+.readme h1{font-size:24px}.readme p,.readme li{color:#cdd3e1;font-size:15px}.readme ul,.readme ol{padding-left:22px;margin:8px 0}
+.readme img{max-width:100%;border-radius:8px}.readme pre{background:#0a0f1d;padding:14px;border-radius:10px;overflow-x:auto;font-size:13px;margin:10px 0}
+.readme code{font-family:ui-monospace,Menlo,monospace;font-size:13px}.readme table{border-collapse:collapse;margin:12px 0;display:block;overflow-x:auto}
+.readme th,.readme td{border:1px solid var(--line);padding:6px 10px;font-size:13px}
+@media(max-width:640px){.frame iframe{height:560px}.readme{padding:18px}}
+</style></head><body><div class="wrap">
+<div class="top"><a href="/">&larr; saivinay.me</a><a href="https://github.com/Saivinay24/quinian-bootstrapping" target="_blank" rel="noopener">github.com/Saivinay24/quinian-bootstrapping</a></div>
+<span class="badge">First-authored research paper</span><h1>Quinian Bootstrapping</h1><p class="tag">A program-synthesis engine for ARC-AGI that invents, compresses and reuses its own abstractions across wake-sleep cycles.</p>
+<div class="btns"><a class="btn" href="paper/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></svg>Read the paper</a><a class="btn" href="https://github.com/Saivinay24/quinian-bootstrapping" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>Source code</a></div><div class="metrics"><div class="m"><b>28x</b><span>reuse of a self-discovered abstraction</span></div><div class="m"><b>400</b><span>ARC tasks evaluated</span></div><div class="m"><b>Rust</b><span>hot-loop search core</span></div></div><div class="stack"><span class="chip">Python</span><span class="chip">NumPy</span><span class="chip">Rust</span><span class="chip">DreamCoder-style wake-sleep</span><span class="chip">MDL</span></div><h2>Results</h2><div class="gallery"><img src="img/0.png" alt="Quinian Bootstrapping figure" loading="lazy"><img src="img/1.png" alt="Quinian Bootstrapping figure" loading="lazy"><img src="img/2.png" alt="Quinian Bootstrapping figure" loading="lazy"></div><h2>How it works</h2><div class="readme"><h1>bootstrap-substrate</h1>
+<p><strong>Quinian Bootstrapping in Neural Program Synthesis: Spelke-Initialized Library Learning Discovers Cross-Domain Abstractions</strong></p>
+<p>Sai Vinay Bhoomireddy
+Department of Computer Science and Engineering (Data Science), Manipal Institute of Technology Bengaluru, Manipal Academy of Higher Education</p>
+<p>Paper: <a href="https://github.com/Saivinay24/quinian-bootstrapping/blob/HEAD/paper/quinian_bootstrapping_bhoomireddy_2026.pdf"><code>paper/quinian_bootstrapping_bhoomireddy_2026.pdf</code></a></p>
+<hr />
+<h2>What this is</h2>
+<p>The first end-to-end computational instantiation of Carey's Quinian bootstrapping theory within a neural program-synthesis architecture. A typed domain-specific language is initialized with primitives organized into Spelke's core-knowledge systems (OBJECTS, FORMS, NUMBER, with AGENTS, PLACES, and PERSONS extensions), and a DreamCoder-style wake-sleep loop with Stitch anti-unification runs over ARC-AGI and purpose-built cross-system benchmarks. Every abstraction the compressor discovers carries cross-system provenance, so the Carey signature — a placeholder-bearing combinator spanning incommensurable systems — is directly measurable.</p>
+<h2>Headline results</h2>
+<table>
+<thead>
+<tr>
+<th>Result</th>
+<th>Numbers</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cross-system abstraction discovery on real ARC</td>
+<td><code>abs_0,2</code> (FORMS+OBJECTS, MDL savings 25, reuse 4); baselines discover 0</td>
+<td>§4.2, §4.5</td>
+</tr>
+<tr>
+<td>Compounding on ARC</td>
+<td>task <code>b9b7f026</code> solved in cycle 1 via a cycle-0 abstraction</td>
+<td>§4.5</td>
+</tr>
+<tr>
+<td>Three-way ARC comparison (original geometry)</td>
+<td>Spelke 46/400 vs. Generic 42/400 vs. VIMRL 42/400; McNemar p=0.2482 (not significant, reported honestly)</td>
+<td>§4.4</td>
+</tr>
+<tr>
+<td>ARC re-measured (corrected, disclosed geometry)</td>
+<td>Spelke <strong>50/400</strong> vs. Generic 42/400 (bit-identical control); McNemar χ²=6.12, <strong>p=0.0133</strong></td>
+<td>§4.15</td>
+</tr>
+<tr>
+<td>Sustained compounding (the staircase)</td>
+<td>306→511/1530 over 14 cycles, 4 consecutive strict increases, 54 cross-system abstractions</td>
+<td>§4.10</td>
+</tr>
+<tr>
+<td>Held-out transfer incl. never-trained tier</td>
+<td>41 vs. 20 (p=9.54e-07); tier 6: 8/80 vs. 0/80</td>
+<td>§4.10</td>
+</tr>
+<tr>
+<td>Significance at scale</td>
+<td>Spelke [306,307,307] vs. Generic [68,68,68] per seed; p=2.7e-157</td>
+<td>§4.10</td>
+</tr>
+<tr>
+<td>The counting analog (NUMBER+OBJECTS)</td>
+<td>120→494/600, 5 strict increases, 12 NUMBER+OBJECTS abstractions; holdout 110/150 vs. 15/150 (p=5.2e-22), tier 6: 37/60 vs. 0/60</td>
+<td>§4.11</td>
+</tr>
+<tr>
+<td>Order invariance</td>
+<td>3/3 shuffled-order seeds byte-identical, final 520 &gt; 511 (sorted)</td>
+<td>§4.12</td>
+</tr>
+<tr>
+<td>Blind self-curriculum (honest null)</td>
+<td>band 19/852, targeted 0/852 vs. pre-registered bar 25</td>
+<td>§4.13</td>
+</tr>
+<tr>
+<td>Aimed self-curriculum</td>
+<td><strong>27/576 GOAL</strong> rungs newly solved (bar 25) + <strong>16/276 HIDDEN</strong> spillover, under a pre-registered sha256-pinned split and machine-checked non-equivalence</td>
+<td>§4.14</td>
+</tr>
+</tbody>
+</table>
+<p>Every number in the paper traces to a JSON under <code>experiments/outputs/</code> and is machine-checked by the verification gates below.</p>
+<h2>Repository layout</h2>
+<pre><code>src/
+  spelke_dsl/        Six core-knowledge modules (l_objects, l_forms, l_number,
+                     l_agents, l_places, l_persons) + glue and analogy operators
+  engine/            Wake-sleep loop, AST solver, type-directed enumerator,
+                     Stitch compression, dream generator, recognition network,
+                     frontier (self-curriculum) generator, task-integrity checks
+  baselines/         Matched-cardinality Generic DSL; VIMRL objectness-only DSL
+  arc/               ARC task loading and evaluation
+  analysis/          Carey-signature (cross-system provenance) analysis
+rust/spelke-enumerator/   Rust enumeration engine (persistent worker, cached
+                     tables, in-Rust evaluation; Python-verified solutions)
+data/
+  arc-agi-1/         ARC-AGI training tasks (400)
+  spelke_benchmark_v2/   875-task cross-system compounding benchmark + 200 test
+  spelke_staircase/  1530-task tiered staircase suite + 200 test (machine-validated)
+  spelke_counting/   600-task NUMBER+OBJECTS counting suite + 150 test
+  synthetic_*/       Small synthetic suites (cross-system, compounding, curriculum, persons)
+experiments/
+  scripts/           Run scripts, dataset generators, pre-flight validators,
+                     verification gates, figure generation
+  outputs/           The experiment outputs cited in the paper (JSON)
+tests/               Test suite (237 tests)
+paper/               Paper (HTML source, PDF, figures)
+</code></pre>
+<h2>Setup</h2>
+<pre><code class="language-bash">python3 -m venv .venv &amp;&amp; source .venv/bin/activate
+pip install -e &quot;.[dev]&quot;
+</code></pre>
+<p>Optional (used by all post-staircase experiments; everything falls back to the pure-Python engine if absent):</p>
+<pre><code class="language-bash">cd rust/spelke-enumerator &amp;&amp; cargo build --release &amp;&amp; cd ../..
+</code></pre>
+<h2>Verify the results</h2>
+<p>Every claim in the paper has a mechanical verification gate that re-derives the numbers from <code>experiments/outputs/</code> and re-runs the control conditions:</p>
+<pre><code class="language-bash">python3 -m pytest tests/ -q                                # 237 passed
+python3 experiments/scripts/verify_phase1.py               # canonical ARC claims
+python3 experiments/scripts/verify_benchmark_v2.py          # 875-task compounding (10 checks)
+python3 experiments/scripts/verify_transfer.py             # curriculum→ARC transfer (5 checks)
+python3 experiments/scripts/verify_curriculum.py           # curriculum results (12 checks)
+python3 experiments/scripts/verify_persons.py              # PERSONS system (10 checks)
+python3 experiments/scripts/verify_staircase.py --run experiments/outputs/staircase_run
+                                                           # staircase + full virgin controls (15 checks)
+python3 experiments/scripts/verify_counting_staircase.py   # counting staircase + controls (14 checks)
+python3 experiments/scripts/verify_number_search.py        # int@2 wall diagnosis + fix (10 checks)
+python3 experiments/scripts/verify_aimed_frontier.py       # aimed self-curriculum integrity (14 checks)
+python3 experiments/scripts/verify_rust_enumerator.py      # Rust/Python parity (8 checks; needs cargo build)
+</code></pre>
+<p>The staircase and counting gates include full virgin controls: they re-confirm that the untrained system solves <strong>zero</strong> tier-k≥2 tasks by AST search or enumeration at the experiment budget (all 1224 staircase tier-k tasks; all 480 counting tier-k tasks).</p>
+<h2>Reproduce the experiments</h2>
+<pre><code class="language-bash"># Canonical ARC three-way comparison (§4.4)
+python3 experiments/scripts/run_experiment.py \
+  --cycles 3 --enum-cost 5 --enum-budget 20 \
+  --run-generic --run-vimrl \
+  --output-dir experiments/outputs/canonical_run_v2 --verbose
+
+# ARC re-measurement under the corrected geometry (§4.15)
+python3 experiments/scripts/run_experiment.py \
+  --cycles 3 --enum-cost 5 --enum-budget 20 --rust \
+  --enum-cap-scale 8 --enum-fair-caps --enum-fair-args --enum-dep-first \
+  --stitch-canonical --run-generic \
+  --output-dir experiments/outputs/canonical_run_v3_newflags --verbose
+
+# The staircase (§4.10; ~3 h on an idle machine)
+python3 experiments/scripts/run_experiment.py \
+  --task-dir data/spelke_staircase/train --cycles 14 --rust --staircase \
+  --enum-cost 4 --enum-budget 3 --enum-cap-scale 8 --enum-fair-caps \
+  --no-neural --max-abs 8 --output-dir experiments/outputs/staircase_run --verbose
+python3 experiments/scripts/evaluate_staircase_holdout.py \
+  --checkpoint experiments/outputs/staircase_run/spelke/library_cycle_13.json
+python3 experiments/scripts/run_staircase_stats.py --seeds 3 --cycles 10
+
+# The counting staircase (§4.11)
+python3 experiments/scripts/run_experiment.py \
+  --task-dir data/spelke_counting/train --cycles 14 --rust --staircase \
+  --enum-cost 4 --enum-budget 3 --enum-cap-scale 8 --enum-fair-caps \
+  --enum-fair-args --enum-dep-first --no-neural --max-abs 8 \
+  --output-dir experiments/outputs/counting_run --verbose
+
+# Order invariance (§4.12)
+python3 experiments/scripts/run_order_robustness.py
+
+# Self-curricula (§4.13–4.14)
+python3 experiments/scripts/run_frontier.py --mode band
+python3 experiments/scripts/run_frontier.py --mode targeted
+python3 experiments/scripts/make_goal_hidden_split.py
+python3 experiments/scripts/run_aimed_frontier.py
+
+# Multi-seed statistical significance (§4.4 / §4.15)
+python3 experiments/scripts/run_statistical_significance.py --seeds 5
+python3 experiments/scripts/run_statistical_significance.py --seeds 3 --new-flags
+</code></pre>
+<p>Dataset generators with mechanical pre-flight validation (every tier-k≥2 rung machine-verified virgin-unsolvable before any experiment runs):</p>
+<pre><code class="language-bash">python3 experiments/scripts/generate_staircase.py
+python3 experiments/scripts/preflight_staircase.py
+python3 experiments/scripts/generate_counting_staircase.py
+python3 experiments/scripts/preflight_counting.py
+</code></pre>
+<h2>Disclosed configuration flags</h2>
+<p>All search-geometry and compression mechanisms introduced after the canonical run are <strong>config-gated and OFF by default</strong>; default settings reproduce the original results bit-identically (checked by a cross-engine differential test over all flag combinations):</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>What it does</th>
+<th>Used by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--enum-fair-caps</code> / <code>--enum-cap-scale</code></td>
+<td>Per-root fair shares of enumeration buckets</td>
+<td>§4.10+</td>
+</tr>
+<tr>
+<td><code>--enum-fair-args</code></td>
+<td>Per-first-argument fair shares within a root's share</td>
+<td>§4.11+</td>
+</tr>
+<tr>
+<td><code>--enum-dep-first</code></td>
+<td>Input-dependent candidates before constants</td>
+<td>§4.11+</td>
+</tr>
+<tr>
+<td><code>--stitch-canonical</code></td>
+<td>Compression as a pure function of the solved-program set (order-invariant, deployability-first ranking)</td>
+<td>§4.12+</td>
+</tr>
+<tr>
+<td><code>--rust</code></td>
+<td>Rust enumeration engine (parity-verified; every solution re-verified in Python)</td>
+<td>§4.10+</td>
+</tr>
+</tbody>
+</table>
+<h2>Method (one paragraph)</h2>
+<p>WAKE: a recognition-guided AST solver and a type-directed, cost-bounded enumerator search for programs that solve each task. ABSTRACTION SLEEP: the corpus of solving programs is compressed by Stitch anti-unification; abstractions that reduce total description length (ΔL = size×(count−1)−count−n_holes &gt; 0) are registered as typed, callable, cost-1 primitives, with exact cross-cycle deduplication. DREAMING SLEEP: a dream generator (pipeline / cross-system / PCFG modes) trains a recognition network. Each cycle's abstractions become first-class parts for the next cycle's search — Carey's staircase, computationally.</p>
+<h2>Citation</h2>
+<pre><code class="language-bibtex">@article{bhoomireddy2026quinian,
+  title   = {Quinian Bootstrapping in Neural Program Synthesis: Spelke-Initialized
+             Library Learning Discovers Cross-Domain Abstractions},
+  author  = {Bhoomireddy, Sai Vinay},
+  year    = {2026},
+  note    = {Preprint}
+}
+</code></pre>
+<h2>License</h2>
+<p>MIT. ARC-AGI tasks in <code>data/arc-agi-1/</code> are from the <a href="https://github.com/fchollet/ARC-AGI">ARC-AGI repository</a> (Apache 2.0, François Chollet).</p></div></div></body></html>

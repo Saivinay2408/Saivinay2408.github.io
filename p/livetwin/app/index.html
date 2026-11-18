@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LIVETWIN | Operational AI Platform</title>
+<script src="livetwin_data.js"></script>
+<script src="demo_backend.js"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          "headline": ["Space Grotesk"],
+          "body": ["Inter"],
+          "label": ["Inter"],
+          "mono": ["JetBrains Mono"]
+        },
+        borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+      },
+    },
+  }
+</script>
+<style>
+  /* ═══════════════════════════════════════════════
+     LIVETWIN NEUMORPHIC THEME
+     Base: #e5e7eb — every surface matches
+  ═══════════════════════════════════════════════ */
+
+  :root {
+    --neu-bg:            #e5e7eb;
+    --neu-shadow-light:  rgba(255,255,255,0.85);
+    --neu-shadow-dark:   rgb(153,161,175);
+    --neu-inset:         rgb(209,213,220);
+    --text-primary:      #1f2937;
+    --text-secondary:    #374151;
+    --text-muted:        #6b7280;
+    --accent:            #0369a1;
+    --accent-green:      #10b981;
+    --accent-yellow:     #f59e0b;
+    --accent-red:        #dc2626;
+    --accent-orange:     #ea580c;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    background-color: var(--neu-bg) !important;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── Neumorphic panel ── */
+  .glass-panel {
+    background: var(--neu-bg) !important;
+    border: none !important;
+    border-radius: 20px !important;
+    box-shadow:
+      -10px -10px 20px var(--neu-shadow-light),
+       10px  10px  20px var(--neu-shadow-dark),
+      inset -10px -10px 20px var(--neu-inset) !important;
+    backdrop-filter: none !important;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--neu-bg) !important;
+    border-bottom: none !important;
+    box-shadow: 0 4px 12px var(--neu-shadow-dark), 0 -2px 6px var(--neu-shadow-light) !important;
+  }
+
+  /* ── Sidebar ── */
+  aside {
+    background: var(--neu-bg) !important;
+    border-right: none !important;
+    box-shadow: 4px 0 12px var(--neu-shadow-dark), -2px 0 6px var(--neu-shadow-light) !important;
+  }
+
+  /* ── KPI Card ── */
+  .kpi-card {
+    background: var(--neu-bg);
+    border-radius: 20px;
+    padding: 20px 22px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow:
+      -10px -10px 20px var(--neu-shadow-light),
+       10px  10px  20px var(--neu-shadow-dark),
+      inset -10px -10px 20px var(--neu-inset);
+    min-width: 0;
+  }
+  .kpi-card .card-title {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  }
+  .kpi-card .card-title-left { display: flex; align-items: center; gap: 8px; }
+  .kpi-card .card-icon {
+    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; background: var(--neu-bg) !important;
+    box-shadow: -2px -2px 4px var(--neu-shadow-light), 2px 2px 4px var(--neu-shadow-dark) !important;
+  }
+  .kpi-card .card-label {
+    font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; color: #374151;
+  }
+  .kpi-card .card-percent {
+    display: flex; align-items: center; gap: 3px; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 100px;
+    box-shadow: -2px -2px 4px var(--neu-shadow-light), 2px 2px 4px var(--neu-shadow-dark);
+    background: var(--neu-bg) !important;
+  }
+  .kpi-card .card-percent.up      { color: #10b981; }
+  .kpi-card .card-percent.down    { color: #ef4444; }
+  .kpi-card .card-percent.neutral { color: #6b7280; }
+  .kpi-card .card-percent.warn    { color: #f59e0b; }
+  .kpi-card .card-value {
+    font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700;
+    color: #1f2937; line-height: 1; letter-spacing: -0.03em;
+  }
+  .kpi-card .card-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #6b7280;
+    margin-top: 2px; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .kpi-card .card-range {
+    width: 100%; height: 8px; background: var(--neu-bg); border-radius: 4px; overflow: hidden; margin-top: 4px;
+    box-shadow: inset -2px -2px 4px var(--neu-shadow-light), inset 2px 2px 4px var(--neu-shadow-dark);
+  }
+  .kpi-card .card-fill {
+    height: 100%; border-radius: 4px; transition: width 0.9s cubic-bezier(0.16,1,0.3,1); width: 0%;
+  }
+
+  /* ── Table ── */
+  .vt { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .vt th {
+    padding: 10px 16px; text-align: left; color: #6b7280; text-transform: uppercase;
+    font-size: 10px; letter-spacing: 0.06em; font-weight: 700; background: var(--neu-bg);
+    position: sticky; top: 0; z-index: 1; border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .vt td { padding: 10px 16px; color: #374151; border-bottom: 1px solid rgba(0,0,0,0.04); }
+  .vt tr:hover td { background: rgba(3,105,161,0.03); }
+
+  /* ── Input + Button ── */
+  .neu-input {
+    width: 100%; padding: 10px 12px; background: var(--neu-bg); border: none; border-radius: 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #1f2937; outline: none;
+    box-shadow: inset -3px -3px 6px var(--neu-shadow-light), inset 3px 3px 6px var(--neu-shadow-dark);
+  }
+  .neu-input:focus { box-shadow: inset -3px -3px 6px var(--neu-shadow-light), inset 3px 3px 8px var(--neu-shadow-dark), 0 0 0 2px rgba(3,105,161,0.2); }
+  .neu-btn {
+    padding: 10px 24px; background: var(--accent); color: #fff; border: none; border-radius: 12px;
+    font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer;
+    letter-spacing: 0.05em; box-shadow: -3px -3px 6px var(--neu-shadow-light), 3px 3px 6px var(--neu-shadow-dark);
+    transition: all 0.2s;
+  }
+  .neu-btn:hover { background: #0284c7; }
+  .neu-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+  .neu-btn-sm { padding: 6px 14px; font-size: 11px; border-radius: 8px; }
+
+  /* ── CM Cell ── */
+  .cm-cell {
+    padding: 16px; border-radius: 12px; text-align: center;
+    box-shadow: inset -3px -3px 6px var(--neu-shadow-light), inset 3px 3px 6px var(--neu-shadow-dark);
+    background: var(--neu-bg);
+  }
+  .cm-cell .cm-val { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: #1f2937; }
+  .cm-cell .cm-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; margin-top: 4px; }
+
+  /* ── Metric bar ── */
+  .metric-bar-track {
+    width: 100%; height: 8px; background: var(--neu-bg); border-radius: 100px;
+    box-shadow: inset -2px -2px 4px var(--neu-shadow-light), inset 2px 2px 4px var(--neu-shadow-dark); overflow: hidden;
+  }
+  .metric-bar-fill { height: 100%; border-radius: 100px; transition: width 0.9s cubic-bezier(0.16,1,0.3,1); }
+
+  /* ── SPA routing ── */
+  .view { display: none; }
+  .view.active { display: block; }
+  .nav-link { color: #475569 !important; text-decoration: none; border-bottom: 2px solid transparent; padding-bottom: 4px; transition: color 0.2s; font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; }
+  .nav-link.active { color: var(--accent) !important; border-bottom-color: var(--accent) !important; }
+  .nav-link:hover { color: var(--text-primary) !important; }
+  .sidebar-link { cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; padding: 12px 0; color: #9ca3af; }
+  .sidebar-link:hover { color: var(--text-primary); }
+  .sidebar-link.active {
+    background: var(--neu-bg) !important; color: var(--accent) !important;
+    box-shadow: inset -3px -3px 6px var(--neu-shadow-light), inset 3px 3px 6px var(--neu-shadow-dark) !important;
+  }
+  .sidebar-link.active .material-symbols-outlined { color: var(--accent) !important; }
+  .view-header { margin-bottom: 24px; }
+  .view-header h2 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: #1f2937; margin-bottom: 4px; }
+  .view-header p { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* ── Row flash for live data ── */
+  @keyframes rowFlash {
+    0%   { background-color: rgba(34,197,94,0.35); border-left: 3px solid rgba(34,197,94,1.0); }
+    50%  { background-color: rgba(34,197,94,0.15); border-left: 3px solid rgba(34,197,94,0.6); }
+    100% { background-color: transparent;           border-left: 3px solid transparent; }
+  }
+  .row-new { animation: rowFlash 2s ease-out; }
+
+  @keyframes rowFlashRed {
+    0%   { background-color: rgba(220,38,38,0.2); border-left: 3px solid rgba(220,38,38,1.0); }
+    100% { background-color: transparent;          border-left: 3px solid transparent; }
+  }
+  .row-alert { animation: rowFlashRed 3s ease-out forwards; }
+
+  /* ── Status badges ── */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 100px; font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .badge-green  { background: rgba(16,185,129,0.12); color: #059669; }
+  .badge-yellow { background: rgba(245,158,11,0.12); color: #b45309; }
+  .badge-orange { background: rgba(234,88,12,0.12);  color: #c2410c; }
+  .badge-red    { background: rgba(220,38,38,0.12);  color: #dc2626; }
+  .badge-blue   { background: rgba(3,105,161,0.12);  color: #0369a1; }
+  .badge-gray   { background: rgba(107,114,128,0.12);color: #6b7280; }
+
+  /* ── Engine grid card ── */
+  .engine-card {
+    background: var(--neu-bg); border-radius: 16px; padding: 14px;
+    box-shadow: -6px -6px 14px var(--neu-shadow-light), 6px 6px 14px var(--neu-shadow-dark);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .engine-card:hover {
+    box-shadow: -8px -8px 18px var(--neu-shadow-light), 8px 8px 18px var(--neu-shadow-dark), 0 0 0 2px rgba(3,105,161,0.2);
+  }
+  .engine-card.critical {
+    box-shadow: -6px -6px 14px var(--neu-shadow-light), 6px 6px 14px var(--neu-shadow-dark), 0 0 0 2px rgba(220,38,38,0.4) !important;
+  }
+  .engine-card.failure {
+    box-shadow: -6px -6px 14px var(--neu-shadow-light), 6px 6px 14px var(--neu-shadow-dark), 0 0 0 2px rgba(220,38,38,0.7) !important;
+    animation: enginePulse 1.5s ease-in-out infinite;
+  }
+  @keyframes enginePulse {
+    0%, 100% { box-shadow: -6px -6px 14px var(--neu-shadow-light), 6px 6px 14px var(--neu-shadow-dark), 0 0 0 2px rgba(220,38,38,0.7); }
+    50%       { box-shadow: -6px -6px 14px var(--neu-shadow-light), 6px 6px 14px var(--neu-shadow-dark), 0 0 0 4px rgba(220,38,38,0.4), 0 0 20px rgba(220,38,38,0.15); }
+  }
+
+  /* ── Agent pipeline card ── */
+  .agent-card {
+    background: var(--neu-bg); border-radius: 16px; padding: 18px;
+    box-shadow: -8px -8px 16px var(--neu-shadow-light), 8px 8px 16px var(--neu-shadow-dark);
+    flex: 1; min-width: 0;
+  }
+  .agent-connector {
+    display: flex; align-items: center; color: #9ca3af; font-size: 20px; flex-shrink: 0;
+  }
+
+  /* ── Alert banner ── */
+  .alert-banner {
+    background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.3);
+    border-radius: 12px; padding: 12px 20px; display: flex; align-items: center; gap: 12px;
+    box-shadow: inset -3px -3px 6px var(--neu-shadow-light), inset 3px 3px 6px rgba(220,38,38,0.1);
+  }
+
+  /* ── Sparkline ── */
+  .sparkline-svg { width: 100%; height: 80px; }
+
+  /* ── Inset sub-panel ── */
+  .inset-panel {
+    background: var(--neu-bg); border-radius: 12px;
+    box-shadow: inset -3px -3px 6px var(--neu-shadow-light), inset 3px 3px 6px var(--neu-shadow-dark);
+    padding: 16px;
+  }
+
+  /* ── API error toast ── */
+  #api-error {
+    display: none; position: fixed; bottom: 16px; right: 16px;
+    background: rgba(159,5,25,0.9); border: 1px solid rgba(255,113,108,0.4);
+    padding: 10px 16px; border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #ffa8a3;
+    z-index: 9999;
+  }
+
+  /* ── Material icons ── */
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+
+  /* ── Filter pills ── */
+  .filter-pill {
+    padding: 4px 12px; border-radius: 100px; font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    cursor: pointer; transition: all 0.15s; color: #6b7280;
+    box-shadow: -2px -2px 4px var(--neu-shadow-light), 2px 2px 4px var(--neu-shadow-dark);
+    background: var(--neu-bg); border: none;
+  }
+  .filter-pill.active { color: #fff; background: var(--accent); box-shadow: none; }
+  .filter-pill:hover:not(.active) { color: var(--accent); }
+
+  /* ── Branch log badge ── */
+  .branch-merged { color: #059669; font-weight: 700; }
+  .branch-dropped { color: #dc2626; font-weight: 700; }
+  .branch-progress { color: #b45309; font-weight: 700; }
+
+  /* ── Progress dot ── */
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .live-dot { animation: pulse-dot 1.4s ease-in-out infinite; }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--neu-bg); }
+  ::-webkit-scrollbar-thumb { background: var(--neu-shadow-dark); border-radius: 4px; }
+
+  /* ── Spinner ── */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; vertical-align: middle; }
+
+  /* ── Urgency row borders ── */
+  .urgency-critical td:first-child { border-left: 3px solid #dc2626 !important; }
+  .urgency-urgent td:first-child   { border-left: 3px solid #f59e0b !important; }
+
+  /* ── Agent status colors ── */
+  .agent-running  { color: var(--accent); }
+  .agent-complete { color: #059669; }
+  .agent-blocked  { color: #dc2626; }
+  .agent-idle     { color: #9ca3af; }
+</style>
+</head>
+<body class="font-body">
+
+<!-- API error toast -->
+<div id="api-error">⚠ API unreachable — showing cached data</div>
+
+<!-- ══════════════════════════════════════════════
+     TOP HEADER
+══════════════════════════════════════════════ -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16">
+  <div class="flex items-center gap-8">
+    <h1 class="text-xl font-bold tracking-tighter font-headline uppercase" style="color: var(--accent);">LIVETWIN</h1>
+    <nav class="hidden md:flex gap-6 items-center h-full">
+      <a class="nav-link active" data-view="fleet-overview">Fleet</a>
+      <a class="nav-link" data-view="engine-detail">Engine</a>
+      <a class="nav-link" data-view="agent-chain">Agents</a>
+      <a class="nav-link" data-view="maintenance-orders">Orders</a>
+      <a class="nav-link" data-view="governance">Governance</a>
+    </nav>
+  </div>
+  <div class="flex items-center gap-4">
+    <div class="flex items-center gap-2 px-3 py-1 rounded-full"
+         style="box-shadow: -2px -2px 5px var(--neu-shadow-light), 2px 2px 5px var(--neu-shadow-dark);">
+      <span id="monitor-dot" class="w-2 h-2 rounded-full live-dot" style="background: var(--accent-green);"></span>
+      <span id="monitor-label" class="text-[10px] font-bold tracking-widest font-mono uppercase" style="color: var(--accent);">MONITOR ACTIVE</span>
+    </div>
+    <div class="hidden lg:flex items-center gap-2">
+      <span class="px-2 py-0.5 rounded text-[9px] font-mono uppercase font-bold"
+            style="color: #0891b2; box-shadow: -2px -2px 4px var(--neu-shadow-light), 2px 2px 4px var(--neu-shadow-dark);">MLflow</span>
+      <span id="lakebase-badge" class="px-2 py-0.5 rounded text-[9px] font-mono uppercase font-bold"
+            style="color: var(--accent-green); box-shadow: -2px -2px 4px var(--neu-shadow-light), 2px 2px 4px var(--neu-shadow-dark);">Lakebase ●</span>
+    </div>
+    <div class="flex items-center gap-3 ml-4 pl-4" style="border-left: 1px solid rgba(0,0,0,0.1);">
+      <span class="material-symbols-outlined cursor-pointer" style="color: var(--text-muted);">notifications</span>
+      <span class="material-symbols-outlined cursor-pointer" style="color: var(--text-muted);">settings</span>
+      <div class="w-8 h-8 rounded-full flex items-center justify-center"
+           style="box-shadow: -2px -2px 5px var(--neu-shadow-light), 2px 2px 5px var(--neu-shadow-dark);">
+        <span class="material-symbols-outlined text-sm" style="color: var(--text-muted);">person</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════════ -->
+<aside class="fixed left-0 top-16 bottom-0 flex flex-col items-center py-4 z-40 w-20">
+  <div class="flex flex-col items-center gap-1 mb-6">
+    <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-1"
+         style="box-shadow: -3px -3px 6px var(--neu-shadow-light), 3px 3px 6px var(--neu-shadow-dark);">
+      <span class="material-symbols-outlined text-xl" style="color: var(--accent);">precision_manufacturing</span>
+    </div>
+    <span class="text-[8px] font-mono font-bold uppercase" style="color: var(--accent);">v1.0</span>
+  </div>
+  <div class="flex flex-col gap-1 w-full">
+    <div class="sidebar-link active" data-view="fleet-overview">
+      <span class="material-symbols-outlined mb-1" style="font-size:22px;">grid_view</span>
+      <span class="font-label text-[9px] uppercase font-semibold tracking-[0.05em]">Fleet</span>
+    </div>
+    <div class="sidebar-link" data-view="engine-detail">
+      <span class="material-symbols-outlined mb-1" style="font-size:22px;">engineering</span>
+      <span class="font-label text-[9px] uppercase font-semibold tracking-[0.05em]">Engine</span>
+    </div>
+    <div class="sidebar-link" data-view="agent-chain">
+      <span class="material-symbols-outlined mb-1" style="font-size:22px;">account_tree</span>
+      <span class="font-label text-[9px] uppercase font-semibold tracking-[0.05em]">Agents</span>
+    </div>
+    <div class="sidebar-link" data-view="maintenance-orders">
+      <span class="material-symbols-outlined mb-1" style="font-size:22px;">build</span>
+      <span class="font-label text-[9px] uppercase font-semibold tracking-[0.05em]">Orders</span>
+    </div>
+    <div class="sidebar-link" data-view="governance">
+      <span class="material-symbols-outlined mb-1" style="font-size:22px;">shield</span>
+      <span class="font-label text-[9px] uppercase font-semibold tracking-[0.05em]">Govrnce</span>
+    </div>
+  </div>
+  <div class="mt-auto pb-4 flex flex-col items-center gap-2">
+    <div id="plant-badge" class="px-2 py-1 rounded-lg text-[8px] font-mono font-bold uppercase text-center"
+         style="box-shadow: inset -2px -2px 4px var(--neu-shadow-light), inset 2px 2px 4px var(--neu-shadow-dark); color: var(--accent);">
+      PLANT A
+    </div>
+  </div>
+</aside>
+
+<!-- ══════════════════════════════════════════════
+     MAIN CANVAS
+══════════════════════════════════════════════ -->
+<main class="ml-20 mt-16 p-6 min-h-screen">
+
+<!-- ════════════════════════════════════════════
+     VIEW 1: FLEET OVERVIEW
+════════════════════════════════════════════ -->
+<div id="view-fleet-overview" class="view active">
+
+  <div class="view-header flex items-center justify-between">
+    <div>
+      <h2>Fleet Overview</h2>
+      <p>20 turbofan engines · NASA CMAPSS · Real-time monitoring</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <span id="fleet-live-dot" class="w-2 h-2 rounded-full live-dot" style="background: var(--accent-green);"></span>
+      <span class="text-[10px] font-mono" style="color: var(--text-muted);">LIVE</span>
+      <span id="fleet-update-time" class="text-[10px] font-mono" style="color: var(--text-muted);">—</span>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div class="kpi-card">
+      <div class="card-title">
+        <div class="card-title-left">
+          <div class="card-icon"><span class="material-symbols-outlined text-sm" style="color:#3b82f6;">sensors</span></div>
+          <span class="card-label">Engines Online</span>
+        </div>
+        <span class="card-percent up">● LIVE</span>
+      </div>
+      <div>
+        <p id="kpi-online" class="card-value">—</p>
+        <p class="card-sub">of 20 engines</p>
+      </div>
+      <div class="card-range"><div id="fill-online" class="card-fill" style="background:#3b82f6;"></div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="card-title">
+        <div class="card-title-left">
+          <div class="card-icon"><span class="material-symbols-outlined text-sm" style="color:#dc2626;">warning</span></div>
+          <span class="card-label">Active Alerts</span>
+        </div>
+        <span id="kpi-alerts-badge" class="card-percent neutral">—</span>
+      </div>
+      <div>
+        <p id="kpi-alerts" class="card-value">—</p>
+        <p class="card-sub">Critical + Failure</p>
+      </div>
+      <div class="card-range"><div id="fill-alerts" class="card-fill" style="background:#dc2626;"></div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="card-title">
+        <div class="card-title-left">
+          <div class="card-icon"><span class="material-symbols-outlined text-sm" style="color:#f59e0b;">build</span></div>
+          <span class="card-label">Pending Orders</span>
+        </div>
+        <span class="card-percent warn">PENDING</span>
+      </div>
+      <div>
+        <p id="kpi-pending" class="card-value">—</p>
+        <p class="card-sub">Guardian-created orders</p>
+      </div>
+      <div class="card-range"><div id="fill-pending" class="card-fill" style="background:#f59e0b;"></div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="card-title">
+        <div class="card-title-left">
+          <div class="card-icon"><span class="material-symbols-outlined text-sm" style="color:#10b981;">monitor_heart</span></div>
+          <span class="card-label">Avg Fleet Health</span>
+        </div>
+        <span id="kpi-health-badge" class="card-percent neutral">—</span>
+      </div>
+      <div>
+        <p id="kpi-health" class="card-value">—</p>
+        <p class="card-sub">Health score 0–100</p>
+      </div>
+      <div class="card-range"><div id="fill-health" class="card-fill" style="background:#10b981;"></div></div>
+    </div>
+  </div>
+
+  <!-- Alert Banner (hidden unless failure imminent) -->
+  <div id="alert-banner" class="alert-banner mb-6" style="display:none;">
+    <span class="w-3 h-3 rounded-full live-dot" style="background:#dc2626; flex-shrink:0;"></span>
+    <span class="material-symbols-outlined" style="color:#dc2626; font-size:18px;">emergency</span>
+    <span id="alert-banner-text" class="font-mono text-sm font-bold" style="color:#dc2626;"></span>
+    <button class="ml-auto neu-btn neu-btn-sm" onclick="navigateTo('engine-detail')" style="background:#dc2626;">View Engine</button>
+  </div>
+
+  <!-- Engine Grid -->
+  <div class="glass-panel p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="font-headline text-sm font-bold uppercase tracking-widest" style="color: var(--text-primary);">Engine Fleet Status</h3>
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3 text-[10px] font-mono" style="color: var(--text-muted);">
+          <span><span class="inline-block w-2 h-2 rounded-full mr-1" style="background:#10b981;"></span>Healthy</span>
+          <span><span class="inline-block w-2 h-2 rounded-full mr-1" style="background:#f59e0b;"></span>Degrading</span>
+          <span><span class="inline-block w-2 h-2 rounded-full mr-1" style="background:#ea580c;"></span>Critical</span>
+          <span><span class="inline-block w-2 h-2 rounded-full mr-1" style="background:#dc2626;"></span>Failure</span>
+        </div>
+      </div>
+    </div>
+    <div id="engine-grid" class="grid grid-cols-4 md:grid-cols-5 xl:grid-cols-10 gap-3">
+      <!-- Populated by JS -->
+      <div class="text-center py-8 text-[10px] font-mono col-span-10" style="color: var(--text-muted);">Loading fleet data...</div>
+    </div>
+  </div>
+
+</div><!-- end fleet-overview -->
+
+
+<!-- ════════════════════════════════════════════
+     VIEW 2: ENGINE DETAIL
+════════════════════════════════════════════ -->
+<div id="view-engine-detail" class="view">
+
+  <div class="view-header flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <button onclick="navigateTo('fleet-overview')" class="flex items-center gap-1 text-[11px] font-mono" style="color: var(--accent); background: none; border: none; cursor: pointer;">
+        <span class="material-symbols-outlined text-sm">arrow_back</span> Fleet
+      </button>
+      <div>
+        <h2 id="engine-detail-title">Engine —</h2>
+        <p id="engine-detail-sub">Select an engine from Fleet Overview</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
+        <label class="text-[10px] font-mono" style="color: var(--text-muted);">ENGINE</label>
+        <select id="engine-select" class="neu-input" style="width:100px; padding: 6px 10px;"
+                onchange="loadEngineDetail(this.value)">
+          <!-- populated by JS -->
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Engine Status Row -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" id="engine-status-row">
+    <div class="kpi-card">
+      <div class="card-title"><div class="card-title-left">
+        <div class="card-icon"><span class="material-symbols-outlined text-sm" style="color:#10b981;">health_and_safety</span></div>
+        <span class="card-label">Health Score</span>
+      </div></div>
+      <div><p id="eng-health" class="card-value">—</p><p class="card-sub">out of 100</p></div>
+      <div class="card-range"><div id="eng-health-fill" class="card-fill" style="background:#10b981;"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="card-title"><div class="card-title-left">
+        <div class="card-icon"><span class="material-symbols-outlined text-sm" style="color:#ea580c;">timer</span></div>
+        <span class="card-label">RUL Remaining</span>
+      </div></div>
+      <div>
+        <p id="eng-rul" class="card-value">—</p>
+        <p id="eng-rul-ci" class="card-sub">GBR 90% CI: — — —h</p>
+      </div>
+      <div class="card-range"><div id="eng-rul-fill" class="card-fill" style="background:#ea580c;"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="card-title"><div class="card-title-left">
+        <div class="card-icon"><span class="material-symbols-outlined text-sm" style="color:#7c3aed;">troubleshoot</span></div>
+        <span class="card-label">Failure Mode</span>
+      </div></div>
+      <div><p id="eng-failure-mode" class="card-value" style="font-size:16px; margin-top:4px;">—</p>
+        <p id="eng-failure-conf" class="card-sub">RF classifier · conf. —</p>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="card-title"><div class="card-title-left">
+        <div class="card-icon"><span class="material-symbols-outlined text-sm" style="color:#dc2626;">error</span></div>
+        <span class="card-label">Anomaly Flags</span>
+      </div></div>
+      <div><p id="eng-anomalies" class="card-value">—</p><p class="card-sub">in last 50 cycles</p></div>
+      <div class="card-range"><div id="eng-anomaly-fill" class="card-fill" style="background:#dc2626;"></div></div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="grid grid-cols-12 gap-6">
+
+    <!-- Sensor Readings (left 8/12) -->
+    <div class="col-span-12 lg:col-span-8">
+      <div class="glass-panel" style="height:420px; display:flex; flex-direction:column;">
+        <div class="px-6 py-4 flex items-center justify-between" style="border-bottom: 1px solid rgba(0,0,0,0.06);">
+          <div class="flex items-center gap-3">
+            <span id="sensor-pulse" class="w-2 h-2 rounded-full live-dot" style="background: var(--accent-green);"></span>
+            <h3 class="font-headline text-xs font-bold uppercase tracking-widest">Sensor Readings</h3>
+          </div>
+          <span class="text-[10px] font-mono" style="color: var(--text-muted);">Last 50 cycles · Live</span>
+        </div>
+        <div style="overflow-y: auto; flex: 1;">
+          <table class="vt">
+            <thead>
+              <tr>
+                <th>Cycle</th>
+                <th>s2 LPC Temp (°R)</th>
+                <th>s4 LPT Temp (°R)</th>
+                <th>s7 HPC Press (psia)</th>
+                <th>s11 HPC Static P</th>
+                <th>s12 Fuel/Ps30</th>
+                <th>Anomaly</th>
+              </tr>
+            </thead>
+            <tbody id="sensor-table-body">
+              <tr><td colspan="7" class="text-center py-8 text-[10px] font-mono" style="color: var(--text-muted);">Select an engine to load data</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column (4/12) -->
+    <div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+
+      <!-- Health Trend Sparkline -->
+      <div class="glass-panel p-5">
+        <h3 class="font-headline text-xs font-bold uppercase tracking-widest mb-4">Health Trend</h3>
+        <svg id="health-sparkline" class="sparkline-svg" viewBox="0 0 300 80" preserveAspectRatio="none">
+          <text x="150" y="45" text-anchor="middle" class="font-mono" style="font-size:9px; fill:#9ca3af;">No data</text>
+        </svg>
+        <div class="flex justify-between mt-2">
+          <span class="text-[9px] font-mono" style="color: var(--text-muted);">100 cycles ago</span>
+          <span class="text-[9px] font-mono" style="color: var(--text-muted);">now</span>
+        </div>
+      </div>
+
+      <!-- Similar Incidents -->
+      <div class="glass-panel p-5 flex-1">
+        <h3 class="font-headline text-xs font-bold uppercase tracking-widest mb-4">Similar Incidents</h3>
+        <div style="overflow-y: auto; max-height: 200px;">
+          <table class="vt">
+            <thead>
+              <tr><th>Incident ID</th><th>Failure Mode</th><th>Match %</th><th>Prev. Cost ₹</th></tr>
+            </thead>
+            <tbody id="incidents-table-body">
+              <tr><td colspan="4" class="text-center py-4 text-[10px] font-mono" style="color: var(--text-muted);">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- end engine-detail -->
+
+
+<!-- ════════════════════════════════════════════
+     VIEW 3: AGENT CHAIN
+════════════════════════════════════════════ -->
+<div id="view-agent-chain" class="view">
+
+  <div class="view-header flex items-center justify-between">
+    <div>
+      <h2>Agent Chain</h2>
+      <p>Monitor → Diagnosis → Plan → Guardian · OBO Authorization</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <button id="demo-trigger-btn" class="neu-btn" onclick="triggerDemo()">
+        <span class="material-symbols-outlined text-sm" style="vertical-align:middle; margin-right:4px;">play_circle</span>
+        Trigger Engine 15 Demo
+      </button>
+    </div>
+  </div>
+
+  <!-- Agent Pipeline -->
+  <div class="flex items-stretch gap-2 mb-6 overflow-x-auto pb-2">
+
+    <!-- Monitor -->
+    <div class="agent-card" style="min-width: 200px;">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined" style="color: var(--accent); font-size:20px;">radar</span>
+          <span class="font-headline text-sm font-bold">Monitor</span>
+        </div>
+        <span id="agent-monitor-status" class="badge badge-gray">IDLE</span>
+      </div>
+      <div class="inset-panel" style="padding: 10px 12px; margin-bottom: 10px;">
+        <p id="agent-monitor-output" class="font-mono text-[10px]" style="color: var(--text-muted);">Scanning fleet...</p>
+      </div>
+      <div class="flex justify-between text-[9px] font-mono" style="color: var(--text-muted);">
+        <span>Zerobus · 100ms scan</span>
+        <span id="agent-monitor-ts">—</span>
+      </div>
+    </div>
+
+    <div class="agent-connector">
+      <span class="material-symbols-outlined">arrow_forward</span>
+    </div>
+
+    <!-- Diagnosis -->
+    <div class="agent-card" style="min-width: 200px;">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined" style="color:#7c3aed; font-size:20px;">troubleshoot</span>
+          <span class="font-headline text-sm font-bold">Diagnosis</span>
+        </div>
+        <span id="agent-diagnosis-status" class="badge badge-gray">IDLE</span>
+      </div>
+      <div class="inset-panel" style="padding: 10px 12px; margin-bottom: 10px;">
+        <p id="agent-diagnosis-output" class="font-mono text-[10px]" style="color: var(--text-muted);">Awaiting anomaly...</p>
+      </div>
+      <div class="flex justify-between text-[9px] font-mono" style="color: var(--text-muted);">
+        <span>MLflow + Vector Search · ~2.1s</span>
+        <span id="agent-diagnosis-ts">—</span>
+      </div>
+    </div>
+
+    <div class="agent-connector">
+      <span class="material-symbols-outlined">arrow_forward</span>
+    </div>
+
+    <!-- Plan -->
+    <div class="agent-card" style="min-width: 200px;">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined" style="color:#ea580c; font-size:20px;">event_available</span>
+          <span class="font-headline text-sm font-bold">Plan</span>
+        </div>
+        <span id="agent-plan-status" class="badge badge-gray">IDLE</span>
+      </div>
+      <div class="inset-panel" style="padding: 10px 12px; margin-bottom: 10px;">
+        <p id="agent-plan-output" class="font-mono text-[10px]" style="color: var(--text-muted);">Awaiting diagnosis...</p>
+      </div>
+      <div class="flex justify-between text-[9px] font-mono" style="color: var(--text-muted);">
+        <span>Lakebase · window + cost · ~0.8s</span>
+        <span id="agent-plan-ts">—</span>
+      </div>
+    </div>
+
+    <div class="agent-connector">
+      <span class="material-symbols-outlined">arrow_forward</span>
+    </div>
+
+    <!-- Guardian -->
+    <div class="agent-card" style="min-width: 220px;">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined" style="color:#10b981; font-size:20px;">verified_user</span>
+          <span class="font-headline text-sm font-bold">Guardian</span>
+        </div>
+        <span id="agent-guardian-status" class="badge badge-gray">IDLE</span>
+      </div>
+      <div class="inset-panel" style="padding: 10px 12px; margin-bottom: 10px;">
+        <p id="agent-guardian-output" class="font-mono text-[10px]" style="color: var(--text-muted);">Awaiting plan...</p>
+        <p id="agent-branch-id" class="font-mono text-[9px] mt-1" style="color: var(--text-muted); display:none;"></p>
+      </div>
+      <div class="flex justify-between text-[9px] font-mono" style="color: var(--text-muted);">
+        <span>Lakebase branch → INSERT → MERGE · ~2s</span>
+        <span id="agent-guardian-ts">—</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Decision Log Table -->
+  <div class="glass-panel" style="overflow:hidden;">
+    <div class="px-6 py-4 flex items-center justify-between" style="border-bottom: 1px solid rgba(0,0,0,0.06);">
+      <div class="flex items-center gap-3">
+        <span id="decisions-pulse" class="w-2 h-2 rounded-full live-dot" style="background: var(--accent-green);"></span>
+        <h3 class="font-headline text-xs font-bold uppercase tracking-widest">Live Decision Log</h3>
+      </div>
+      <span id="decisions-count" class="text-[10px] font-mono" style="color: var(--text-muted);">— decisions</span>
+    </div>
+    <div style="overflow-x: auto; max-height: 380px; overflow-y: auto;">
+      <table class="vt">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Agent</th>
+            <th>Engine</th>
+            <th>Action</th>
+            <th>Verdict</th>
+            <th>Duration</th>
+          </tr>
+        </thead>
+        <tbody id="decisions-table-body">
+          <tr><td colspan="6" class="text-center py-8 text-[10px] font-mono" style="color: var(--text-muted);">Loading agent decisions...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- end agent-chain -->
+
+
+<!-- ════════════════════════════════════════════
+     VIEW 4: MAINTENANCE ORDERS
+════════════════════════════════════════════ -->
+<div id="view-maintenance-orders" class="view">
+
+  <div class="view-header">
+    <h2>Maintenance Orders</h2>
+    <p>Guardian-approved maintenance actions · All costs in ₹ INR</p>
+  </div>
+
+  <!-- Filters -->
+  <div class="glass-panel p-4 mb-6 flex flex-wrap items-center gap-4">
+    <div class="relative flex-1" style="min-width: 200px;">
+      <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm" style="color: var(--text-muted);">search</span>
+      <input type="text" id="orders-search" class="neu-input" style="padding-left: 36px;" placeholder="Search engine, failure mode..."
+             oninput="filterOrders()">
+    </div>
+    <div class="flex items-center gap-2 flex-wrap">
+      <span class="text-[10px] font-mono font-bold uppercase" style="color: var(--text-muted);">Status</span>
+      <button class="filter-pill active" data-filter="status" data-value="all" onclick="setFilter('status','all',this)">All</button>
+      <button class="filter-pill" data-filter="status" data-value="pending" onclick="setFilter('status','pending',this)">Pending</button>
+      <button class="filter-pill" data-filter="status" data-value="in_progress" onclick="setFilter('status','in_progress',this)">In Progress</button>
+      <button class="filter-pill" data-filter="status" data-value="completed" onclick="setFilter('status','completed',this)">Completed</button>
+    </div>
+    <div class="flex items-center gap-2 flex-wrap">
+      <span class="text-[10px] font-mono font-bold uppercase" style="color: var(--text-muted);">Urgency</span>
+      <button class="filter-pill active" data-filter="urgency" data-value="all" onclick="setFilter('urgency','all',this)">All</button>
+      <button class="filter-pill" data-filter="urgency" data-value="scheduled" onclick="setFilter('urgency','scheduled',this)">Scheduled</button>
+      <button class="filter-pill" data-filter="urgency" data-value="urgent" onclick="setFilter('urgency','urgent',this)">Urgent</button>
+      <button class="filter-pill" data-filter="urgency" data-value="critical" onclick="setFilter('urgency','critical',this)">Critical</button>
+    </div>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="glass-panel" style="overflow:hidden;">
+    <div class="px-6 py-4 flex items-center justify-between" style="border-bottom: 1px solid rgba(0,0,0,0.06);">
+      <h3 class="font-headline text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm" style="color: var(--accent-yellow);">assignment</span>
+        Guardian Maintenance Orders
+      </h3>
+      <span class="text-[10px] font-mono" style="color: var(--text-muted);">Created by Guardian · OBO authorized</span>
+    </div>
+    <div style="overflow-x:auto; max-height: 420px; overflow-y: auto;">
+      <table class="vt">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Engine</th>
+            <th>Failure Mode</th>
+            <th>Urgency</th>
+            <th>Status</th>
+            <th>Est. Cost</th>
+            <th>Window Start</th>
+            <th>Approved By</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody id="orders-table-body">
+          <tr><td colspan="9" class="text-center py-8 text-[10px] font-mono" style="color: var(--text-muted);">Loading maintenance orders...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Summary Stats -->
+  <div class="grid grid-cols-3 gap-4 mt-6">
+    <div class="cm-cell">
+      <div class="cm-val" id="orders-total">—</div>
+      <div class="cm-label">Orders This Month</div>
+    </div>
+    <div class="cm-cell">
+      <div class="cm-val" id="orders-cost">—</div>
+      <div class="cm-label">Total Est. Cost (₹)</div>
+    </div>
+    <div class="cm-cell">
+      <div class="cm-val" id="orders-savings">—</div>
+      <div class="cm-label">Est. Savings vs Unplanned Failure</div>
+    </div>
+  </div>
+
+</div><!-- end maintenance-orders -->
+
+
+<!-- ════════════════════════════════════════════
+     VIEW 5: GOVERNANCE
+════════════════════════════════════════════ -->
+<div id="view-governance" class="view">
+
+  <div class="view-header">
+    <h2>Governance</h2>
+    <p>Unity Catalog ABAC · OBO Authorization · Guardian Branch Audit</p>
+  </div>
+
+  <div class="grid grid-cols-12 gap-6">
+
+    <!-- OBO Authorization Context -->
+    <div class="col-span-12 lg:col-span-5">
+      <div class="glass-panel p-6">
+        <h3 class="font-headline text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm" style="color: var(--accent);">manage_accounts</span>
+          OBO Authorization Context
+        </h3>
+        <div class="space-y-3">
+          <div class="inset-panel">
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-[9px] font-mono font-bold uppercase" style="color: var(--text-muted);">Active User</span>
+              <span id="obo-user" class="text-[11px] font-mono font-bold" style="color: var(--accent);">—</span>
+            </div>
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-[9px] font-mono font-bold uppercase" style="color: var(--text-muted);">Groups</span>
+              <span id="obo-groups" class="text-[10px] font-mono" style="color: var(--text-secondary);">—</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-[9px] font-mono font-bold uppercase" style="color: var(--text-muted);">Auth Method</span>
+              <span class="badge badge-blue">OBO · Unity Catalog</span>
+            </div>
+          </div>
+          <div>
+            <p class="text-[9px] font-mono font-bold uppercase mb-2" style="color: var(--text-muted);">Row-Level Access Filter</p>
+            <div id="abac-filter" class="inset-panel">
+              <p class="font-mono text-[10px]" style="color: var(--text-secondary);">Loading...</p>
+            </div>
+          </div>
+          <div>
+            <p class="text-[9px] font-mono font-bold uppercase mb-2" style="color: var(--text-muted);">Visible Engines</p>
+            <div id="visible-engines" class="flex flex-wrap gap-1">
+              <!-- populated by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cost Authorization Limits -->
+      <div class="glass-panel p-6 mt-6">
+        <h3 class="font-headline text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm" style="color: var(--accent-yellow);">payments</span>
+          Cost Authorization Limits
+        </h3>
+        <div class="grid grid-cols-3 gap-3">
+          <div class="cm-cell" id="limit-operator">
+            <div class="cm-val" style="font-size:18px;">₹10K</div>
+            <div class="cm-label">Operator</div>
+          </div>
+          <div class="cm-cell" id="limit-supervisor" style="box-shadow: inset -3px -3px 6px var(--neu-shadow-light), inset 3px 3px 6px var(--neu-shadow-dark), 0 0 0 2px rgba(3,105,161,0.3);">
+            <div class="cm-val" style="font-size:18px; color: var(--accent);">₹50K</div>
+            <div class="cm-label">Supervisor ●</div>
+          </div>
+          <div class="cm-cell" id="limit-admin">
+            <div class="cm-val" style="font-size:18px;">∞</div>
+            <div class="cm-label">Admin</div>
+          </div>
+        </div>
+        <p class="text-[9px] font-mono mt-3" style="color: var(--text-muted);">● = your active OBO authorization level</p>
+      </div>
+    </div>
+
+    <!-- Guardian Branch Log + Audit -->
+    <div class="col-span-12 lg:col-span-7 flex flex-col gap-6">
+
+      <!-- Branch Log -->
+      <div class="glass-panel" style="overflow: hidden;">
+        <div class="px-6 py-4 flex items-center justify-between" style="border-bottom: 1px solid rgba(0,0,0,0.06);">
+          <h3 class="font-headline text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm" style="color:#10b981;">call_split</span>
+            Guardian Branch Log
+          </h3>
+          <span class="text-[10px] font-mono" style="color: var(--text-muted);">Lakebase DB Branching</span>
+        </div>
+        <div style="overflow-x:auto; max-height: 220px; overflow-y: auto;">
+          <table class="vt">
+            <thead>
+              <tr>
+                <th>Branch ID</th>
+                <th>Engine</th>
+                <th>Action</th>
+                <th>Outcome</th>
+                <th>Duration</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody id="branch-log-body">
+              <tr><td colspan="6" class="text-center py-6 text-[10px] font-mono" style="color: var(--text-muted);">Loading branch log...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Guardian Decision Audit -->
+      <div class="glass-panel" style="overflow: hidden; flex: 1;">
+        <div class="px-6 py-4 flex items-center justify-between" style="border-bottom: 1px solid rgba(0,0,0,0.06);">
+          <h3 class="font-headline text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm" style="color: var(--accent);">verified_user</span>
+            Guardian Decision Audit
+          </h3>
+          <span class="text-[10px] font-mono" style="color: var(--text-muted);">Last 10 decisions</span>
+        </div>
+        <div style="overflow-x:auto; max-height: 280px; overflow-y: auto;">
+          <table class="vt">
+            <thead>
+              <tr>
+                <th>Engine</th>
+                <th>Verdict</th>
+                <th>Reason / Action</th>
+                <th>Cost ₹</th>
+                <th>User</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="guardian-audit-body">
+              <tr><td colspan="6" class="text-center py-6 text-[10px] font-mono" style="color: var(--text-muted);">Loading Guardian audit...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- end governance -->
+
+</main>
+
+<!-- ══════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════ -->
+<script>
+/* ─────────────────────────────────────────────
+   CONFIG
+───────────────────────────────────────────── */
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? 'http://localhost:8000'
+  : '';  // same origin in Databricks
+
+const POLL_INTERVALS = {
+  'fleet-overview':      3000,
+  'engine-detail':       5000,
+  'agent-chain':         2000,
+  'maintenance-orders': 10000,
+  'governance':         30000,
+};
+
+/* ─────────────────────────────────────────────
+   STATE
+───────────────────────────────────────────── */
+let activeView = 'fleet-overview';
+let selectedEngine = 15;
+let pollTimers = {};
+let ordersData = [];
+let ordersFilters = { status: 'all', urgency: 'all', search: '' };
+let apiReachable = true;
+let currentAbortController = null;
+let engineHealthMap = {};  // asset_id -> { health_status, health_score }
+
+/* ─────────────────────────────────────────────
+   SPA ROUTING
+───────────────────────────────────────────── */
+function navigateTo(viewId, engineId) {
+  if (engineId !== undefined) {
+    selectedEngine = parseInt(engineId);
+    populateEngineSelect(selectedEngine);
+    loadEngineDetail(selectedEngine);
+  }
+
+  // Hide all views
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + viewId).classList.add('active');
+
+  // Update nav links
+  document.querySelectorAll('.nav-link').forEach(a => {
+    a.classList.toggle('active', a.dataset.view === viewId);
+  });
+
+  // Update sidebar
+  document.querySelectorAll('.sidebar-link').forEach(s => {
+    s.classList.toggle('active', s.dataset.view === viewId);
+  });
+
+  // Clear existing polls and start new one for active view
+  clearAllPolls();
+  activeView = viewId;
+  startPoll(viewId);
+}
+
+document.querySelectorAll('.nav-link, .sidebar-link').forEach(el => {
+  el.addEventListener('click', () => navigateTo(el.dataset.view));
+});
+
+/* ─────────────────────────────────────────────
+   POLLING
+───────────────────────────────────────────── */
+function startPoll(viewId) {
+  currentAbortController = new AbortController();
+  const handlers = {
+    'fleet-overview':      fetchFleet,
+    'engine-detail':       () => loadEngineDetail(selectedEngine),
+    'agent-chain':         fetchAgents,
+    'maintenance-orders':  fetchOrders,
+    'governance':          fetchGovernance,
+  };
+  const fn = handlers[viewId];
+  if (!fn) return;
+  fn();
+  pollTimers[viewId] = setInterval(fn, POLL_INTERVALS[viewId]);
+}
+
+function clearAllPolls() {
+  Object.values(pollTimers).forEach(t => clearInterval(t));
+  pollTimers = {};
+  if (currentAbortController) {
+    currentAbortController.abort();
+    currentAbortController = null;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   API HELPERS
+───────────────────────────────────────────── */
+async function apiFetch(path, options = {}) {
+  try {
+    const fetchOpts = {
+      headers: { 'Accept': 'application/json' },
+      signal: currentAbortController?.signal,
+      ...options,
+    };
+    const r = await fetch(API_BASE + path, fetchOpts);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+    if (!apiReachable) {
+      apiReachable = true;
+      document.getElementById('api-error').style.display = 'none';
+    }
+    return data;
+  } catch (e) {
+    if (e.name === 'AbortError') throw e;  // view changed — silently ignore
+    apiReachable = false;
+    document.getElementById('api-error').style.display = 'block';
+    throw e;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   FORMATTERS
+───────────────────────────────────────────── */
+function fmtTs(ts) {
+  if (!ts) return '—';
+  const d = new Date(ts);
+  return d.toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false });
+}
+
+function fmtCost(v) {
+  if (v === null || v === undefined) return '—';
+  if (v >= 100000) return '₹' + (v/100000).toFixed(1) + 'L';
+  if (v >= 1000) return '₹' + Math.round(v/1000) + 'K';
+  return '₹' + Math.round(v);
+}
+
+function healthColor(score) {
+  if (score >= 80) return '#10b981';
+  if (score >= 50) return '#f59e0b';
+  if (score >= 20) return '#ea580c';
+  return '#dc2626';
+}
+
+function statusBadge(status) {
+  const map = {
+    'healthy':          '<span class="badge badge-green">Healthy</span>',
+    'degrading':        '<span class="badge badge-yellow">Degrading</span>',
+    'critical':         '<span class="badge badge-orange">Critical</span>',
+    'failure_imminent': '<span class="badge badge-red">Failure</span>',
+  };
+  return map[status] || `<span class="badge badge-gray">${status||'—'}</span>`;
+}
+
+function urgencyBadge(u) {
+  const map = {
+    'SCHEDULED': '<span class="badge badge-blue">Scheduled</span>',
+    'URGENT':    '<span class="badge badge-yellow">Urgent</span>',
+    'CRITICAL':  '<span class="badge badge-red">Critical</span>',
+  };
+  return map[u] || `<span class="badge badge-gray">${u||'—'}</span>`;
+}
+
+function orderStatusBadge(s) {
+  const map = {
+    'pending':     '<span class="badge badge-yellow">Pending</span>',
+    'in_progress': '<span class="badge badge-blue">In Progress</span>',
+    'completed':   '<span class="badge badge-green">Completed</span>',
+    'cancelled':   '<span class="badge badge-gray">Cancelled</span>',
+  };
+  return map[s] || `<span class="badge badge-gray">${s||'—'}</span>`;
+}
+
+function verdictBadge(v) {
+  if (v === 'APPROVED') return '<span class="badge badge-green">APPROVED</span>';
+  if (v === 'BLOCKED')  return '<span class="badge badge-red">BLOCKED</span>';
+  return `<span class="badge badge-gray">${v||'—'}</span>`;
+}
+
+/* ─────────────────────────────────────────────
+   VIEW 1: FLEET OVERVIEW
+───────────────────────────────────────────── */
+async function fetchFleet() {
+  try {
+    const data = await apiFetch('/api/fleet');
+    renderFleet(data);
+  } catch(e) { /* error banner shown */ }
+}
+
+function renderFleet(data) {
+  const { engines, kpis, timestamp } = data;
+
+  // Update KPIs
+  const online = kpis.engines_online ?? 0;
+  const alerts = kpis.active_alerts ?? 0;
+  const pending = kpis.pending_orders ?? 0;
+  const health = kpis.avg_health ?? 0;
+
+  setEl('kpi-online', online);
+  setEl('kpi-alerts', alerts);
+  setEl('kpi-pending', pending);
+  setEl('kpi-health', Math.round(health));
+
+  setWidth('fill-online', (online / 20) * 100);
+  setWidth('fill-alerts', Math.min(alerts * 20, 100));
+  setWidth('fill-pending', Math.min(pending * 20, 100));
+  setWidth('fill-health', health);
+
+  const ab = document.getElementById('kpi-alerts-badge');
+  ab.textContent = alerts > 0 ? '⚠ ALERT' : '● OK';
+  ab.className = 'card-percent ' + (alerts > 0 ? 'down' : 'up');
+
+  const hb = document.getElementById('kpi-health-badge');
+  hb.textContent = health >= 80 ? '▲ GOOD' : health >= 50 ? '— FAIR' : '▼ POOR';
+  hb.className = 'card-percent ' + (health >= 80 ? 'up' : health >= 50 ? 'warn' : 'down');
+
+  document.getElementById('fleet-update-time').textContent = fmtTs(timestamp);
+
+  // Keep health map up to date for engine dropdown
+  if (engines) {
+    engines.forEach(e => { engineHealthMap[e.asset_id] = { health_status: e.health_status, health_score: e.health_score }; });
+    populateEngineSelect(selectedEngine);
+  }
+
+  // Alert banner
+  const failureEngines = engines.filter(e => e.health_status === 'failure_imminent');
+  const banner = document.getElementById('alert-banner');
+  if (failureEngines.length > 0) {
+    const e = failureEngines[0];
+    banner.style.display = 'flex';
+    document.getElementById('alert-banner-text').textContent =
+      `ENGINE ${e.asset_id} — FAILURE IMMINENT — RUL: ${e.rul_hours != null ? e.rul_hours.toFixed(1) + 'h' : '—'} — ${e.failure_mode || ''}`;
+    document.getElementById('alert-banner-text').onclick = () => navigateTo('engine-detail', e.asset_id);
+  } else {
+    banner.style.display = 'none';
+  }
+
+  // Engine grid
+  renderEngineGrid(engines);
+}
+
+function renderEngineGrid(engines) {
+  const grid = document.getElementById('engine-grid');
+  if (!engines || engines.length === 0) {
+    grid.innerHTML = '<div class="text-center py-8 text-[10px] font-mono col-span-10" style="color: var(--text-muted);">No engine data</div>';
+    return;
+  }
+
+  grid.innerHTML = engines.map(e => {
+    const score = Math.round(e.health_score ?? 0);
+    const color = healthColor(score);
+    const cardClass = e.health_status === 'failure_imminent' ? 'failure' :
+                      e.health_status === 'critical' ? 'critical' : '';
+    return `
+      <div class="engine-card ${cardClass}" onclick="navigateTo('engine-detail', ${e.asset_id})">
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-mono text-[11px] font-bold" style="color: var(--text-primary);">ENG-${String(e.asset_id).padStart(2,'0')}</span>
+          <span class="text-[8px] font-mono" style="color: var(--text-muted);">P${e.plant || '?'}</span>
+        </div>
+        <div class="metric-bar-track mb-2">
+          <div class="metric-bar-fill" style="background:${color}; width:${score}%;"></div>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-[16px] font-bold" style="color:${color};">${score}</span>
+          <div class="w-2 h-2 rounded-full" style="background:${color};"></div>
+        </div>
+        <div class="font-mono text-[9px] mt-1" style="color: var(--text-muted);">
+          ${e.rul_hours != null ? 'RUL ' + e.rul_hours.toFixed(0) + 'h' : '—'}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+/* ─────────────────────────────────────────────
+   VIEW 2: ENGINE DETAIL
+───────────────────────────────────────────── */
+function populateEngineSelect(selected) {
+  const sel = document.getElementById('engine-select');
+  sel.innerHTML = '';
+  for (let i = 1; i <= 20; i++) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    const info = engineHealthMap[i];
+    const dot = info?.health_status === 'failure_imminent' ? '🔴' :
+                info?.health_status === 'critical'         ? '🟠' :
+                info?.health_status === 'degrading'        ? '🟡' :
+                info?.health_status === 'healthy'          ? '🟢' : '⚪';
+    opt.text = `${dot} Engine ${String(i).padStart(2,'0')}` +
+               (info?.health_score != null ? ` — ${Math.round(info.health_score)}%` : '');
+    sel.appendChild(opt);
+  }
+  sel.value = selected;
+}
+
+async function loadEngineDetail(engineId) {
+  selectedEngine = parseInt(engineId);
+  populateEngineSelect(selectedEngine);
+  try {
+    const data = await apiFetch(`/api/engine/${selectedEngine}`);
+    renderEngineDetail(data);
+  } catch(e) { /* handled */ }
+}
+
+function renderEngineDetail(data) {
+  const { engine, sensor_readings, predictions, similar_incidents } = data;
+
+  // Header
+  document.getElementById('engine-detail-title').textContent =
+    `Engine ${engine.asset_id} — Plant ${engine.plant || '?'}`;
+  document.getElementById('engine-detail-sub').innerHTML =
+    `${statusBadge(engine.health_status)} &nbsp; Cycle ${engine.current_cycle || '—'} &nbsp; Last seen ${fmtTs(engine.last_seen)}`;
+
+  // KPIs
+  const score = Math.round(engine.health_score ?? 0);
+  setEl('eng-health', score);
+  setWidth('eng-health-fill', score);
+  document.getElementById('eng-health-fill').style.background = healthColor(score);
+
+  const rul = predictions?.rul_hours;
+  setEl('eng-rul', rul != null ? rul.toFixed(1) + 'h' : '—');
+  if (predictions) {
+    document.getElementById('eng-rul-ci').textContent =
+      `GBR 90% CI: [${predictions.rul_lower?.toFixed(1) ?? '—'} — ${predictions.rul_upper?.toFixed(1) ?? '—'}]h`;
+    const rulPct = rul != null ? Math.min(100, (rul / 100) * 100) : 0;
+    setWidth('eng-rul-fill', 100 - rulPct);
+  }
+
+  const fm = predictions?.failure_mode ?? '—';
+  const conf = predictions?.failure_confidence;
+  document.getElementById('eng-failure-mode').textContent = fm.replace(/_/g, ' ');
+  document.getElementById('eng-failure-conf').textContent =
+    conf != null ? `RF classifier · conf. ${Math.round(conf * 100)}%` : 'RF classifier · conf. —';
+
+  const anomalyCount = sensor_readings?.filter(r => r.anomaly_flag)?.length ?? 0;
+  setEl('eng-anomalies', anomalyCount);
+  setWidth('eng-anomaly-fill', Math.min(anomalyCount * 10, 100));
+
+  // Sensor table
+  const tbody = document.getElementById('sensor-table-body');
+  if (!sensor_readings || sensor_readings.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-[10px] font-mono" style="color: var(--text-muted);">No sensor data</td></tr>';
+  } else {
+    const rows = sensor_readings.slice().reverse().map((r, idx) => {
+      const sensors = r.sensors || {};
+      const anomaly = r.anomaly_flag;
+      return `<tr class="${anomaly ? 'row-alert' : ''} ${idx === 0 ? 'row-new' : ''}">
+        <td>${r.cycle ?? '—'}</td>
+        <td>${fmtSensor(sensors.s2)}</td>
+        <td>${fmtSensor(sensors.s4)}</td>
+        <td>${fmtSensor(sensors.s7)}</td>
+        <td>${fmtSensor(sensors.s11)}</td>
+        <td>${fmtSensor(sensors.s12)}</td>
+        <td>${anomaly ? '<span class="badge badge-red">⚠ ANOMALY</span>' : '<span class="badge badge-green">OK</span>'}</td>
+      </tr>`;
+    });
+    tbody.innerHTML = rows.join('');
+  }
+
+  // Sparkline
+  if (engine.health_history && engine.health_history.length > 1) {
+    drawSparkline('health-sparkline', engine.health_history, healthColor(score));
+  }
+
+  // Similar incidents
+  const itbody = document.getElementById('incidents-table-body');
+  if (!similar_incidents || similar_incidents.length === 0) {
+    itbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-[10px] font-mono" style="color: var(--text-muted);">No similar incidents found</td></tr>';
+  } else {
+    itbody.innerHTML = similar_incidents.map(i => `
+      <tr>
+        <td>${i.incident_id || '—'}</td>
+        <td>${(i.failure_mode || '—').replace(/_/g,' ')}</td>
+        <td><span class="badge badge-blue">${i.similarity_score != null ? Math.round(i.similarity_score*100)+'%' : '—'}</span></td>
+        <td>${fmtCost(i.cost)}</td>
+      </tr>`).join('');
+  }
+}
+
+function fmtSensor(v) {
+  if (v === null || v === undefined) return '—';
+  return parseFloat(v).toFixed(2);
+}
+
+function drawSparkline(svgId, history, color) {
+  const svg = document.getElementById(svgId);
+  const W = 300, H = 80, pad = 4;
+  const min = Math.min(...history), max = Math.max(...history);
+  const range = max - min || 1;
+  const xs = history.map((_, i) => pad + (i / (history.length - 1)) * (W - 2*pad));
+  const ys = history.map(v => H - pad - ((v - min) / range) * (H - 2*pad));
+
+  const path = xs.map((x, i) => (i === 0 ? 'M' : 'L') + `${x.toFixed(1)},${ys[i].toFixed(1)}`).join(' ');
+  const area = `M${xs[0].toFixed(1)},${H} ` + xs.map((x, i) => `L${x.toFixed(1)},${ys[i].toFixed(1)}`).join(' ') + ` L${xs[xs.length-1].toFixed(1)},${H} Z`;
+
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="sg-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${color}" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="${color}" stop-opacity="0.02"/>
+      </linearGradient>
+    </defs>
+    <path d="${area}" fill="url(#sg-grad)"/>
+    <path d="${path}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${xs[xs.length-1].toFixed(1)}" cy="${ys[ys.length-1].toFixed(1)}" r="3" fill="${color}"/>
+  `;
+}
+
+/* ─────────────────────────────────────────────
+   VIEW 3: AGENT CHAIN
+───────────────────────────────────────────── */
+async function fetchAgents() {
+  try {
+    const data = await apiFetch('/api/agents/status');
+    renderAgents(data);
+  } catch(e) {}
+}
+
+function renderAgents(data) {
+  const { agents, decisions } = data;
+
+  const agentMap = {};
+  (agents || []).forEach(a => { agentMap[a.agent_name] = a; });
+
+  renderAgentCard('monitor',   agentMap['monitor_agent']);
+  renderAgentCard('diagnosis', agentMap['diagnosis_agent']);
+  renderAgentCard('plan',      agentMap['plan_agent']);
+  renderAgentCard('guardian',  agentMap['guardian_agent']);
+
+  // Decision log
+  const tbody = document.getElementById('decisions-table-body');
+  document.getElementById('decisions-count').textContent = `${(decisions||[]).length} decisions`;
+  if (!decisions || decisions.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-[10px] font-mono" style="color: var(--text-muted);">No decisions yet — trigger a demo run</td></tr>';
+    return;
+  }
+  tbody.innerHTML = decisions.map((d, idx) => {
+    const rowClass = idx === 0 ? 'row-new' : '';
+    const verdictStyle = d.verdict === 'APPROVED' ? 'color:#059669; font-weight:700;' :
+                         d.verdict === 'BLOCKED'  ? 'color:#dc2626; font-weight:700;' : '';
+    return `<tr class="${rowClass}">
+      <td>${fmtTs(d.created_at)}</td>
+      <td><span class="badge badge-blue">${(d.agent_name||'—').replace('_agent','').toUpperCase()}</span></td>
+      <td>ENG-${String(d.asset_id||'?').padStart(2,'0')}</td>
+      <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${d.action_taken || '—'}</td>
+      <td><span style="${verdictStyle}">${d.verdict || '—'}</span></td>
+      <td>${d.duration_ms != null ? d.duration_ms + 'ms' : '—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderAgentCard(name, agent) {
+  const statusEl   = document.getElementById(`agent-${name}-status`);
+  const outputEl   = document.getElementById(`agent-${name}-output`);
+  const tsEl       = document.getElementById(`agent-${name}-ts`);
+
+  if (!agent) {
+    statusEl.className = 'badge badge-gray'; statusEl.textContent = 'IDLE';
+    return;
+  }
+
+  const status = agent.status || 'idle';
+  const statusClass = { running:'badge-blue', complete:'badge-green', blocked:'badge-red', idle:'badge-gray' }[status] || 'badge-gray';
+  statusEl.className = `badge ${statusClass}`;
+  statusEl.textContent = status.toUpperCase();
+
+  outputEl.textContent = agent.last_output || '—';
+  outputEl.style.color = status === 'blocked' ? '#dc2626' : status === 'complete' ? '#059669' : 'var(--text-muted)';
+
+  tsEl.textContent = agent.last_run ? fmtTs(agent.last_run) : '—';
+
+  // Guardian special: branch_id
+  if (name === 'guardian' && agent.branch_id) {
+    const branchEl = document.getElementById('agent-branch-id');
+    branchEl.style.display = 'block';
+    branchEl.textContent = `Branch: ${agent.branch_id}`;
+    branchEl.style.color = '#10b981';
+  }
+}
+
+async function triggerDemo() {
+  const btn = document.getElementById('demo-trigger-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Running chain...';
+  try {
+    await apiFetch('/api/demo/trigger', { method: 'POST' });
+    // Poll agents rapidly for 15s to show progress
+    let polls = 0;
+    const rapid = setInterval(async () => {
+      await fetchAgents();
+      polls++;
+      if (polls > 15) {
+        clearInterval(rapid);
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-symbols-outlined text-sm" style="vertical-align:middle; margin-right:4px;">play_circle</span>Trigger Engine 15 Demo';
+      }
+    }, 1000);
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = '<span class="material-symbols-outlined text-sm" style="vertical-align:middle; margin-right:4px;">play_circle</span>Trigger Engine 15 Demo';
+  }
+}
+
+/* ─────────────────────────────────────────────
+   VIEW 4: MAINTENANCE ORDERS
+───────────────────────────────────────────── */
+async function fetchOrders() {
+  try {
+    const data = await apiFetch('/api/orders');
+    ordersData = data.orders || [];
+    renderOrdersSummary(data.summary || {});
+    filterOrders();
+  } catch(e) {}
+}
+
+function setFilter(type, value, btn) {
+  ordersFilters[type] = value;
+  // Update pill states for this filter group
+  document.querySelectorAll(`[data-filter="${type}"]`).forEach(p => {
+    p.classList.toggle('active', p.dataset.value === value);
+  });
+  filterOrders();
+}
+
+function filterOrders() {
+  const q = (document.getElementById('orders-search')?.value || '').toLowerCase();
+  ordersFilters.search = q;
+
+  let rows = ordersData;
+  if (ordersFilters.status !== 'all') rows = rows.filter(r => r.status === ordersFilters.status);
+  if (ordersFilters.urgency !== 'all') rows = rows.filter(r => (r.urgency||'').toLowerCase() === ordersFilters.urgency);
+  if (q) rows = rows.filter(r =>
+    String(r.asset_id).includes(q) ||
+    (r.failure_mode||'').toLowerCase().includes(q) ||
+    (r.maintenance_action||'').toLowerCase().includes(q)
+  );
+
+  renderOrdersTable(rows);
+}
+
+function renderOrdersTable(rows) {
+  const tbody = document.getElementById('orders-table-body');
+  if (!rows || rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="9" class="text-center py-8 text-[10px] font-mono" style="color: var(--text-muted);">No orders match filter</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map((o, idx) => {
+    const urgencyClass = o.urgency === 'CRITICAL' ? 'urgency-critical' :
+                         o.urgency === 'URGENT'   ? 'urgency-urgent' : '';
+    const rowNew = idx === 0 ? 'row-new' : '';
+    return `<tr class="${urgencyClass} ${rowNew}">
+      <td class="font-mono text-[10px]">#${o.id || '—'}</td>
+      <td>ENG-${String(o.asset_id||'?').padStart(2,'0')}</td>
+      <td>${(o.failure_mode||'—').replace(/_/g,' ')}</td>
+      <td>${urgencyBadge(o.urgency)}</td>
+      <td>${orderStatusBadge(o.status)}</td>
+      <td class="font-mono">${fmtCost(o.estimated_cost)}</td>
+      <td class="font-mono text-[10px]">${o.window_start ? fmtTs(o.window_start) : '—'}</td>
+      <td class="font-mono text-[10px]">${o.approved_by_user || '—'}</td>
+      <td class="font-mono text-[10px]">${fmtTs(o.created_at)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderOrdersSummary(summary) {
+  setEl('orders-total', summary.total_this_month ?? '—');
+  setEl('orders-cost', summary.total_cost ? fmtCost(summary.total_cost) : '—');
+  setEl('orders-savings', summary.estimated_savings ? fmtCost(summary.estimated_savings) : '—');
+}
+
+/* ─────────────────────────────────────────────
+   VIEW 5: GOVERNANCE
+───────────────────────────────────────────── */
+async function fetchGovernance() {
+  try {
+    const data = await apiFetch('/api/governance');
+    renderGovernance(data);
+  } catch(e) {}
+}
+
+function renderGovernance(data) {
+  const { obo_context, branch_log, guardian_decisions, cost_limits, visible_engines } = data;
+
+  // OBO context
+  if (obo_context) {
+    setEl('obo-user', obo_context.user_id || '—');
+    setEl('obo-groups', (obo_context.groups || []).join(', ') || '—');
+    document.getElementById('plant-badge').textContent = obo_context.plant || 'ALL';
+
+    const plant = obo_context.plant;
+    document.getElementById('abac-filter').innerHTML =
+      `<p class="font-mono text-[10px]" style="color: var(--text-secondary);">` +
+      (plant === 'A' ? 'WHERE asset_id BETWEEN 1 AND 10' :
+       plant === 'B' ? 'WHERE asset_id BETWEEN 11 AND 20' :
+       'No row filter — full access') + '</p>';
+  }
+
+  // Cost limits
+  if (cost_limits) {
+    const role = obo_context?.role;
+    ['operator','supervisor','admin'].forEach(r => {
+      const el = document.getElementById(`limit-${r}`);
+      if (el) {
+        if (r === role) {
+          el.style.boxShadow = 'inset -3px -3px 6px var(--neu-shadow-light), inset 3px 3px 6px var(--neu-shadow-dark), 0 0 0 2px rgba(3,105,161,0.3)';
+          el.querySelector('.cm-val').style.color = 'var(--accent)';
+        }
+      }
+    });
+  }
+
+  // Visible engines
+  const veDiv = document.getElementById('visible-engines');
+  const engines = visible_engines || [];
+  veDiv.innerHTML = engines.map(id =>
+    `<span class="badge badge-blue">ENG-${String(id).padStart(2,'0')}</span>`
+  ).join('');
+
+  // Branch log
+  const branchTbody = document.getElementById('branch-log-body');
+  const branches = branch_log || [];
+  if (branches.length === 0) {
+    branchTbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-[10px] font-mono" style="color: var(--text-muted);">No branch operations yet</td></tr>';
+  } else {
+    branchTbody.innerHTML = branches.map((b, idx) => {
+      const outcomeClass = b.outcome === 'MERGED' ? 'branch-merged' : b.outcome === 'DROPPED' ? 'branch-dropped' : 'branch-progress';
+      return `<tr class="${idx === 0 ? 'row-new' : ''}">
+        <td class="font-mono text-[9px]">${b.branch_id || '—'}</td>
+        <td>ENG-${String(b.asset_id||'?').padStart(2,'0')}</td>
+        <td>${b.action || '—'}</td>
+        <td class="${outcomeClass}">${b.outcome || '—'}</td>
+        <td>${b.duration_ms != null ? b.duration_ms + 'ms' : '—'}</td>
+        <td class="font-mono text-[10px]">${fmtTs(b.created_at)}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Guardian audit
+  const guardTbody = document.getElementById('guardian-audit-body');
+  const decisions = guardian_decisions || [];
+  if (decisions.length === 0) {
+    guardTbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-[10px] font-mono" style="color: var(--text-muted);">No Guardian decisions yet</td></tr>';
+  } else {
+    guardTbody.innerHTML = decisions.map((d, idx) => `
+      <tr class="${idx === 0 ? 'row-new' : ''}">
+        <td>ENG-${String(d.asset_id||'?').padStart(2,'0')}</td>
+        <td>${verdictBadge(d.verdict)}</td>
+        <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:10px;">${d.reason || d.action_taken || '—'}</td>
+        <td class="font-mono">${fmtCost(d.estimated_cost)}</td>
+        <td class="font-mono text-[9px]">${d.triggered_by || '—'}</td>
+        <td class="font-mono text-[10px]">${fmtTs(d.created_at)}</td>
+      </tr>`).join('');
+  }
+}
+
+/* ─────────────────────────────────────────────
+   UTILITIES
+───────────────────────────────────────────── */
+function setEl(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val !== null && val !== undefined ? val : '—';
+}
+
+function setWidth(id, pct) {
+  const el = document.getElementById(id);
+  if (el) el.style.width = Math.min(100, Math.max(0, pct)) + '%';
+}
+
+/* ─────────────────────────────────────────────
+   HEADER HEALTH POLL (every 5s, independent of view)
+───────────────────────────────────────────── */
+async function pollHeaderStatus() {
+  try {
+    const data = await fetch(API_BASE + '/health', { headers: { 'Accept': 'application/json' } }).then(r => r.json());
+
+    const label = document.getElementById('monitor-label');
+    const dot   = document.getElementById('monitor-dot');
+    const lakebaseBadge = document.getElementById('lakebase-badge');
+
+    // Monitor status based on agents in flight
+    if (data.agents_in_flight > 0) {
+      label.textContent = 'AGENTS RUNNING';
+      dot.style.background = 'var(--accent)';
+    } else {
+      label.textContent = 'MONITOR ACTIVE';
+      dot.style.background = 'var(--accent-green)';
+    }
+
+    // Lakebase connection badge
+    if (data.lakebase) {
+      lakebaseBadge.textContent = 'Lakebase ●';
+      lakebaseBadge.style.color = 'var(--accent-green)';
+    } else {
+      lakebaseBadge.textContent = 'Lakebase ✗';
+      lakebaseBadge.style.color = 'var(--accent-red)';
+    }
+
+    // Clear API error if reachable
+    if (!apiReachable) {
+      apiReachable = true;
+      document.getElementById('api-error').style.display = 'none';
+    }
+  } catch(e) {
+    // Header status falls back gracefully — no toast from health poll
+  }
+}
+
+/* ─────────────────────────────────────────────
+   INIT
+───────────────────────────────────────────── */
+window.addEventListener('DOMContentLoaded', () => {
+  populateEngineSelect(15);
+  startPoll('fleet-overview');
+  pollHeaderStatus();
+  setInterval(pollHeaderStatus, 5000);
+});
+</script>
+</body>
+</html>

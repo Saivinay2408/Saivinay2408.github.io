@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Gaming the Sphere: A Gameability Audit of VR-Completeness Metrics for Generative 4D Scene Completion</title>
+<style>
+  /* ── NeurIPS two-column format ── */
+  @page {
+    size: letter;
+    margin: 1in 0.75in 1in 0.75in;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 10pt;
+    line-height: 1.45;
+    color: #000;
+    hyphens: auto;
+    max-width: 7in;
+    margin: 0 auto;
+    padding: 0.5in 0;
+  }
+
+  /* Title block: full width, centered */
+  .title-block {
+    text-align: center;
+    margin-bottom: 14pt;
+    padding-top: 8pt;
+    padding-bottom: 8pt;
+    border-top: 4pt solid #000;
+    border-bottom: 1pt solid #000;
+    column-span: all;
+  }
+  .title-block h1 {
+    font-size: 17pt;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 10pt;
+    font-family: "Times New Roman", serif;
+    letter-spacing: -0.01em;
+  }
+  .authors {
+    font-size: 12pt;
+    margin-bottom: 4pt;
+    font-weight: bold;
+  }
+  .affiliations {
+    font-size: 10pt;
+    color: #000;
+    margin-bottom: 6pt;
+    font-style: italic;
+  }
+  .contact {
+    font-size: 9pt;
+    font-family: "Courier New", monospace;
+    color: #333;
+  }
+
+  /* Paper summary block: full width, indented */
+  .paper-summary-block {
+    margin: 0 0.4in 14pt 0.4in;
+  }
+  .paper-summary-block h2 {
+    font-size: 10pt;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 4pt;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .paper-summary-block p {
+    font-size: 9pt;
+    line-height: 1.35;
+    text-align: justify;
+  }
+
+  /* Two-column layout for body */
+  .two-col {
+    column-count: 2;
+    column-gap: 0.25in;
+    column-rule: none;
+  }
+
+  /* Section headings: NeurIPS style */
+  h2.section {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-top: 12pt;
+    margin-bottom: 6pt;
+    column-span: none;
+  }
+  h3.subsection {
+    font-size: 10pt;
+    font-weight: bold;
+    margin-top: 8pt;
+    margin-bottom: 4pt;
+  }
+  h4.subsubsection {
+    font-size: 10pt;
+    font-weight: bold;
+    font-style: italic;
+    margin-top: 6pt;
+    margin-bottom: 2pt;
+  }
+
+  /* Paragraphs, NeurIPS: no indent, half-line space */
+  p {
+    text-align: justify;
+    margin-bottom: 5.5pt;
+    text-indent: 0;
+  }
+  p.no-indent { text-indent: 0; }
+
+  /* Math display */
+  .display-math {
+    font-family: "Times New Roman", serif;
+    font-style: italic;
+    text-align: center;
+    margin: 6pt 0;
+    font-size: 10pt;
+    text-indent: 0;
+  }
+
+  /* Code / program text */
+  code, .prog {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 8pt;
+    background: #f5f5f5;
+    padding: 0 2pt;
+    border-radius: 1pt;
+  }
+  .code-block {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 7pt;
+    background: #f8f8f8;
+    border-left: 2pt solid #999;
+    padding: 4pt 6pt;
+    margin: 5pt 0;
+    white-space: pre-wrap;
+    text-indent: 0;
+    line-height: 1.3;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    overflow: hidden;
+  }
+
+  /* Tables: booktabs style */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.5pt;
+    margin: 6pt 0;
+  }
+  th {
+    font-weight: bold;
+    border-top: 1.5pt solid #000;
+    border-bottom: 0.75pt solid #000;
+    padding: 3pt 4pt;
+    text-align: left;
+  }
+  td {
+    padding: 2pt 4pt;
+    border-bottom: none;
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: 1.5pt solid #000; }
+  .table-caption {
+    font-size: 8.5pt;
+    text-align: left;
+    margin-top: 3pt;
+    margin-bottom: 8pt;
+    text-indent: 0;
+    color: #000;
+    line-height: 1.3;
+  }
+  .table-label {
+    font-weight: bold;
+  }
+
+  /* Figures */
+  .figure {
+    margin: 8pt 0;
+  }
+  .figure-caption {
+    font-size: 8.5pt;
+    margin-top: 4pt;
+    text-indent: 0;
+    color: #000;
+    line-height: 1.3;
+  }
+  .figure-label { font-weight: bold; }
+  .figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* Result highlight boxes */
+  .result-box {
+    border: 0.75pt solid #2c5f2e;
+    background: #f3f9f3;
+    padding: 5pt 7pt;
+    margin: 6pt 0;
+    font-size: 9pt;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .result-box strong { color: #1a3d1b; }
+
+  /* References */
+  .references {
+    margin-top: 10pt;
+    border-top: 0.5pt solid #000;
+    padding-top: 6pt;
+    column-count: 2;
+    column-gap: 0.25in;
+  }
+  .references h2 {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-bottom: 4pt;
+  }
+  .ref-entry {
+    font-size: 8pt;
+    margin-bottom: 3pt;
+    padding-left: 16pt;
+    text-indent: -16pt;
+    text-align: justify;
+    line-height: 1.25;
+  }
+
+  /* Lists */
+  ol, ul {
+    margin-left: 14pt;
+    margin-bottom: 4pt;
+    font-size: 9.5pt;
+  }
+  li { margin-bottom: 2pt; }
+
+  /* Footnotes */
+  .footnote {
+    font-size: 7.5pt;
+    color: #333;
+    border-top: 0.3pt solid #aaa;
+    padding-top: 3pt;
+    margin-top: 6pt;
+  }
+
+  hr { border: none; border-top: 0.5pt solid #ccc; margin: 6pt 0; }
+  sup { font-size: 7pt; vertical-align: super; line-height: 0; }
+
+  /* Print optimizations */
+  @media print {
+    body { margin: 0; padding: 0; max-width: none; }
+    .two-col { column-count: 2; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════
+     TITLE BLOCK
+     ════════════════════════════════════════════════════════════ -->
+<div class="title-block">
+  <h1>Gaming the Sphere: A Gameability Audit of VR-Completeness<br/>
+  Metrics for Generative 4D Scene Completion</h1>
+
+  <div class="authors">
+    Sai Vinay Bhoomireddy, Aditya, Aryan Srivastava, Shrit Shrivastava, Tanisha, Palak Patnaik
+  </div>
+  <div class="affiliations">
+    Manipal Institute of Technology Bengaluru, Manipal Academy of Higher Education
+  </div>
+  <div class="contact">
+    saivinaybhoomireddy@gmail.com
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     ABSTRACT
+     ════════════════════════════════════════════════════════════ -->
+<div class="paper-summary-block">
+  <h2>Abstract</h2>
+  <p class="no-indent">
+    Generative 4D scene completion, synthesizing the unobserved regions of a
+    dynamic scene reconstructed from monocular video, is an emerging task with
+    no agreed evaluation protocol. Recent systems (Vivid4D, See4D, Fillerbuster)
+    are evaluated by reconstruction fidelity at trajectory-adjacent views, which
+    does not measure whether the unobserved portion of the viewing sphere has
+    been completed at all. A natural alternative, adopted in several project-stage
+    evaluation suites including our own, is <em>angular coverage</em>: count the
+    test azimuths around the scene at which reconstructed geometry exists. We
+    show that this family of metrics is critically unsound. First, on three real
+    monocular depth-unprojection scenes (7,408,427 points total), a
+    threshold-based coverage metric is flipped from 12.5&ndash;50.0%
+    to 100% by inserting as few as 20 content-free points
+    (&ldquo;dust&rdquo;), and re-centring the test sphere at the cloud centroid
+    saturates coverage to 100% on <em>every</em> scene with no completion at all.
+    Second, we formalize a taxonomy of degenerate completions (dust, volumetric
+    chaff, temporally flickering chaff, and rotational clones) and show all of
+    them defeat naive coverage. We then construct <strong>VRC-R</strong>, a
+    reference-free metric suite combining relative-density coverage, appearance
+    consistency, local-structure consistency, and temporal coherence of turntable
+    renders, and show empirically that it resists dust, chaff, and flicker
+    (mean attacked composite 0.12 vs. honest 0.12;
+    the attacks buy nothing)
+    while remaining monotonic in true coverage on ground-truth-controlled
+    synthetic scenes (naive coverage under attack: flat at 1.0). Finally, we
+    demonstrate a fundamental negative result: a rotational clone of observed
+    content passes the reference-free suite (mean VRC-R 0.62,
+    every per-sector gate passed on two of three scenes),
+    yet reference-based quality against ground truth exposes it
+    (quality 0.21 vs. 1.00 by construction for the true scene). Reference-free
+    completeness metrics can certify that <em>plausible-looking</em> content exists
+    everywhere; they cannot certify that it is <em>correct</em>. We release the
+    audit suite, attacks, and metrics as a benchmark protocol for future 4D
+    completion systems.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     BODY
+     ════════════════════════════════════════════════════════════ -->
+<div class="two-col">
+
+<h2 class="section">1&nbsp;&nbsp;Introduction</h2>
+
+<p>
+Monocular 4D reconstruction has advanced rapidly: D4RT [1] reconstructs dynamic
+scenes and camera poses from a single video at hundreds of FPS, and NeoVerse [2]
+produces feed-forward 4D Gaussian-Splat scenes from in-the-wild clips. Yet every
+reconstruction method, by design, recovers only what the camera saw. A
+monocular capture of a person from the front contains no information about
+their back; the corresponding region of the viewing sphere is empty. A growing
+body of work therefore targets <em>generative completion</em> of these
+unobserved regions: Vivid4D [3] inpaints depth-warped novel views with a video
+diffusion model, See4D [4] generates 4D scenes by autoregressive video
+inpainting, and Fillerbuster [5] completes large unknown regions of static
+casual captures with a multi-view latent diffusion model.
+</p>
+
+<p>
+How should such completions be evaluated? Reconstruction benchmarks reward
+fidelity at views <em>near the original trajectory</em> (PSNR, SSIM, LPIPS [13]
+against held-out frames), which is silent about the far side of the scene,
+precisely the region completion is supposed to fill. The obvious
+alternative is some form of <em>angular coverage</em>: discretize the viewing
+sphere into test directions and check whether scene geometry exists at each.
+Coverage-style scores of exactly this form appear in project-stage evaluation
+tooling, including the Phase-0 evaluation suite of our own broader project
+(BARF), whose gap-detection module marks a 45&deg; sector &ldquo;covered&rdquo;
+when it contains at least &tau;&nbsp;=&nbsp;5 points.
+</p>
+
+<p>
+This paper is an adversarial audit of that idea, in the spirit of known
+critiques of generative-image metrics such as the Inception Score [15] and FID
+[14], and of Goodhart's law: <em>when a measure becomes a target, it ceases to
+be a good measure</em>. Our question is concrete: if a 4D completion method
+were optimized (or merely selected) to maximize an angular
+coverage score, what is the cheapest thing that score would accept? The answer,
+we show, is: almost anything.
+</p>
+
+<p><strong>Contributions.</strong></p>
+<ol>
+  <li><strong>A gameability taxonomy and audit.</strong> We define four families
+  of degenerate &ldquo;completions&rdquo;: <em>dust</em> (the minimum
+  point count that flips a thresholded metric), <em>chaff</em> (full-density
+  volumetric noise), <em>flicker chaff</em> (chaff resampled per frame), and
+  <em>clone</em> (observed content rotated into unobserved sectors). We
+  show that each one drives a naive coverage metric to 100% on real monocular
+  scenes, with dust requiring only 20&ndash;35
+  inserted points against clouds of ~2.5M points. We further document a
+  <em>centring pathology</em>: measuring coverage about the point-cloud centroid
+  instead of the capture camera saturates the metric on 2.5D depth sheets
+  without any attack.</li>
+  <li><strong>VRC-R, an audited reference-free metric suite.</strong> Four
+  sub-metrics (relative-density coverage, appearance consistency,
+  local-structure consistency, and temporal coherence of CPU turntable renders),
+  each engineered against a specific attack family, combined by
+  per-sector gating (we show the naive product-of-means composite leaks: chaff
+  can profit from it). On ground-truth-controlled synthetic scenes VRC-R is
+  monotonic in true coverage and is not inflated by chaff, while naive coverage
+  is gamed flat to 1.0.</li>
+  <li><strong>A negative result with practical consequences.</strong> The clone
+  attack (temporally coherent, structurally real, chromatically real,
+  and wrong) passes the reference-free suite (mean VRC-R
+  0.62 on real scenes, vs. 0.12 honest; every
+  gate passed on two of three scenes). Reference-based quality computed against
+  ground truth on synthetic scenes detects it immediately
+  (0.21 vs. 1.00 by construction). We argue this boundary
+  (reference-free metrics certify <em>plausibility</em>, never
+  <em>correctness</em>) should be stated explicitly by any future 4D
+  completion benchmark.</li>
+</ol>
+
+<p>
+All experiments in this paper run on CPU (Apple Silicon) in
+under an hour, are fully deterministic (fixed seeds), and are reproducible
+with one script; every number is generated by committed code against committed
+data (Section&nbsp;6, reproducibility statement).
+</p>
+
+<h2 class="section">2&nbsp;&nbsp;Related Work</h2>
+
+<h3 class="subsection">2.1&nbsp;&nbsp;4D reconstruction from monocular video</h3>
+<p>
+D4RT [1] performs unified feed-forward 4D reconstruction and tracking from
+monocular video with an encoder&ndash;decoder transformer. NeoVerse [2]
+(CVPR&nbsp;2026) trains a feed-forward 4D Gaussian-Splat [12] model on
+in-the-wild monocular clips and supports bounded multiview re-rendering near
+the source trajectory. 4C4D [10] extends 4DGS to sparse multi-camera rigs.
+None of these methods synthesize geometry for viewing directions the camera
+never observed, which is the regime our audit targets.
+</p>
+
+<h3 class="subsection">2.2&nbsp;&nbsp;Generative completion of unobserved regions</h3>
+<p>
+Vivid4D [3] reformulates view augmentation as video inpainting: observed
+frames are warped to novel viewpoints via monocular depth and a diffusion
+model inpaints the disocclusions; the goal is reconstruction quality at
+trajectory-adjacent views. See4D [4] generates 4D scenes from unposed video by
+autoregressive spatio-temporal inpainting. SeeU [9] targets unseen-region
+generation with dynamics-aware disentanglement. Fillerbuster [5] completes
+static casual captures with a multi-view latent diffusion transformer. Lyra
+2.0 [8] and SceneCompleter [11] generate explorable static 3D scenes; LaVR [7]
+re-renders novel trajectories conditioned on a latent 4D representation. All
+of these are evaluated with image-fidelity metrics at views near the
+input trajectory; none reports an omnidirectional completeness measure. Our
+audit is complementary to all of them: it concerns how the completion
+<em>task</em> should be scored, not how to perform it.
+</p>
+
+<h3 class="subsection">2.3&nbsp;&nbsp;Metric critiques</h3>
+<p>
+Generative-model metrics have a history of post-hoc audits: the Inception
+Score was shown to be gameable and statistically fragile [15], and FID [14]
+inherits ImageNet biases. LPIPS [13] measures perceptual similarity but
+requires a reference. To our knowledge no prior work has audited completeness
+metrics for 3D/4D generative scene completion; the closest precedent is the
+internal red-team analysis of our own project, which conjectured that a
+coverage&ndash;coherence composite creates self-defeating optimization
+pressure. This paper turns that conjecture into a measured, attack-by-attack
+result.
+</p>
+
+<h2 class="section">3&nbsp;&nbsp;Test Data and Provenance</h2>
+
+<p>
+We use the three Phase-0 scenes produced by our project's Colab evaluation
+pipeline in June 2026, and we begin with an audit of what those artifacts
+actually are, because honest provenance turns out to matter for metric design.
+Each scene ships as a PLY labelled &ldquo;exported from NeoVerse reconstructor.&rdquo;
+The point counts tell a different story: every cloud contains within 240 points of
+392&nbsp;&times;&nbsp;252&nbsp;&times;&nbsp;25&nbsp;=&nbsp;2,469,600 points
+(Table&nbsp;1): exactly one point per pixel per frame at the pipeline's
+internal resolution. These artifacts are therefore <em>per-pixel monocular
+depth unprojections</em> of 25 video frames (2.5D depth sheets fused
+across time), not optimized 4D Gaussian-Splat reconstructions. We use
+them as representative of the <em>geometry distribution</em> a monocular
+pipeline produces (a partial shell facing the camera), which is the input
+regime any completion metric must handle, and we refer to them as
+depth-unprojection scenes throughout.
+</p>
+
+<table>
+<tr><th>Scene</th><th>Source video</th><th>Points</th><th>W&times;H&times;T</th><th>&Delta;</th><th>Frames</th></tr>
+<tr><td>S1 flower</td><td>MDN flower test clip</td><td>2,469,517</td><td>2,469,600</td><td>83</td><td>25</td></tr>
+<tr><td>S2 bunny</td><td>Big Buck Bunny excerpt</td><td>2,469,369</td><td>2,469,600</td><td>231</td><td>25</td></tr>
+<tr><td>S3 street</td><td>SampleLib 5s clip</td><td>2,469,541</td><td>2,469,600</td><td>59</td><td>25</td></tr>
+</table>
+<p class="table-caption"><span class="table-label">Table 1:</span>
+Provenance audit of the Phase-0 scene artifacts. Every cloud's point count
+equals width&times;height&times;frames minus a small number of invalid-depth
+pixels (&Delta;), identifying the artifacts as per-pixel depth unprojections
+rather than optimized 4DGS reconstructions. Artifact: <code>results/session/provenance.json</code>.</p>
+
+<p>
+Each point carries position, RGB colour, and a frame index
+t&nbsp;&isin;&nbsp;{0,&hellip;,24}; the capture camera sits at the origin of
+each cloud's coordinate frame. Scene representation throughout the paper:
+S&nbsp;=&nbsp;(X&nbsp;&isin;&nbsp;&#8477;<sup>N&times;3</sup>,
+C&nbsp;&isin;&nbsp;{0..255}<sup>N&times;3</sup>,
+t&nbsp;&isin;&nbsp;&#8484;<sup>N</sup>).
+</p>
+
+<h2 class="section">4&nbsp;&nbsp;The Gameability Problem</h2>
+
+<h3 class="subsection">4.1&nbsp;&nbsp;Naive angular coverage</h3>
+<p>
+The audited metric is the one implemented in our project's Phase-0 evaluation
+suite (and representative of density-threshold coverage checks generally).
+Fix a centre <em>c</em>, discretize azimuth into eight 45&deg; sectors
+&Theta;&nbsp;=&nbsp;{0&deg;,45&deg;,&hellip;,315&deg;}, and call sector
+&theta; covered when at least &tau; points fall inside it:
+</p>
+<p class="display-math">
+Cov<sub>naive</sub>(S) = (1/|&Theta;|) &Sigma;<sub>&theta;</sub>
+&#8505;[ |{ i : azim(x<sub>i</sub> &minus; c) &isin; &theta; &plusmn; 22.5&deg; }| &ge; &tau; ],
+&nbsp;&nbsp;&tau; = 5.
+</p>
+<p>
+On the three depth-unprojection scenes, with <em>c</em> at the capture camera,
+Cov<sub>naive</sub> reports 12.5%, 50.0%, and
+37.5% respectively (Figure&nbsp;1): the honest diagnosis that
+motivated generative completion in the first place: most of the viewing sphere
+has no geometry at all.
+</p>
+
+<div class="figure">
+  <img src="figures/fig1_angular_profiles.png" alt="Angular density profiles"/>
+  <p class="figure-caption"><span class="figure-label">Figure 1:</span>
+  Capture-centred angular point-density profiles (log<sub>10</sub> count per
+  45&deg; sector) of the three depth-unprojection scenes. Grey sectors are
+  empty. The monocular frustum populates 1&ndash;4 of 8 sectors; the rest of
+  the sphere contains nothing to render. Generated by
+  <code>scripts/make_figures.py</code> from <code>results/session/diagnostic.json</code>.</p>
+</div>
+
+<h3 class="subsection">4.2&nbsp;&nbsp;The centring pathology</h3>
+<p>
+Before any adversary appears, the metric already fails under an innocuous
+implementation choice. The sphere centre <em>c</em> is a free parameter; a
+natural-looking choice is the point-cloud centroid (&ldquo;orbit the
+scene&rdquo;). But a fronto-parallel depth sheet is a slab in space, and its
+centroid lies <em>inside</em> the slab: points then surround the centre at
+every azimuth, and coverage saturates. Empirically, centroid-centred
+Cov<sub>naive</sub> is 100% on all three scenes, and so is the
+relative-density variant C1 introduced below (1.00 on all
+scenes), even though nothing was completed and a VR user walking behind
+the sheet would see a hollow shell. Capture-centred measurement, which asks
+&ldquo;in how many directions from the capture point does geometry
+exist,&rdquo; reports 12.5&ndash;50.0%. All subsequent
+experiments therefore centre the sphere at the capture camera. The lesson
+generalizes: a completeness metric must specify its centre as part of the
+metric definition, not leave it to the evaluator.
+</p>
+
+<h3 class="subsection">4.3&nbsp;&nbsp;A taxonomy of degenerate completions</h3>
+<p>
+We now play the adversary, with attacks ordered by increasing sophistication.
+Each takes a partial scene and returns a &ldquo;completed&rdquo; scene with
+points in every empty sector; none performs any generative modelling. All are
+deterministic given a seed (implementation:
+<code>src/attacks/degenerate_completions.py</code>).
+</p>
+<ul>
+  <li><strong>Dust.</strong> Insert exactly &tau; mid-grey points per empty
+  sector at plausible radii. Cost: 20&ndash;35
+  points against ~2.5M-point clouds (&le;0.002% of the scene).</li>
+  <li><strong>Chaff.</strong> Fill each empty sector with uniform-random
+  points in the scene's radial shell, at the median per-sector density of the
+  observed sectors, with uniform-random colours; the same chaff appears in
+  every frame (temporally static).</li>
+  <li><strong>Flicker chaff.</strong> As chaff, but resampled independently
+  per frame: the temporal failure mode the red-team analysis predicted
+  for unconstrained generative samplers.</li>
+  <li><strong>Clone.</strong> Rotate a copy of the densest observed sector
+  about the vertical axis into each empty sector, preserving real colours,
+  real local surface structure, and real per-frame dynamics. This is
+  simultaneously an attack and a (deliberately naive) symmetry-prior
+  completion baseline.</li>
+</ul>
+
+<div class="figure">
+  <img src="figures/fig2_attack_panels.png" alt="Attack visualizations"/>
+  <p class="figure-caption"><span class="figure-label">Figure 2:</span>
+  Top-down (XZ) views of scene S2: original depth-unprojection sheet, then
+  dust, chaff, and clone &ldquo;completions.&rdquo; The red triangle marks the
+  capture camera. Every variant after the first scores 100% on naive coverage.
+  Generated by <code>scripts/make_figures.py</code> (attacks regenerated with
+  the experiment seed).</p>
+</div>
+
+<p>
+<strong>Result.</strong> Every attack flips Cov<sub>naive</sub> to 100% on all
+three scenes (Table&nbsp;2). Dust does so with 20 points on S2.
+A metric that a few dozen points can saturate cannot anchor a benchmark, let
+alone a training objective.
+</p>
+
+<h2 class="section">5&nbsp;&nbsp;VRC-R: an Audited Metric Suite</h2>
+
+<p>
+We construct four reference-free sub-metrics, each targeting one attack
+family, and combine them multiplicatively (any sub-metric near zero collapses
+the composite, intentional, since a scene that fails any one test is
+not VR-complete). Implementation: <code>src/metrics/robust_vrc.py</code>.
+</p>
+
+<h3 class="subsection">5.1&nbsp;&nbsp;C1: relative-density coverage (vs. dust)</h3>
+<p class="no-indent">
+A sector counts as covered only if it holds a meaningful fraction of the
+cloud: count &ge; &rho;&nbsp;&middot;&nbsp;N/8 with &rho;&nbsp;=&nbsp;0.10.
+Thresholds expressed in absolute points (&tau;) are scale-dependent and
+dust-gameable; thresholds relative to the uniform share are not.
+</p>
+
+<h3 class="subsection">5.2&nbsp;&nbsp;C2: appearance consistency (vs. random-colour chaff)</h3>
+<p class="no-indent">
+Per sector, an 8&times;8&times;8 RGB histogram is compared by Jensen&ndash;Shannon
+divergence to a reference sector; the score is 1&nbsp;&minus;&nbsp;JS averaged
+over populated sectors. The reference is the most <em>surface-like</em>
+(smallest mean nearest-neighbour distance) sector among those holding &ge;25%
+of the maximum sector count; selecting the reference by density alone
+is itself gameable by density-matched chaff, a failure we hit and fixed during
+the audit.
+</p>
+
+<h3 class="subsection">5.3&nbsp;&nbsp;C3: structural consistency (vs. any volumetric chaff)</h3>
+<p class="no-indent">
+Real reconstructed geometry is locally a surface: nearest-neighbour distances
+are small relative to point count. Volumetric chaff at the same density has
+systematically larger nearest-neighbour distances. Per sector we compute the
+mean nearest-neighbour distance over a 5,000-point subsample (after removing
+exact duplicates: replicating one point set across frames adds no
+geometry and must not lower the statistic) and score
+nn<sub>ref</sub>&nbsp;/&nbsp;max(nn<sub>sector</sub>,&nbsp;nn<sub>ref</sub>).
+</p>
+
+<h3 class="subsection">5.4&nbsp;&nbsp;C4: temporal coherence (vs. flicker)</h3>
+<p class="no-indent">
+Each frame's <em>sector content</em> is rendered at its azimuth with an
+orthographic z-buffered point splatter (96&times;96, CPU); coherence at an
+azimuth is the mean Pearson correlation between consecutive frames over
+pixels lit in either frame, clipped to [0,1]. Every clause of that definition
+was forced by an attack during the audit. Whole-scene renders let static
+filler in one sector dilute the flicker statistic at every other azimuth.
+Without the lit-pixel restriction, a small flickering wedge hides behind
+black background (a 4%-silhouette flicker sector measured frame-difference
+MAE 0.013 vs. 0.33 silhouette-normalised). And difference-magnitude
+statistics conflate motion with noise: silhouette-normalised MAE of
+<em>genuine</em> video motion in our scenes reaches 0.27, barely below the
+0.33 of per-frame random noise, zeroing honest scenes under any fixed
+threshold. Correlation separates them cleanly: consecutive-frame correlation
+is 0.37&ndash;0.90 for real scene content and &asymp;0.00 for resampled
+chaff.
+</p>
+
+<h3 class="subsection">5.5&nbsp;&nbsp;Composite: per-sector gating, not partial credit</h3>
+<p>
+Our first composite was the obvious one: the product of the four sub-metric
+means. It leaks. Chaff saturates C1 (8/8 dense sectors) while C2/C3 means
+average the damage over sectors, and on ablated synthetic scenes the
+product composite under chaff <em>exceeded</em> the honest score (0.19 vs.
+0.12 at true coverage 1/8): the attack profited. The audited composite
+instead gates per sector: a sector counts toward coverage only if it passes
+the density test <em>and</em> scores &ge;0.5 on both appearance and structure;
+coherence is then averaged over passing sectors only:
+</p>
+<p class="display-math">
+VRC-R(S) = GatedCoverage(S) &times; C4<sub>passing</sub>(S)
+</p>
+<p>
+An attacked sector that fails any test contributes exactly nothing, so an
+attack can no longer profit by quantity. When ground truth exists (synthetic
+scenes, dual-camera captures), we additionally compute Q: PSNR-mapped quality
+of turntable renders against ground-truth renders at the originally-empty
+azimuths. Q is what reference-free metrics cannot replace (Section&nbsp;6.3).
+</p>
+
+<h2 class="section">6&nbsp;&nbsp;Experiments</h2>
+
+<p>
+All experiments run via <code>scripts/run_all_experiments.py</code> (CPU-only;
+4.0 minutes end-to-end on an Apple Silicon laptop) with seed
+0; raw outputs are committed under <code>results/session/</code>. Figures are
+produced by <code>scripts/make_figures.py</code>. The unit-test suite covering
+the attacks and metrics (135 tests) passes with
+<code>python3 -m pytest tests/</code>.
+</p>
+
+<h3 class="subsection">6.1&nbsp;&nbsp;Gameability audit on real scenes</h3>
+
+<table>
+<tr><th>Scene / variant</th><th>+pts</th><th>naive</th><th>C1</th><th>C2</th><th>C3</th><th>C4</th><th>gated</th><th>VRC-R</th></tr>
+<tr><td><strong>S1</strong></td><td>&ndash;</td><td>0.12</td><td>0.12</td><td>1.00</td><td>1.00</td><td>0.90</td><td>0.12</td><td><strong>0.11</strong></td></tr>
+<tr><td>S1 +dust</td><td>35</td><td>1.00</td><td>0.12</td><td>1.00</td><td>1.00</td><td>0.90</td><td>0.12</td><td><strong>0.11</strong></td></tr>
+<tr><td>S1 +chaff</td><td>17,286,500</td><td>1.00</td><td>1.00</td><td>0.42</td><td>0.27</td><td>0.99</td><td>0.12</td><td><strong>0.12</strong></td></tr>
+<tr><td>S1 +flicker</td><td>17,286,500</td><td>1.00</td><td>1.00</td><td>0.42</td><td>0.54</td><td>0.12</td><td>0.12</td><td><strong>0.12</strong></td></tr>
+<tr><td>S1 +clone</td><td>17,286,619</td><td>1.00</td><td>1.00</td><td>1.00</td><td>0.99</td><td>0.92</td><td>1.00</td><td><strong>0.92</strong></td></tr>
+<tr><td><strong>S2</strong></td><td>&ndash;</td><td>0.50</td><td>0.38</td><td>0.66</td><td>0.71</td><td>0.47</td><td>0.12</td><td><strong>0.07</strong></td></tr>
+<tr><td>S2 +dust</td><td>20</td><td>1.00</td><td>0.38</td><td>0.66</td><td>0.71</td><td>0.47</td><td>0.12</td><td><strong>0.07</strong></td></tr>
+<tr><td>S2 +chaff</td><td>1,069,700</td><td>1.00</td><td>0.88</td><td>0.46</td><td>0.38</td><td>0.77</td><td>0.12</td><td><strong>0.07</strong></td></tr>
+<tr><td>S2 +flicker</td><td>1,069,700</td><td>1.00</td><td>0.88</td><td>0.46</td><td>0.51</td><td>0.20</td><td>0.12</td><td><strong>0.07</strong></td></tr>
+<tr><td>S2 +clone</td><td>7,737,920</td><td>1.00</td><td>0.88</td><td>0.86</td><td>0.87</td><td>0.54</td><td>0.62</td><td><strong>0.37</strong></td></tr>
+<tr><td><strong>S3</strong></td><td>&ndash;</td><td>0.38</td><td>0.38</td><td>0.94</td><td>0.89</td><td>0.47</td><td>0.38</td><td><strong>0.17</strong></td></tr>
+<tr><td>S3 +dust</td><td>25</td><td>1.00</td><td>0.38</td><td>0.94</td><td>0.89</td><td>0.47</td><td>0.38</td><td><strong>0.17</strong></td></tr>
+<tr><td>S3 +chaff</td><td>1,435,875</td><td>1.00</td><td>1.00</td><td>0.54</td><td>0.41</td><td>0.80</td><td>0.38</td><td><strong>0.17</strong></td></tr>
+<tr><td>S3 +flicker</td><td>1,435,875</td><td>1.00</td><td>1.00</td><td>0.54</td><td>0.57</td><td>0.18</td><td>0.38</td><td><strong>0.17</strong></td></tr>
+<tr><td>S3 +clone</td><td>10,038,865</td><td>1.00</td><td>1.00</td><td>0.98</td><td>0.94</td><td>0.57</td><td>1.00</td><td><strong>0.57</strong></td></tr>
+</table>
+<p class="table-caption"><span class="table-label">Table 2:</span>
+Gameability audit, capture-centred, all three real scenes. Naive coverage is
+gamed to 1.00 by every attack. VRC-R holds dust at the honest baseline
+(C1 unchanged), suppresses chaff via C2/C3, and additionally punishes flicker
+via C4. The clone largely passes the reference-free suite (all gates on S1
+and S3): the documented blind spot. Artifact:
+<code>results/session/attack_table.json</code>.</p>
+
+<div class="figure">
+  <img src="figures/fig4_metric_bars.png" alt="Metric scores by variant"/>
+  <p class="figure-caption"><span class="figure-label">Figure 3:</span>
+  Sub-metric and composite scores averaged over the three scenes. Each attack
+  family is caught by the sub-metric designed for it (dust by C1, chaff by
+  C2+C3, flicker additionally by C4); the clone is caught by none.
+  From <code>results/session/attack_table.json</code>.</p>
+</div>
+
+<p>
+Three observations. First, dust leaves every robust sub-metric essentially
+untouched: C1 simply refuses to count the dusted sectors, so the
+composite stays at the honest-scene level. Second, chaff is rejected twice
+over: random colours collapse C2 to ~0.47 and volumetric
+structure collapses C3 to ~0.35, so even chaff painted with
+plausible colours would fail. Third, the flicker variant additionally drops
+C4 from 0.85 (static chaff) to 0.17, isolating
+temporal instability as an independently measurable failure: the
+red-team's &ldquo;coverage&ndash;coherence paradox&rdquo; is real but
+measurable, not paradoxical.
+</p>
+
+<h3 class="subsection">6.2&nbsp;&nbsp;Validation on ground-truth-controlled synthetic scenes</h3>
+<p>
+A metric must not only resist attacks; it must track the quantity it claims to
+measure. We build a synthetic scene that is complete by construction: a
+cylindrical surface band carrying a high-frequency procedural texture whose
+per-sector colour histograms are nearly identical (satisfying C2's
+stationarity assumption) while its spatial phase is azimuth-unique (so cloned
+content is provably wrong under reference comparison), plus an orbiting bright
+marker providing temporal dynamics (400,000 points,
+10 frames), then ablate it to known true coverage k/8,
+k&nbsp;=&nbsp;1&hellip;8, and score every ablation honestly and under attack.
+</p>
+
+<div class="figure">
+  <img src="figures/fig3_synthetic_curves.png" alt="Synthetic validation curves"/>
+  <p class="figure-caption"><span class="figure-label">Figure 4:</span>
+  Metric response vs. true angular coverage on the synthetic scene.
+  (a) Naive coverage tracks truth when honest but is gamed flat to 1.0 by
+  chaff at every ablation level. (b) VRC-R is monotonic in true coverage,
+  stays near the honest value under chaff, but is inflated by the clone
+  (orange), which ground-truth quality at the ablated angles (purple,
+  Q&nbsp;&asymp;&nbsp;0.13&ndash;0.42) exposes. Artifact:
+  <code>results/session/synthetic_validation.json</code>.</p>
+</div>
+
+<p>
+Honest VRC-R increases from 0.10 at true coverage 1/8 to
+0.70 at 8/8 (Spearman &rho;&nbsp;=&nbsp;1.00 across the
+eight ablation levels), while naive coverage under chaff attack is constant at
+1.0 across all levels, carrying zero information about the underlying
+scene. Chaff-attacked VRC-R stays within 0.002 of the honest
+value at every level: the attack buys essentially nothing. The honest curve
+sits below the ideal diagonal because C4 charges genuine scene dynamics (the
+orbiting marker) a small coherence cost, a conservative bias we accept,
+discussed in Section&nbsp;8.
+</p>
+
+<h3 class="subsection">6.3&nbsp;&nbsp;The clone blind spot, and what catches it</h3>
+<p>
+The clone attack produces temporally coherent, structurally real, chromatically
+real content: it is, after all, real content, in the wrong place. On
+real scenes it scores mean VRC-R 0.62 (vs. 0.12
+for the honest originals), passing every per-sector gate on S1 and S3 (gated
+coverage 1.00; on S2 a minority of cloned sectors trip the appearance gate
+against that scene's heterogeneous content); on the synthetic scenes it
+tracks near the full-scene score at every ablation level. No reference-free
+statistic we constructed reliably separates it from a correct completion, and
+we conjecture none can in general: the clone differs from a valid completion only in <em>being wrong
+about the world</em>, which is not a property of the point cloud alone. With
+ground truth available, the failure is obvious: reference-based quality at the
+ablated angles is 0.21 for the clone, versus
+1.00 by construction when the true content is present (Figure&nbsp;4b, purple).
+</p>
+
+<div class="figure">
+  <img src="figures/fig5_turntable_montage.png" alt="Turntable renders"/>
+  <p class="figure-caption"><span class="figure-label">Figure 5:</span>
+  Turntable renders (middle frame) of scene S2 at 90&deg;, 180&deg;, 270&deg;,
+  0&deg;: original (top) vs. clone-completed (bottom). The clone fills every
+  azimuth with photometrically and structurally plausible content that no
+  reference-free metric in this paper (or, we argue, any) can
+  flag as wrong. Generated by <code>scripts/make_figures.py</code>.</p>
+</div>
+
+<div class="result-box">
+<strong>The boundary of reference-free evaluation.</strong> Reference-free
+completeness metrics can certify <em>necessity conditions</em>:
+geometry exists everywhere (C1), looks like the scene (C2), is locally
+surface-like (C3), and is temporally stable (C4). But they cannot certify
+<em>correctness</em>. Benchmarks for generative 4D completion should therefore
+pair VRC-R-style audits with reference-based evaluation on
+ground-truth-complete data (synthetic scenes or multi-camera captures), and
+should report both.
+</div>
+
+<h2 class="section">7&nbsp;&nbsp;Discussion</h2>
+<p>
+<strong>Implications for completion methods.</strong> Vivid4D, See4D, and
+Fillerbuster each report image-fidelity metrics at views near the input
+trajectory. Our results suggest a concrete protocol upgrade for this line of
+work: (i) report capture-centred VRC-R on the full sphere, so that
+&ldquo;the method completed the scene&rdquo; is a measured claim rather than a
+rendered teaser; (ii) report it alongside attacks: a benchmark that
+publishes its attack suite makes metric-gaming a falsifiable accusation rather
+than a suspicion; (iii) where any ground truth exists, report reference-based
+quality at the unobserved angles separately from trajectory-adjacent fidelity,
+because the two measure different things.
+</p>
+<p>
+<strong>On the red-team objections.</strong> This work began as a response to
+an internal anti-feasibility analysis of our own completion project. Two of
+its objections are confirmed and quantified here: the coverage&ndash;coherence
+optimization tension (measurable as C1 vs. C4, Section&nbsp;6.1) and the
+under-determination of unobserved 4D content (the clone result, Section&nbsp;6.3:
+plausibility is checkable, correctness is not, so unconstrained generative
+completion cannot be <em>verified</em> reference-free, only
+falsified). The audit framework is exactly the re-scope that analysis
+recommended, executed with attacks it did not anticipate (dust, centring).
+</p>
+
+<h2 class="section">8&nbsp;&nbsp;Limitations</h2>
+<p>
+What this paper does <em>not</em> do, stated plainly. (1) The three real test
+scenes are per-pixel depth unprojections from a Colab pipeline, not optimized
+4DGS reconstructions; no GPU reconstruction (NeoVerse, D4RT) or diffusion
+completion (Vivid4D, See4D, Fillerbuster) was run in this work, so we audit the
+metrics, not those systems' outputs. (2) Three real scenes and one synthetic
+family is a small testbed; the attack results are uniform across it, but
+broader scene diversity could expose new failure modes. (3) C4 uses silhouette-normalised MAE
+between point-splat renders as a flicker proxy rather than LPIPS, renders are
+low-resolution (96&times;96) orthographic splats, and any frame-difference
+statistic conflates genuine motion with flicker, so dynamic scenes pay a small
+coherence cost (visible as the gap below the ideal diagonal in Figure&nbsp;4b);
+perceptual coherence in a real VR headset was not measured. (4) C2 assumes
+approximate azimuthal stationarity of appearance: during the design of the
+synthetic validation we observed that low-frequency azimuth-dependent textures
+can push genuine sectors below the appearance gate. Scenes with strongly
+view-dependent appearance need the per-sector diagnostics inspected, not just
+the composite. (5) Coverage is azimuthal (8 sectors); the
+elevation dimension and full S&sup2; sampling are untested. (6) No VR hardware
+was used and no human study was run; nothing in this paper supports claims
+about presence, comfort, or frame rate on any headset. (7) Our conjecture that
+no reference-free statistic separates clones from correct completions is
+supported empirically, not proved; a learned scene prior might flag
+implausible symmetries even without references.
+</p>
+
+<h2 class="section">9&nbsp;&nbsp;Conclusion</h2>
+<p>
+We audited the evaluation foundation of generative 4D scene completion before
+the field standardizes one. Naive angular coverage (the obvious metric,
+and the one our own project shipped) is defeated by five points per
+sector, by its own centring parameter, and by every degenerate completion we
+constructed. The audited replacement, VRC-R, is empirically monotonic in true
+completeness and resistant to dust, chaff, and flicker; and the one attack
+that defeats it defeats, we argue, all reference-free evaluation, delimiting
+what such metrics can ever certify. The attacks, metrics, and protocol are
+released as a benchmark suite so that future completion systems can be scored
+against adversaries rather than against hope.
+</p>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     REFERENCES
+     ════════════════════════════════════════════════════════════ -->
+<div class="references">
+<h2>References</h2>
+<p class="ref-entry">[1] Zhang et al. D4RT: Efficiently Reconstructing Dynamic Scenes One D4RT at a Time. arXiv:2512.08924, 2025.</p>
+<p class="ref-entry">[2] NeoVerse: Enhancing 4D World Model with in-the-wild Monocular Videos. CVPR 2026. arXiv:2601.00393, 2026.</p>
+<p class="ref-entry">[3] Huang et al. Vivid4D: Improving 4D Reconstruction from Monocular Video by Video Inpainting. ICCV 2025. arXiv:2504.11092, 2025.</p>
+<p class="ref-entry">[4] See4D: Pose-Free 4D Generation via Auto-Regressive Video Inpainting. arXiv:2510.26796, 2025.</p>
+<p class="ref-entry">[5] Weber et al. Fillerbuster: Multi-View Scene Completion for Casual Captures. arXiv:2502.05175, 2025.</p>
+<p class="ref-entry">[6] Teed and Deng. RAFT: Recurrent All-Pairs Field Transforms for Optical Flow. ECCV 2020. arXiv:2003.12039, 2020.</p>
+<p class="ref-entry">[7] LaVR: Scene Latent Conditioned Generative Video Trajectory Re-Rendering using Large 4D Reconstruction Models. arXiv:2601.14674, 2026.</p>
+<p class="ref-entry">[8] Lyra 2.0: Explorable Generative 3D Worlds. NVIDIA Research. arXiv:2604.13036, 2026.</p>
+<p class="ref-entry">[9] SeeU: Seeing the Unseen World via 4D Dynamics-aware Generation. arXiv:2512.03350, 2025.</p>
+<p class="ref-entry">[10] 4C4D: 4D Gaussian Splatting from Extremely Sparse Cameras. arXiv:2604.04063, 2026.</p>
+<p class="ref-entry">[11] SceneCompleter: Dense 3D Scene Completion for Generative Novel View Synthesis. arXiv:2506.10981, 2025.</p>
+<p class="ref-entry">[12] Kerbl et al. 3D Gaussian Splatting for Real-Time Radiance Field Rendering. SIGGRAPH 2023. arXiv:2308.04079, 2023.</p>
+<p class="ref-entry">[13] Zhang et al. The Unreasonable Effectiveness of Deep Features as a Perceptual Metric. CVPR 2018. arXiv:1801.03924, 2018.</p>
+<p class="ref-entry">[14] Heusel et al. GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium. NeurIPS 2017. arXiv:1706.08500, 2017.</p>
+<p class="ref-entry">[15] Barratt and Sharma. A Note on the Inception Score. arXiv:1801.01973, 2018.</p>
+</div>
+
+</body>
+</html>

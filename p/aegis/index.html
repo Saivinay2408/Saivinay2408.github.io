@@ -1,0 +1,304 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aegis OS | Sai Vinay Bhoomireddy</title><meta name="description" content="JARVIS-like macOS agent layer that sees the system and acts on it, with a Guardian supervisor on every action.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#FED176;--navy:#18233F;--ink:#0e1424;--cyan:#13F2EF;--mag:#FF2EC4;--txt:#e9ecf3;--mut:#9aa3b8;--line:#26314f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--txt);font-family:Poppins,system-ui,sans-serif;line-height:1.6}
+a{color:var(--gold)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;font-size:14px}
+.top a{color:var(--mut);text-decoration:none}.top a:hover{color:var(--gold)}
+.badge{display:inline-block;background:rgba(254,209,118,.12);color:var(--gold);border:1px solid rgba(254,209,118,.35);
+ padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(40px,7vw,76px);line-height:1.02;margin:16px 0 10px;letter-spacing:.01em}
+.tag{font-size:clamp(16px,2.2vw,20px);color:#cfd5e3;max-width:820px}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 34px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;text-decoration:none;border:1px solid var(--line);color:var(--txt);background:#141c31}
+.btn svg{width:16px;height:16px}.btn.primary{background:var(--gold);color:#1b1b1b;border-color:var(--gold)}
+.btn:hover{transform:translateY(-1px)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.m{background:linear-gradient(160deg,#18233F,#121a2e);border:1px solid var(--line);border-radius:16px;padding:18px}
+.m b{display:block;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:34px;color:var(--gold);line-height:1.1}
+.m span{font-size:13px;color:var(--mut)}
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.chip{font-size:12px;padding:6px 11px;border-radius:8px;background:#141c31;border:1px solid var(--line);color:#c9d0e0}
+h2{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:28px;letter-spacing:.02em;margin:44px 0 14px;color:#fff}
+.frame{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#000}
+.frame iframe{width:100%;height:720px;border:0;display:block;background:#e6e9ef}
+.frame video{width:100%;display:block}
+.note{font-size:13px;color:var(--mut);margin:10px 2px 0}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.gallery img{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;display:block}
+.readme{background:#111830;border:1px solid var(--line);border-radius:16px;padding:28px;overflow-wrap:anywhere}
+.readme h1,.readme h2,.readme h3{font-family:Poppins,sans-serif;font-weight:700;color:#fff;margin:22px 0 10px;font-size:20px;letter-spacing:0}
+.readme h1{font-size:24px}.readme p,.readme li{color:#cdd3e1;font-size:15px}.readme ul,.readme ol{padding-left:22px;margin:8px 0}
+.readme img{max-width:100%;border-radius:8px}.readme pre{background:#0a0f1d;padding:14px;border-radius:10px;overflow-x:auto;font-size:13px;margin:10px 0}
+.readme code{font-family:ui-monospace,Menlo,monospace;font-size:13px}.readme table{border-collapse:collapse;margin:12px 0;display:block;overflow-x:auto}
+.readme th,.readme td{border:1px solid var(--line);padding:6px 10px;font-size:13px}
+@media(max-width:640px){.frame iframe{height:560px}.readme{padding:18px}}
+</style></head><body><div class="wrap">
+<div class="top"><a href="/">&larr; saivinay.me</a><a href="https://github.com/Saivinay24/Aegis" target="_blank" rel="noopener">github.com/Saivinay24/Aegis</a></div>
+<span class="badge">AI operating layer</span><h1>Aegis OS</h1><p class="tag">JARVIS-like macOS agent layer that sees the system and acts on it, with a Guardian supervisor on every action.</p>
+<div class="btns"><a class="btn" href="https://github.com/Saivinay24/Aegis" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>Source code</a></div><div class="metrics"><div class="m"><b>100%</b><span>local voice: Whisper STT + native TTS</span></div><div class="m"><b>Guardian</b><span>risk review before every action</span></div><div class="m"><b>128K</b><span>context agent backend</span></div></div><div class="stack"><span class="chip">Python</span><span class="chip">LLM agents</span><span class="chip">Whisper</span><span class="chip">AppleScript</span></div><h2>How it works</h2><div class="readme"><h1>🛡️ Aegis — AI Operating System Layer</h1>
+<blockquote>
+<p><strong>Your OS, supercharged with AI.</strong> Aegis is a JARVIS-like AI assistant that deeply integrates with macOS, powered by GitHub Copilot (free with GitHub account) with 64K–128K context windows.</p>
+</blockquote>
+<hr />
+<h2>✨ What Makes Aegis Different</h2>
+<p>Most AI assistants are chatbots. Aegis is an <strong>OS layer</strong> — it sees your system, controls your apps, runs commands, manages files, and talks to you in real-time voice. Every action goes through a built-in security supervisor so nothing dangerous happens without your approval.</p>
+<hr />
+<h2>🚀 Quick Start</h2>
+<pre><code class="language-bash"># Install
+pip install -e &quot;.[voice]&quot;
+
+# Launch
+aegis
+
+# First launch: it'll show a code and a URL — authorize in 30 seconds
+# All subsequent launches are instant (token cached)
+</code></pre>
+<p>On first launch, Aegis authenticates with GitHub Copilot:</p>
+<pre><code>🔐 GitHub Copilot Authentication Required
+  1. Go to: https://github.com/login/device
+  2. Enter code: XXXX-XXXX
+  ✅ Authorized! Copilot access granted.
+</code></pre>
+<hr />
+<h2>🧠 What Aegis Can Do</h2>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔍 <strong>File Management</strong></td>
+<td>Search, read, write, organize files via Spotlight</td>
+</tr>
+<tr>
+<td>📊 <strong>System Monitoring</strong></td>
+<td>CPU, RAM, disk, battery, processes — all in real-time</td>
+</tr>
+<tr>
+<td>💻 <strong>Shell Execution</strong></td>
+<td>Run commands with AI safety review before execution</td>
+</tr>
+<tr>
+<td>🍎 <strong>App Control</strong></td>
+<td>Launch, close, and automate macOS apps via AppleScript</td>
+</tr>
+<tr>
+<td>🌐 <strong>Web Access</strong></td>
+<td>Search the web and read content from URLs</td>
+</tr>
+<tr>
+<td>🎤 <strong>Voice Control</strong></td>
+<td>Talk to Aegis with Whisper STT + native TTS (no API needed)</td>
+</tr>
+<tr>
+<td>🔔 <strong>Notifications</strong></td>
+<td>Send alerts, manage clipboard, control volume</td>
+</tr>
+<tr>
+<td>🧩 <strong>Skill System</strong></td>
+<td>Run pre-built automation workflows</td>
+</tr>
+<tr>
+<td>🔗 <strong>MCP Integration</strong></td>
+<td>Connect to any Model Context Protocol server</td>
+</tr>
+<tr>
+<td>🧠 <strong>Persistent Memory</strong></td>
+<td>Remembers context across conversations</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>🛡️ The Guardian — Built-in Security</h2>
+<p>Every single action Aegis takes passes through an AI security supervisor:</p>
+<pre><code>You → Doer AI → 🛡️ Guardian AI → Execute (or Block)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Risk Level</th>
+<th>Example</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🟢 Safe</td>
+<td>Read a file</td>
+<td>Auto-approved</td>
+</tr>
+<tr>
+<td>🟡 Low</td>
+<td>Create a file</td>
+<td>Auto-approved + logged</td>
+</tr>
+<tr>
+<td>🟠 Medium</td>
+<td>Install a package</td>
+<td>Asks you first</td>
+</tr>
+<tr>
+<td>🔴 High</td>
+<td>Delete files</td>
+<td>Requires confirmation + snapshot</td>
+</tr>
+<tr>
+<td>⛔ Forbidden</td>
+<td><code>rm -rf /</code></td>
+<td>Hard blocked, no override possible</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>🎤 Voice Control</h2>
+<pre><code class="language-bash">/voice on       # Start voice mode
+/voice off      # Stop
+/voice status   # Check status
+</code></pre>
+<p>Voice pipeline:
+- <strong>Wake word</strong> → Alexa-compatible local detection (no cloud)
+- <strong>STT</strong> → OpenAI Whisper (<code>base.en</code>, runs locally, very fast)
+- <strong>TTS</strong> → macOS native <code>say</code> command (instant, no API)
+- <strong>Barge-in</strong> → Speak to interrupt when using headphones, Enter key on speakers</p>
+<blockquote>
+<p><strong>Note on barge-in:</strong> This is a fundamentally hard problem. When using built-in speakers, the mic picks up the TTS audio at full Silero VAD confidence (prob=1.00 — proven by logging). Hardware AEC is required for reliable mic-based barge-in, which is what ChatGPT/Siri use at the OS level. With headphones/AirPods, barge-in works perfectly via Silero VAD since the mic is isolated.</p>
+</blockquote>
+<hr />
+<h2>🔌 LLM Providers</h2>
+<p>Aegis tries providers in this order (fully configurable):</p>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Context</th>
+<th>Setup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GitHub Copilot</strong> (default)</td>
+<td>64K–128K</td>
+<td>Free GitHub account with Copilot</td>
+</tr>
+<tr>
+<td>GitHub Models API</td>
+<td>8K</td>
+<td><code>GITHUB_TOKEN</code> env var</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>128K</td>
+<td><code>OPENAI_API_KEY</code></td>
+</tr>
+<tr>
+<td>Anthropic Claude</td>
+<td>200K</td>
+<td><code>ANTHROPIC_API_KEY</code></td>
+</tr>
+<tr>
+<td>Ollama</td>
+<td>Varies</td>
+<td>Local Ollama server</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>⚙️ Configuration</h2>
+<pre><code class="language-yaml"># ~/.aegis/config.yaml
+llm:
+  provider: auto       # auto → tries copilot first
+  model: gpt-4o
+
+guardian:
+  enabled: true
+  auto_approve_safe: true
+  auto_approve_low_risk: true
+
+voice:
+  enabled: false
+  stt_model: base.en   # tiny.en / base.en / small.en
+  wake_word: alexa
+
+enabled_agents:
+  - system
+  - file
+  - shell
+  - web
+  - app
+  - automation
+</code></pre>
+<hr />
+<h2>🏗️ Architecture</h2>
+<pre><code>aegis/
+├── core/
+│   ├── orchestrator.py     # Central agent loop (context-aware)
+│   ├── guardian.py         # 🛡️ Security supervisor
+│   ├── llm.py              # Pluggable LLM backends
+│   ├── memory.py           # Persistent conversation memory
+│   └── learning.py         # Adaptive learning from usage
+├── agents/
+│   ├── system_agent.py     # CPU, RAM, disk, battery, processes
+│   ├── file_agent.py       # File search, read, write, Spotlight
+│   ├── shell_agent.py      # Shell with Guardian safety
+│   ├── web_agent.py        # Web search &amp; content reading
+│   ├── app_agent.py        # App control via AppleScript
+│   └── automation_agent.py # Workflow automation &amp; scheduling
+├── voice/
+│   ├── conversation.py     # Voice state machine + barge-in
+│   ├── audio.py            # Mic capture + Silero VAD
+│   ├── stt.py              # Whisper speech-to-text
+│   ├── tts.py              # TTS backends (say / Piper / espeak)
+│   └── wake_word.py        # Local wake word detection
+├── ui/
+│   ├── cli.py              # Rich terminal interface
+│   └── overlay.py          # Desktop overlay widget
+├── platform/
+│   ├── macos.py            # AppleScript, Spotlight, CoreAudio
+│   └── linux.py            # D-Bus, wmctrl, notify-send
+├── integrations/
+│   └── mcp.py              # MCP server support
+└── docs/                   # Full in-depth documentation
+    ├── README.md            # Documentation index
+    ├── core.md              # Core architecture deep-dive
+    ├── agents.md            # Agent system reference
+    ├── voice.md             # Voice pipeline internals
+    ├── ui.md                # UI components
+    ├── platform.md          # Platform integration
+    ├── skills.md            # Skill system
+    ├── integrations.md      # External integrations
+    └── configuration.md     # Full config reference
+</code></pre>
+<hr />
+<h2>🔐 How GitHub Copilot Auth Works</h2>
+<p>Aegis uses the same OAuth device flow as VS Code:</p>
+<ol>
+<li>Client ID <code>Iv1.b507a08c87ecfe98</code> (VS Code Copilot Chat)</li>
+<li>Device code → user authorizes at <code>github.com/login/device</code></li>
+<li>Token saved to <code>~/.aegis/copilot_token.json</code> (mode 600)</li>
+<li>Per-request: token exchanged via <code>copilot_internal/v2/token</code></li>
+<li>Requests sent to <code>api.individual.githubcopilot.com</code></li>
+</ol>
+<p><strong>Requirements:</strong> GitHub account + Copilot access (Free tier included for individuals).</p>
+<hr />
+<h2>📚 Documentation</h2>
+<p>Full in-depth docs in <a href="https://github.com/Saivinay24/Aegis/blob/HEAD/docs/README.md"><code>docs/</code></a>:
+- <a href="https://github.com/Saivinay24/Aegis/blob/HEAD/docs/core.md">Core Architecture</a>
+- <a href="https://github.com/Saivinay24/Aegis/blob/HEAD/docs/agents.md">Agent System</a>
+- <a href="https://github.com/Saivinay24/Aegis/blob/HEAD/docs/voice.md">Voice Pipeline</a>
+- <a href="https://github.com/Saivinay24/Aegis/blob/HEAD/docs/ui.md">UI &amp; Overlay</a>
+- <a href="https://github.com/Saivinay24/Aegis/blob/HEAD/docs/configuration.md">Configuration Reference</a>
+- <a href="https://github.com/Saivinay24/Aegis/blob/HEAD/docs/skills.md">Skills</a>
+- <a href="https://github.com/Saivinay24/Aegis/blob/HEAD/docs/integrations.md">Integrations</a>
+- <a href="https://github.com/Saivinay24/Aegis/blob/HEAD/docs/platform.md">Platform Support</a></p>
+<hr />
+<h2>License</h2>
+<p>MIT</p></div></div></body></html>

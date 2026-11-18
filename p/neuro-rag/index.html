@@ -1,0 +1,95 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Neuro-RAG Assistant | Sai Vinay Bhoomireddy</title><meta name="description" content="Offline, citation-backed neuroscience assistant running fully on-device with zero API cost.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#FED176;--navy:#18233F;--ink:#0e1424;--cyan:#13F2EF;--mag:#FF2EC4;--txt:#e9ecf3;--mut:#9aa3b8;--line:#26314f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--txt);font-family:Poppins,system-ui,sans-serif;line-height:1.6}
+a{color:var(--gold)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;font-size:14px}
+.top a{color:var(--mut);text-decoration:none}.top a:hover{color:var(--gold)}
+.badge{display:inline-block;background:rgba(254,209,118,.12);color:var(--gold);border:1px solid rgba(254,209,118,.35);
+ padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(40px,7vw,76px);line-height:1.02;margin:16px 0 10px;letter-spacing:.01em}
+.tag{font-size:clamp(16px,2.2vw,20px);color:#cfd5e3;max-width:820px}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 34px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;text-decoration:none;border:1px solid var(--line);color:var(--txt);background:#141c31}
+.btn svg{width:16px;height:16px}.btn.primary{background:var(--gold);color:#1b1b1b;border-color:var(--gold)}
+.btn:hover{transform:translateY(-1px)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.m{background:linear-gradient(160deg,#18233F,#121a2e);border:1px solid var(--line);border-radius:16px;padding:18px}
+.m b{display:block;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:34px;color:var(--gold);line-height:1.1}
+.m span{font-size:13px;color:var(--mut)}
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.chip{font-size:12px;padding:6px 11px;border-radius:8px;background:#141c31;border:1px solid var(--line);color:#c9d0e0}
+h2{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:28px;letter-spacing:.02em;margin:44px 0 14px;color:#fff}
+.frame{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#000}
+.frame iframe{width:100%;height:720px;border:0;display:block;background:#e6e9ef}
+.frame video{width:100%;display:block}
+.note{font-size:13px;color:var(--mut);margin:10px 2px 0}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.gallery img{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;display:block}
+.readme{background:#111830;border:1px solid var(--line);border-radius:16px;padding:28px;overflow-wrap:anywhere}
+.readme h1,.readme h2,.readme h3{font-family:Poppins,sans-serif;font-weight:700;color:#fff;margin:22px 0 10px;font-size:20px;letter-spacing:0}
+.readme h1{font-size:24px}.readme p,.readme li{color:#cdd3e1;font-size:15px}.readme ul,.readme ol{padding-left:22px;margin:8px 0}
+.readme img{max-width:100%;border-radius:8px}.readme pre{background:#0a0f1d;padding:14px;border-radius:10px;overflow-x:auto;font-size:13px;margin:10px 0}
+.readme code{font-family:ui-monospace,Menlo,monospace;font-size:13px}.readme table{border-collapse:collapse;margin:12px 0;display:block;overflow-x:auto}
+.readme th,.readme td{border:1px solid var(--line);padding:6px 10px;font-size:13px}
+@media(max-width:640px){.frame iframe{height:560px}.readme{padding:18px}}
+</style></head><body><div class="wrap">
+<div class="top"><a href="/">&larr; saivinay.me</a><a href="https://github.com/Saivinay24/neuro-rag-assistant" target="_blank" rel="noopener">github.com/Saivinay24/neuro-rag-assistant</a></div>
+<span class="badge">On-device RAG</span><h1>Neuro-RAG Assistant</h1><p class="tag">Offline, citation-backed neuroscience assistant running fully on-device with zero API cost.</p>
+<div class="btns"><a class="btn" href="https://github.com/Saivinay24/neuro-rag-assistant" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>Source code</a></div><div class="metrics"><div class="m"><b>100%</b><span>offline</span></div><div class="m"><b>$0</b><span>API cost</span></div><div class="m"><b>Cited</b><span>every answer grounded</span></div></div><div class="stack"><span class="chip">Phi-3</span><span class="chip">llama.cpp</span><span class="chip">FAISS</span><span class="chip">LangChain</span><span class="chip">Metal</span></div><h2>How it works</h2><div class="readme"><h1>Neuro-RAG-Assistant</h1>
+<blockquote>
+<p><strong>A local-first Retrieval-Augmented Generation (RAG) system for querying dense neuroscience literature.</strong></p>
+</blockquote>
+<p><img alt="Python" src="https://img.shields.io/badge/Python-3.9%2B-blue" />
+<img alt="LangChain" src="https://img.shields.io/badge/Orchestration-LangChain-green" />
+<img alt="Status" src="https://img.shields.io/badge/Status-Prototype-orange" /></p>
+<h2>📌 Overview</h2>
+<p><strong>Neuro-RAG-Assistant</strong> is a specialized semantic search tool designed to help students and researchers navigate complex neuroscience textbooks. Unlike standard keyword search, this system uses <strong>vector embeddings</strong> to understand the <em>context</em> of a query (e.g., "How do glial cells support neurons?") and retrieves precise answers from a local knowledge base.</p>
+<p>It runs entirely offline using a quantized <strong>Phi-3</strong> model, ensuring data privacy and zero inference costs.</p>
+<h2>Key Features</h2>
+<ul>
+<li><strong>Local Inference:</strong> Powered by <code>Phi-3-mini</code> (via <code>llama.cpp</code>) for high performance on consumer hardware (CPU/Mac Metal).</li>
+<li><strong>Semantic Retrieval:</strong> Uses FAISS and HuggingFace embeddings (<code>all-MiniLM-L6-v2</code>) to find relevant text chunks.</li>
+<li><strong>Citation Tracking:</strong> Returns the specific source chunks used to generate the answer, promoting scientific reproducibility.</li>
+<li><strong>Privacy Focused:</strong> No data is sent to external APIs (OpenAI/Anthropic).</li>
+</ul>
+<h2>Tech Stack</h2>
+<ul>
+<li><strong>LLM:</strong> Microsoft Phi-3 Mini (4k context, Quantized GGUF)</li>
+<li><strong>Orchestration:</strong> LangChain</li>
+<li><strong>Vector Database:</strong> FAISS (Facebook AI Similarity Search)</li>
+<li><strong>Interface:</strong> Streamlit</li>
+<li><strong>Ingestion:</strong> PyPDF</li>
+</ul>
+<hr />
+<h2>⚡ Quick Setup</h2>
+<p>To get the system running on your local machine, run the following commands in your terminal:</p>
+<pre><code class="language-bash"># Clone the repository
+git clone [https://github.com/Saivinay24/neuro-rag-assistant.git](https://github.com/Saivinay24/neuro-rag-assistant.git)
+
+# Navigate to the project directory
+cd neuro-rag-assistant
+
+# Create and activate a virtual environment (Recommended)
+python -m venv venv
+source venv/bin/activate  # On Windows use: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+</code></pre>
+<h1>Data Ingestion</h1>
+<p>Before running the chat interface, you must build the "brain" (Vector Index) by feeding it a textbook or paper.
+ Place your neuroscience PDF file (e.g., textbook.pdf) inside the data/ folder.
+ Run the ingestion script to process the text and create the FAISS index: </p>
+<pre><code class="language-bash">python -m app.ingest
+</code></pre>
+<p>You will see a "Ingestion complete" message and a new faiss_index folder will appear.</p>
+<h1>Launch the Assistant</h1>
+<p>Start the web interface:</p>
+<pre><code class="language-bash">streamlit run app/ui.py
+</code></pre></div></div></body></html>

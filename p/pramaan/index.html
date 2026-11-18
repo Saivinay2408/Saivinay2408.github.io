@@ -1,0 +1,324 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pramaan | Sai Vinay Bhoomireddy</title><meta name="description" content="Streaming voice-clone attack detector for degraded phone channels.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#FED176;--navy:#18233F;--ink:#0e1424;--cyan:#13F2EF;--mag:#FF2EC4;--txt:#e9ecf3;--mut:#9aa3b8;--line:#26314f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--txt);font-family:Poppins,system-ui,sans-serif;line-height:1.6}
+a{color:var(--gold)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;font-size:14px}
+.top a{color:var(--mut);text-decoration:none}.top a:hover{color:var(--gold)}
+.badge{display:inline-block;background:rgba(254,209,118,.12);color:var(--gold);border:1px solid rgba(254,209,118,.35);
+ padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(40px,7vw,76px);line-height:1.02;margin:16px 0 10px;letter-spacing:.01em}
+.tag{font-size:clamp(16px,2.2vw,20px);color:#cfd5e3;max-width:820px}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 34px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;text-decoration:none;border:1px solid var(--line);color:var(--txt);background:#141c31}
+.btn svg{width:16px;height:16px}.btn.primary{background:var(--gold);color:#1b1b1b;border-color:var(--gold)}
+.btn:hover{transform:translateY(-1px)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.m{background:linear-gradient(160deg,#18233F,#121a2e);border:1px solid var(--line);border-radius:16px;padding:18px}
+.m b{display:block;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:34px;color:var(--gold);line-height:1.1}
+.m span{font-size:13px;color:var(--mut)}
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.chip{font-size:12px;padding:6px 11px;border-radius:8px;background:#141c31;border:1px solid var(--line);color:#c9d0e0}
+h2{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:28px;letter-spacing:.02em;margin:44px 0 14px;color:#fff}
+.frame{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#000}
+.frame iframe{width:100%;height:720px;border:0;display:block;background:#e6e9ef}
+.frame video{width:100%;display:block}
+.note{font-size:13px;color:var(--mut);margin:10px 2px 0}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.gallery img{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;display:block}
+.readme{background:#111830;border:1px solid var(--line);border-radius:16px;padding:28px;overflow-wrap:anywhere}
+.readme h1,.readme h2,.readme h3{font-family:Poppins,sans-serif;font-weight:700;color:#fff;margin:22px 0 10px;font-size:20px;letter-spacing:0}
+.readme h1{font-size:24px}.readme p,.readme li{color:#cdd3e1;font-size:15px}.readme ul,.readme ol{padding-left:22px;margin:8px 0}
+.readme img{max-width:100%;border-radius:8px}.readme pre{background:#0a0f1d;padding:14px;border-radius:10px;overflow-x:auto;font-size:13px;margin:10px 0}
+.readme code{font-family:ui-monospace,Menlo,monospace;font-size:13px}.readme table{border-collapse:collapse;margin:12px 0;display:block;overflow-x:auto}
+.readme th,.readme td{border:1px solid var(--line);padding:6px 10px;font-size:13px}
+@media(max-width:640px){.frame iframe{height:560px}.readme{padding:18px}}
+</style></head><body><div class="wrap">
+<div class="top"><a href="/">&larr; saivinay.me</a><a href="https://github.com/Saivinay24/pramaan" target="_blank" rel="noopener">github.com/Saivinay24/pramaan</a></div>
+<span class="badge">Smart India Hackathon 2026 · National Round</span><h1>Pramaan</h1><p class="tag">Streaming voice-clone attack detector for degraded phone channels.</p>
+<div class="btns"><a class="btn" href="https://github.com/Saivinay24/pramaan" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>Source code</a></div><div class="metrics"><div class="m"><b>0.95</b><span>AUROC on unseen cloners</span></div><div class="m"><b>0.0246</b><span>real-time factor (8x inside budget)</span></div><div class="m"><b>0.4%</b><span>operational FPR</span></div><div class="m"><b>2,049</b><span>trainable parameters</span></div></div><div class="stack"><span class="chip">PyTorch</span><span class="chip">XLS-R</span><span class="chip">torchaudio</span><span class="chip">scikit-learn</span><span class="chip">Apple MPS</span></div><h2>Demo</h2><div class="frame"><video src="pramaan.mp4" controls preload="metadata" playsinline></video></div><h2>Results</h2><div class="gallery"><img src="img/0.png" alt="Pramaan figure" loading="lazy"><img src="img/1.png" alt="Pramaan figure" loading="lazy"><img src="img/2.png" alt="Pramaan figure" loading="lazy"><img src="img/3.png" alt="Pramaan figure" loading="lazy"></div><h2>How it works</h2><div class="readme"><h1>Pramaan</h1>
+<p><strong>SIH 2026 | PS SIH26104 | AICTE Cyber Security Cell | Software | Blockchain and Cybersecurity</strong>
+<em>AI-Powered Real-Time Detection and Prevention of Voice Cloning Impersonation Attacks</em></p>
+<p>Pramaan (प्रमाण, proof) is a real-time voice-clone defence for high-value phone approvals. It listens to the live call on the device, scores it every half second, and never lets the voice be the last factor: uncertain calls get a challenge, high-value actions get device approval, and every step is written to a tamper-evident ledger.</p>
+<p>Every number in this file is produced by <code>eval/experiments.py</code> and <code>eval/latency.py</code> into <code>eval/results.json</code> and <code>eval/results/latency.json</code>, and this README is generated from those files by <code>scripts/fill_numbers.py</code>.</p>
+<h2>What it does</h2>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Listener</strong></td>
+<td>Frozen <code>facebook/wav2vec2-xls-r-300m</code> (128 languages), layer 5, mean+std pooling. A head of 2,049 trained parameters. Isotonic calibration per prefix length, so 0.8 means 80%.</td>
+</tr>
+<tr>
+<td><strong>Gate</strong></td>
+<td>Streaming commit-or-defer. Commits only after 1.5 s of real audio (never tile-padded), outside an uncertain band, stable for three updates. The band is derived per channel from bona fide speech alone at a 2% false-positive budget, never hand-set: [0.010, 0.014] on the clean line, [0.014, 0.571] on a G.723.1 6.3 kbps line, because genuine speech scores higher the harder the codec squeezes it.</td>
+</tr>
+<tr>
+<td><strong>Prevention ladder</strong></td>
+<td>Live challenge (random digits and word in the caller's language, 160,000 combinations), out-of-band push to the claimed person's registered device, callback, operator block or clear. A high-value action is never cleared by the voice alone.</td>
+</tr>
+<tr>
+<td><strong>Warrant</strong></td>
+<td>Authorization, not detection. A disclosed voice agent is synthetic on purpose, so a signed attestation on the channel lowers the actionable risk while the synthetic verdict stands. Monotone by construction: a warrant may only ever lower risk, never raise it, enforced by an <code>assert</code> in <code>src/pramaan/warrant.py</code>, because every audio provenance signal published so far is forgeable in both directions (removal and forgery). Absent or invalid changes nothing, which is the ordinary state of a human call. Token path only; this repo embeds and detects no audio watermark.</td>
+</tr>
+<tr>
+<td><strong>Ledger</strong></td>
+<td>SHA-256 hash chain per call. Every score, verdict, challenge and approval is a block; editing any past block breaks every later hash. Verify endpoint, exportable for on-chain anchoring.</td>
+</tr>
+<tr>
+<td><strong>Telephony</strong></td>
+<td>Seven codec conditions applied at train and test time: clean, Opus 24k, Opus 8k, G.722, G.726, G.723.1, Speex WB. AMR-WB and EVS are listed as absent because the toolchain cannot encode them.</td>
+</tr>
+</tbody>
+</table>
+<h2>Results</h2>
+<p>Bona fide speech: FLEURS Hindi, Tamil, Telugu (510 recordings, CC-BY 4.0). Synthetic speech: 8 generator families built locally from the same sentences, plus a 2025 zero-shot cloner (Chatterbox) held out entirely. 70,424 cached embeddings across codecs and prefix lengths.</p>
+<p><strong>Generalisation vs generator diversity.</strong> Hold out the 2025 cloner. Train with k families, over random subsets. With few families the outcome depends on which you have (as bad as 39.6%); with all 8 it is 13.2% regardless. The previous build of this project, trained on two families with an unweighted PCA head, scored 35.9% on the same cloner.</p>
+<p><strong>Leave-one-generator-out, clean channel.</strong> Train on every other family, score the held-out one against held-out genuine speech:</p>
+<table>
+<thead>
+<tr>
+<th>held out</th>
+<th>EER</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XTTS-v2</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td>FreeVC voice conversion</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td>EnCodec resynthesis</td>
+<td>24.4%</td>
+</tr>
+<tr>
+<td>Apple on-device TTS</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td>Meta MMS</td>
+<td>0.8%</td>
+</tr>
+<tr>
+<td>Kokoro-82M</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td>eSpeak NG formant synthesis</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td>Piper</td>
+<td>0.0%</td>
+</tr>
+<tr>
+<td><strong>Chatterbox 2025, same speaker and sentence</strong></td>
+<td><strong>13.2%</strong> (95% CI 4.7% to 21.9%)</td>
+</tr>
+</tbody>
+</table>
+<p>The unseen-cloner row is the honest headline. It clones the exact recording it is scored against, so corpus, speaker and content cannot be the tell. It is also why the prevention ladder is mandatory for high-value actions.</p>
+<p><strong>Error bars, and the two clip counts.</strong> The headline 13.2% is an EER over <strong>23 held-out clones and 127 held-out genuine recordings</strong>, so its 95% interval is wide: <strong>4.7% to 21.9%</strong>, from a cluster bootstrap that resamples parent recordings rather than clips, because a bona fide recording and the clone made from it are one unit under this protocol and not two independent draws. The corpus holds <strong>39</strong> Chatterbox clips in total; 23 of them fall in the test split of parent recordings, which is the subset the leave-one-generator-out headline is scored on. The shipped head never trains on any Chatterbox clip, so it can be scored on all 39, and there its EER is <strong>5.7% (95% CI 3.0% to 8.8%)</strong>. Both counts are correct and they belong to different protocols. Every interval in this repo is in <code>eval/results.json</code> under <code>confidence</code>.</p>
+<p><strong>Streaming.</strong> First decision at 1.5 s. Gate replay on seen families, <strong>clean channel</strong>: coverage 100.0%, committed-call error 0.0%, false alarms on genuine speech 0.0%, median decision at 1.5 s.</p>
+<p><strong>Gate replay per channel.</strong> The band is derived per channel, so the replay is run per channel. No false-alarm number in this repo is quoted without the channel it was measured on.</p>
+<table>
+<thead>
+<tr>
+<th>channel</th>
+<th>gate coverage</th>
+<th>committed-call error</th>
+<th>false alarms on genuine speech</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clean</td>
+<td>100.0%</td>
+<td>0.0%</td>
+<td>0.00%</td>
+</tr>
+<tr>
+<td>Opus 24 kbps</td>
+<td>30.1%</td>
+<td>0.0%</td>
+<td>0.00%</td>
+</tr>
+<tr>
+<td>G.722 64 kbps</td>
+<td>30.1%</td>
+<td>0.0%</td>
+<td>0.00%</td>
+</tr>
+<tr>
+<td>G.726 32 kbps</td>
+<td>30.1%</td>
+<td>0.0%</td>
+<td>0.00%</td>
+</tr>
+<tr>
+<td>Speex WB</td>
+<td>29.8%</td>
+<td>0.0%</td>
+<td>0.00%</td>
+</tr>
+<tr>
+<td>Opus 8 kbps</td>
+<td>29.1%</td>
+<td>0.0%</td>
+<td>0.00%</td>
+</tr>
+<tr>
+<td>G.723.1 6.3 kbps</td>
+<td>29.6%</td>
+<td>0.4%</td>
+<td>0.79%</td>
+</tr>
+</tbody>
+</table>
+<p>Worst false-alarm cell across the seven channels: <strong>0.79% on G.723.1 6.3 kbps</strong>, 95% CI 0.14% to 4.33%, which is one false alarm in 127 genuine recordings on that channel and not a rate measured to two decimal places. Coverage on the six codec channels is 29.1% to 30.1% against 100.0% on clean for a cached-data reason, not a model reason, and the reason is the generator rather than the channel: only 2 of the 9 generator families, counting the held-out cloner, are cached at more than one prefix length on a codec channel, every other family is cached at 4.0 s alone, and the Gate needs three stable updates at or above 1.5 s before it may commit. Genuine speech, which is cached at four or eight prefixes on every channel, commits at 100.0% on clean. The clips it does not commit on are deferred, not decided wrongly.</p>
+<p><strong>The same Gate, in every held-out-generator direction.</strong> The table above replays one head that trained on every family it is then scored on, so its committed-call error is in sample and is not a generalisation claim. This table trains a separate head per direction on the other families only and replays the Gate on the held-out one against held-out genuine speech, clean channel, which is the only channel where every direction is measurable:</p>
+<table>
+<thead>
+<tr>
+<th>held out of training</th>
+<th>held-out clones</th>
+<th>gate coverage on those clones</th>
+<th>committed-call error, 95% CI</th>
+<th>false alarms on genuine speech</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XTTS-v2</td>
+<td>60</td>
+<td>58.3%</td>
+<td>6.2% (3.4% to 11.0%)</td>
+<td>0.00%</td>
+</tr>
+<tr>
+<td>FreeVC voice conversion</td>
+<td>66</td>
+<td>100.0%</td>
+<td>0.5% (0.1% to 2.9%)</td>
+<td>0.79%</td>
+</tr>
+<tr>
+<td>EnCodec resynthesis</td>
+<td>127</td>
+<td>93.7%</td>
+<td><strong>45.1%</strong> (39.0% to 51.4%)</td>
+<td>0.00%</td>
+</tr>
+<tr>
+<td>Apple on-device TTS</td>
+<td>82</td>
+<td>100.0%</td>
+<td>0.0% (0.0% to 1.8%)</td>
+<td>0.00%</td>
+</tr>
+<tr>
+<td>Meta MMS</td>
+<td>127</td>
+<td>96.9%</td>
+<td>4.0% (2.2% to 7.2%)</td>
+<td>3.94%</td>
+</tr>
+<tr>
+<td>Kokoro-82M</td>
+<td>43</td>
+<td>100.0%</td>
+<td>0.0% (0.0% to 2.2%)</td>
+<td>0.00%</td>
+</tr>
+<tr>
+<td>eSpeak NG formant synthesis</td>
+<td>127</td>
+<td>100.0%</td>
+<td>0.0% (0.0% to 1.5%)</td>
+<td>0.00%</td>
+</tr>
+<tr>
+<td>Piper</td>
+<td>82</td>
+<td>100.0%</td>
+<td>0.0% (0.0% to 1.8%)</td>
+<td>0.00%</td>
+</tr>
+<tr>
+<td>Chatterbox (held-out 2025 cloner)</td>
+<td>23</td>
+<td>87.0%</td>
+<td><strong>11.6%</strong> (7.3% to 17.7%)</td>
+<td>0.00%</td>
+</tr>
+</tbody>
+</table>
+<p>EnCodec resynthesis is the worst direction at <strong>45.1%</strong> committed-call error (95% CI 39.0% to 51.4%) on 127 held-out clones, which is the same family the leave-one-generator-out EER table already reports as the hardest cell, and the Gate commits on it rather than deferring. Holding out Meta MMS is the worst false-alarm direction at 3.94% (95% CI 1.69% to 8.89%) against 0.00% for the in-sample head. On the six codec channels 42 of the 63 cells cannot commit on the held-out clones at all, because those clones are cached at 4.0 s alone there; their genuine halves are still measured and are in <code>eval/results.json</code> under <code>streaming_leave_one_out</code>.</p>
+<p>At the shipped band on full 4 s clips, genuine speech is called synthetic <strong>0.4% of the time on the clean channel</strong> and <strong>1.1% pooled across all 7 channels (3,570 genuine recordings)</strong>, worst channel 1.6% on G.726 32 kbps.</p>
+<p><strong>Loudspeaker to microphone.</strong> A clip played out of a speaker and recorded back through the laptop microphone is a real attack path and the one a judge is most likely to trigger by holding a phone up to the laptop. The channel is not part of the seven-codec telephony grid, so the live path falls back to the most degrading band it has measured, G.723.1 6.3 kbps (<code>src/pramaan/stream.py</code>). Two rows, because one alone would mislead:</p>
+<table>
+<thead>
+<tr>
+<th>channel</th>
+<th>clips</th>
+<th>EER, shipped head</th>
+<th>EER, channel held out of training</th>
+<th>clones called synthetic</th>
+<th>genuine called synthetic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>replay_mic</td>
+<td>99 (50 genuine, 49 clones)</td>
+<td>2.0%</td>
+<td><strong>18.2%</strong> (95% CI 10.0% to 25.2%)</td>
+<td>75.5%</td>
+<td>14.0%</td>
+</tr>
+<tr>
+<td>replay_mic_v0.4</td>
+<td>100 (50 genuine, 50 clones)</td>
+<td>2.0%</td>
+<td><strong>12.0%</strong> (95% CI 4.9% to 18.0%)</td>
+<td>84.0%</td>
+<td>4.0%</td>
+</tr>
+</tbody>
+</table>
+<p>The shipped column is <strong>in sample</strong>: <code>ship()</code> trains on these rows at a weight of 30 because the demo runs on this path, so 2.0% is not a generalisation claim and is printed only so the two are not confused. The held-out column removes every replay row from training and is the number that answers "what happens on a channel you did not train on"; the recordings themselves are still in training through their clean and codec versions, so it is a channel-shift measurement and not a held-out-clip one. <strong>The false-alarm figure is the larger problem</strong>: 14.0% of genuine speech through the speaker is called synthetic on the held-out head, against 1.1% on the telephony grid. This is the worst surface in the project and it is printed rather than hidden.</p>
+<p><strong>Calibration.</strong> Expected calibration error on the unseen cloner: raw sigmoid 0.05, Platt 0.08, isotonic 0.08.</p>
+<p><strong>Repair cost.</strong> Adapting on 12 labelled recordings of the unseen cloner takes held-out error on it from 18.8% to 0.0%, scored on speakers the adapted model never saw.</p>
+<p><strong>Latency on a MacBook Air M4.</strong> 185 ms per update on CPU for a 4 s window (RTF 0.046), 104 ms on MPS. 5.4 concurrent calls per CPU core at a 1 s update; 37 cores for a 200-seat centre at full concurrency, no GPU.</p>
+<h2>Run it</h2>
+<pre><code class="language-bash">make features   # cache frozen embeddings (resumable)
+make eval       # every number, then the shipped model
+make latency    # forward latency on this machine
+make samples    # bundle the demo samples with their true origins
+make deck       # ppt/Pramaan_SIH2026_Idea.pptx from results.json
+make demo       # operator console on http://127.0.0.1:8770, offline
+</code></pre>
+<p>The console streams either the laptop microphone or a bundled sample through the same live pipeline, chunk by chunk in real time, and always displays the sample's true origin.</p>
+<h2>Licences</h2>
+<p>XLS-R (Apache-2.0), FLEURS (CC-BY-4.0), EnCodec (MIT), Kokoro-82M (Apache-2.0), Chatterbox (MIT). IndicSynth (CC-BY-NC) and Meta MMS-TTS (CC-BY-NC-4.0) are research-only; a production model retrains on licensed or self-generated data.</p>
+<h2>Layout</h2>
+<pre><code>src/pramaan/     frontend, model, gate, stream, challenge, ledger, channels, server, ui/
+eval/            build_features, experiments, latency, head_sweep, results.json
+scripts/         generators, samples, deck, diagram, fill_numbers, demo.sh
+docs/            PRESENTATION_SCRIPT, QA_PREP, RUBRIC_MAP, RUNSHEET (generated from templates/)
+ppt/             SIH template, generated deck, chart assets
+</code></pre></div></div></body></html>

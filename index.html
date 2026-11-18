@@ -327,36 +327,41 @@
   var DATA={
     sec:{short:'SECURITY',full:'AI Security & Cybersecurity',subareas:[
       {name:'Threat & Fraud Detection',projects:[
+        P('pramaan','Streaming voice-clone attack detector for degraded phone lines.','PyTorch · XLS-R','SIH 2026 National Round · 0.95 AUROC · RTF 0.0246','/p/pramaan/',true),
+        P('verifire','Crowd scam-lookup with an anti-sybil trust engine.','FastAPI · PostgreSQL','CyberForge 2026 Top 20 of 1,300 · 200/200 tricks blocked','/p/verifire/',true),
         P('sentinel-graph-engine','Graph-native identity threat detection.','GraphSAGE \u00b7 Louvain \u00b7 FastAPI \u00b7 React','0.993 AUC-ROC \u00b7 <15ms \u00b7 GDPR/NIS2 \u00b7 Atos 2026 Top Performer','https://sentinel-graph-two.vercel.app',true),
         P('smurfing-hunter','Money-laundering detection (peeling-chain + temporal).','Graph \u00b7 Blockchain tx'),
         P('Sovereign-Agentic-Orchestrator','AI-agent platform with behavioral security + trusted control plane.','JavaScript','','https://sovereign-agentic-orchestrator-phi.vercel.app',true)
       ]},
       {name:'Security Systems & Primitives',projects:[
-        P('Oracle-Guard','Security guard system.','Python'),
+        P('Oracle-Guard','Self-monitoring credit-risk MLOps on Databricks: drift, champion/challenger, LLM-eval.','Databricks · XGBoost · SHAP · MLflow','616K records · 0.7593 AUC · 6/6 drift caught','/p/oracleguard/',true),
         P('cryptography-principles-demo','Confidentiality + integrity primitives.','Python'),
         P('fake-news-detector-ml','NLP misinformation classification.','NLP \u00b7 Machine Learning')
       ]}
     ]},
     research:{short:'RESEARCH',full:'AI Research / AGI',subareas:[
+      {name:'Aerospace & Flight Design',projects:[
+        P('stratoglide','Balloon-launched stratospheric ISR glider: mission to build-ready airframe.','AVL \u00b7 XFOIL \u00b7 JSBSim 6-DOF \u00b7 BEMT','3.76 kg \u00b7 500 releases from 25 km, 100% recovered \u00b7 11.5% SM','/p/stratoglide/',true)
+      ]},
       {name:'Program Synthesis & Bootstrapping',projects:[
-        P('quinian-bootstrapping','Self-improving program synthesis across wake-sleep cycles.','DreamCoder \u00b7 NumPy \u00b7 ARC-AGI','11.8% solve rate \u00b7 49 tests \u00b7 paper ready to publish'),
+        P('quinian-bootstrapping','Self-improving program synthesis across wake-sleep cycles.','DreamCoder \u00b7 NumPy \u00b7 ARC-AGI','First-authored paper · self-invented abstraction reused 28x','/p/quinian/',true),
         P('quinian-bootstrapping','Spelke-initialized library learning, cross-domain abstractions.','Python')
       ]},
       {name:'Retrieval & RAG',projects:[
-        P('neuro-rag-assistant','RAG on Apple GPU (Metal), neuroscience.','FAISS \u00b7 Python'),
+        P('neuro-rag-assistant','RAG on Apple GPU (Metal), neuroscience.','FAISS \u00b7 Python','','/p/neuro-rag/',true),
         P('llm-medical-chatbot','Offline RAG over medical PDFs.','LangChain \u00b7 HuggingFace \u00b7 FAISS \u00b7 Streamlit')
       ]}
     ]},
     cv:{short:'VISION',full:'Computer Vision / 3D / Edge AI',subareas:[
       {name:'3D Reconstruction & Digital Twins',projects:[
         P('CityMind','Drone video \u2192 3D digital twin; AMD Ryzen AI NPU edge.','YOLOv8 \u00b7 ONNX \u00b7 COLMAP','','https://citymind-amd.vercel.app',true),
-        P('Differentiable-Scan-to-BIM','Textureless site BIM.','LoFTR \u00b7 RANSAC'),
-        P('Differentiable-Scan-to-BIM-v2','Unstructured site video \u2192 BIM.','Computer Vision'),
-        P('barf-4d-completion','4D monocular reconstruction, EMA temporal.','Diffusion \u00b7 RAFT')
+        P('Differentiable-Scan-to-BIM','Textureless site BIM.','LoFTR \u00b7 RANSAC','','/p/scan-to-bim/',true),
+        P('Differentiable-Scan-to-BIM-v2','Unstructured site video \u2192 BIM.','Computer Vision','78.6% inlier precision on textureless walls','/p/scan-to-bim/',true),
+        P('barf-4d-completion','4D monocular reconstruction, EMA temporal.','Diffusion \u00b7 RAFT','360° 4D from monocular video · team lead of 6 · paper','/p/barf/',true)
       ]},
       {name:'Generative Motion / Video',projects:[
         P('GenAI-Motion-Benchmarks','Physics-grounded eval for generative video.','Optical Flow \u00b7 PyTorch'),
-        P('GenAI-motion-benchmarks-v2','DRL agents + VLM perceptual rewards.','DRL \u00b7 VLM')
+        P('GenAI-motion-benchmarks-v2','DRL agents + VLM perceptual rewards.','DRL \u00b7 VLM','','/p/genai-motion/',true)
       ]},
       {name:'Applied / Edge CV',projects:[
         P('fracture_detection-using-ai','AI fracture detection.','Python'),
@@ -369,7 +374,7 @@
     quantum:{short:'QUANTUM',full:'Quantum Computing',projects:[
       P('quantum-research-case-study','EDA on 10K+ arXiv quant-ph papers.','Qiskit \u00b7 Jupyter'),
       P('state-vector-simulator','Quantum state-vector simulation.','Python'),
-      P('QC-3','VQC research with paper + figures.','Qiskit \u00b7 PennyLane')
+      P('QC-3','VQC research with paper + figures.','Qiskit \u00b7 PennyLane','','/p/quantum-ml/',true)
     ]},
     data:{short:'DATA',full:'Data Science & Analytics',subareas:[
       {name:'Applied ML / Risk',projects:[
@@ -377,7 +382,7 @@
         P('career-path-recommendation','Skill \u2192 career / internship mapping.','ML \u00b7 React \u00b7 Node','35% accuracy \u00b7 40% discovery','https://career-path-recommendation-pi.vercel.app',true)
       ]},
       {name:'EDA & Capstones',projects:[
-        P('applied-data-science-capstone','End-to-end DS (SpaceX-style).','Python \u00b7 Jupyter'),
+        P('applied-data-science-capstone','SpaceX Falcon 9 first-stage landing prediction + launch-site maps.','Python \u00b7 Jupyter','','/p/spacex/',true),
         P('trending-searches-analysis','Google Trends EDA, US behavior.','Python \u00b7 Jupyter'),
         P('AgriSense-AI_Precision-Agriculture-Intelligence-Platform','Agricultural AI / data analysis.','Jupyter')
       ]}
@@ -392,12 +397,13 @@
         P('end-to-end-ticketing-system','Full-stack ticketing.','Full Stack','','https://end-to-end-ticketing-system.vercel.app',true)
       ]},
       {name:'Infra / Digital Twin',projects:[
+        P('hackbricks_livetwin','Turbofan fleet digital twin on NASA C-MAPSS with a 4-agent maintenance chain.','Databricks · MLflow · Agents','Databricks HackBricks Finalist of 1,000 · live fleet replay','/p/livetwin/',true),
         P('5G-Fronthaul-Network-Optimizer-Digital-Twin','6-layer 5G O-RAN digital twin, 4 dashboards.','FastAPI \u00b7 D3.js \u00b7 Docker','90.2% link-capacity reduction','https://5g-network-optimizer.vercel.app',true)
       ]}
     ]},
     agents:{short:'AGENTS',full:'AI Agents & Voice',projects:[
       P('mem','A model of you that any coding agent can read \u2014 plain markdown in a git repo you own, plus one window you talk to by holding space.','Python \u00b7 Kokoro \u00b7 Whisper \u00b7 Silero VAD \u00b7 xterm.js','Claude Code + Codex + Gemini share one vault \u00b7 zero-dependency engine \u00b7 216 tests','https://saivinay.me/mem/',true),
-      P('Aegis','JARVIS for macOS: voice / shell / file / app control + Guardian security supervisor.','Whisper \u00b7 Silero VAD \u00b7 ChromaDB','macOS-only \u2014 GitHub + demo video, no live link'),
+      P('Aegis','JARVIS for macOS: voice / shell / file / app control + Guardian security supervisor.','Whisper \u00b7 Silero VAD \u00b7 ChromaDB','Local Whisper voice + Guardian supervisor on every action','/p/aegis/',true),
       P('Sovereign-Agentic-Orchestrator','Enterprise AI-agent management with trusted control plane.','JavaScript','','https://sovereign-agentic-orchestrator-phi.vercel.app',true)
     ]}
   };

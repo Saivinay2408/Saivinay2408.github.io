@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BARF 4D — Web Viewer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a0f;
+      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+    }
+
+    #canvas-container { position: fixed; inset: 0; }
+    canvas { display: block; }
+
+    /* HUD */
+    #hud {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.75), transparent);
+      pointer-events: none;
+      z-index: 10;
+    }
+    #hud h1 {
+      font-size: 12px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #ff4444;
+    }
+    #status {
+      font-size: 10px;
+      color: #555;
+      letter-spacing: 0.12em;
+    }
+
+    /* Mode badge */
+    #mode-badge {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border: 1px solid #ff4444;
+      color: #ff4444;
+      background: rgba(0,0,0,0.6);
+      z-index: 11;
+      display: none;
+    }
+    #mode-badge.split { border-color: #44aaff; color: #44aaff; display: block; }
+
+    /* Split divider line */
+    #split-line {
+      position: fixed;
+      top: 0; bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: rgba(68,170,255,0.4);
+      display: none;
+      z-index: 9;
+      pointer-events: none;
+    }
+    #split-line.visible { display: block; }
+    #split-label-left, #split-label-right {
+      position: fixed;
+      top: 48px;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      display: none;
+      z-index: 10;
+      pointer-events: none;
+    }
+    #split-label-left { left: 12px; display: none; }
+    #split-label-right { right: 12px; display: none; }
+    .split-active #split-label-left,
+    .split-active #split-label-right { display: block; }
+
+    /* Info panel */
+    #info {
+      position: fixed;
+      top: 48px;
+      right: 20px;
+      font-size: 9px;
+      color: #383838;
+      letter-spacing: 0.08em;
+      line-height: 2;
+      z-index: 10;
+      text-align: right;
+    }
+    #info span { color: #555; }
+
+    /* Completed indicator */
+    #completed-badge {
+      position: fixed;
+      top: 48px;
+      left: 20px;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #44ff88;
+      display: none;
+      z-index: 10;
+    }
+
+    /* Loading overlay */
+    #loader {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      background: #0a0a0f;
+      transition: opacity 0.5s;
+    }
+    #loader h2 {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 32px;
+    }
+    #drop-zone {
+      width: 380px;
+      border: 1px dashed #444;
+      padding: 44px 36px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    #drop-zone:hover, #drop-zone.drag-over {
+      border-color: #ff4444;
+      background: rgba(255,68,68,0.04);
+    }
+    #drop-zone p {
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      color: #ff4444;
+      margin-bottom: 14px;
+    }
+    #drop-zone .sub {
+      font-size: 10px;
+      color: #555;
+      letter-spacing: 0.08em;
+      line-height: 2;
+    }
+    #file-input { display: none; }
+    #load-progress {
+      margin-top: 24px;
+      font-size: 10px;
+      color: #666;
+      letter-spacing: 0.1em;
+      min-height: 18px;
+    }
+
+    /* Bottom controls */
+    #controls {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 20px;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+      z-index: 10;
+      display: none;
+    }
+    #controls.visible { display: block; }
+
+    /* Timeline */
+    #timeline {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    #timeline.hidden { display: none; }
+    #frame-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      outline: none;
+      cursor: pointer;
+    }
+    #frame-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ff4444;
+      cursor: pointer;
+    }
+    #frame-slider::-webkit-slider-track { background: rgba(255,255,255,0.1); }
+    #frame-display {
+      font-size: 9px;
+      color: #555;
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+      min-width: 80px;
+    }
+
+    /* Buttons */
+    #btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    button {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #888;
+      padding: 6px 14px;
+      font-family: 'Courier New', monospace;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    button:hover {
+      border-color: rgba(255,68,68,0.5);
+      color: #ddd;
+    }
+    button.active {
+      background: rgba(255,68,68,0.12);
+      border-color: #ff4444;
+      color: #ff4444;
+    }
+    button.blue.active {
+      background: rgba(68,170,255,0.12);
+      border-color: #44aaff;
+      color: #44aaff;
+    }
+    button.green.active {
+      background: rgba(68,255,136,0.12);
+      border-color: #44ff88;
+      color: #44ff88;
+    }
+    label.btn-label {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #888;
+      padding: 6px 14px;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    label.btn-label:hover { border-color: rgba(255,68,68,0.5); color: #ddd; }
+
+    /* Keyboard hint */
+    #keys {
+      margin-left: auto;
+      font-size: 8px;
+      color: #2a2a2a;
+      letter-spacing: 0.08em;
+      text-align: right;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+<div id="canvas-container"></div>
+
+<div id="hud">
+  <h1>BARF 4D Viewer</h1>
+  <span id="status">No file loaded</span>
+</div>
+
+<div id="mode-badge"></div>
+<div id="split-line"></div>
+<div id="split-label-left">PARTIAL</div>
+<div id="split-label-right">COMPLETED</div>
+<div id="completed-badge">COMPLETED VIEW</div>
+
+<div id="info">
+  <span>Drag</span> — orbit<br>
+  <span>Scroll</span> — zoom<br>
+  <span>Right drag</span> — pan
+</div>
+
+<!-- Initial loader -->
+<div id="loader">
+  <h2>BARF 4D Point Cloud Viewer</h2>
+  <div id="drop-zone">
+    <p>Drop .ply file(s) here</p>
+    <div class="sub">
+      or click to browse<br><br>
+      Drop <b style="color:#888">multiple</b> .ply files for 4D timeline<br>
+      Files are sorted by name (frame sequence)
+    </div>
+    <input type="file" id="file-input" accept=".ply" multiple />
+  </div>
+  <div id="load-progress"></div>
+</div>
+
+<!-- Bottom controls (shown after load) -->
+<div id="controls">
+  <!-- Timeline (hidden when only 1 frame) -->
+  <div id="timeline" class="hidden">
+    <button id="play-btn">▶ Play</button>
+    <input type="range" id="frame-slider" min="0" max="0" value="0" />
+    <span id="frame-display">Frame 0 / 0</span>
+  </div>
+
+  <!-- Button row -->
+  <div id="btn-row">
+    <label class="btn-label" style="border-color:rgba(255,68,68,0.4);color:#ff6666;">
+      Load PLY
+      <input type="file" id="ply-file-input" accept=".ply" multiple style="display:none" />
+    </label>
+    <button id="btn-gaps" class="active">Gaps ON</button>
+    <button id="btn-split" class="blue">Split View [S]</button>
+    <button id="btn-completed" class="green">Load Completed</button>
+    <label class="btn-label">
+      Load Gaps JSON
+      <input type="file" id="gaps-file-input" accept=".json" style="display:none" />
+    </label>
+    <button id="btn-reset">Reset View</button>
+    <div id="keys">
+      [G] gaps &nbsp; [S] split &nbsp; [C] complete &nbsp; [Space] play &nbsp; [←][→] frame
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── PLY Parser ───────────────────────────────────────────────────────────────
+const TYPE_SIZE = {
+  char: 1, int8: 1, uchar: 1, uint8: 1,
+  short: 2, int16: 2, ushort: 2, uint16: 2,
+  int: 4, int32: 4, uint: 4, uint32: 4, float: 4, float32: 4,
+  double: 8, float64: 8
+};
+
+function parsePLY(buffer) {
+  // Find end_header in first 8KB
+  const headerSlice = new TextDecoder().decode(buffer.slice(0, 8192));
+  const endIdx = headerSlice.indexOf('end_header');
+  if (endIdx === -1) throw new Error('Not a valid PLY file (no end_header)');
+
+  const headerText = headerSlice.slice(0, endIdx);
+  const lines = headerText.split('\n');
+
+  let vertexCount = 0;
+  let inVertex = false;
+  const properties = [];
+
+  for (const rawLine of lines) {
+    const parts = rawLine.trim().split(/\s+/);
+    if (parts[0] === 'element') {
+      inVertex = parts[1] === 'vertex';
+      if (inVertex) vertexCount = parseInt(parts[2]);
+    } else if (parts[0] === 'property' && inVertex && parts[1] !== 'list') {
+      const type = parts[1];
+      const name = parts[2];
+      properties.push({ name, type, size: TYPE_SIZE[type] || 4 });
+    }
+  }
+
+  if (vertexCount === 0) throw new Error('PLY has 0 vertices');
+
+  // Compute byte offsets for each property
+  const stride = properties.reduce((s, p) => s + p.size, 0);
+  const propMap = {};
+  let byteOff = 0;
+  for (const p of properties) {
+    propMap[p.name] = { ...p, byteOffset: byteOff };
+    byteOff += p.size;
+  }
+
+  // Find data start (after "end_header\n" or "\r\n")
+  const afterEnd = endIdx + 'end_header'.length;
+  const dataStart = headerSlice[afterEnd] === '\r' ? afterEnd + 2 : afterEnd + 1;
+  const data = new DataView(buffer, dataStart);
+
+  const xP = propMap['x'], yP = propMap['y'], zP = propMap['z'];
+  // Colour: prefer r/g/b (uint8), then red/green/blue, then f_dc_* (Gaussian Splatting SH)
+  const rP = propMap['r'] || propMap['red'];
+  const gP = propMap['g'] || propMap['green'];
+  const bP = propMap['b'] || propMap['blue'];
+  const dc0P = propMap['f_dc_0'], dc1P = propMap['f_dc_1'], dc2P = propMap['f_dc_2'];
+
+  function readVal(view, base, prop) {
+    const o = base + prop.byteOffset;
+    switch (prop.type) {
+      case 'float': case 'float32': return view.getFloat32(o, true);
+      case 'double': case 'float64': return view.getFloat64(o, true);
+      case 'uchar': case 'uint8': return view.getUint8(o);
+      case 'char': case 'int8': return view.getInt8(o);
+      case 'ushort': case 'uint16': return view.getUint16(o, true);
+      case 'short': case 'int16': return view.getInt16(o, true);
+      case 'uint': case 'uint32': return view.getUint32(o, true);
+      case 'int': case 'int32': return view.getInt32(o, true);
+      default: return 0;
+    }
+  }
+
+  const SH_C0 = 0.28209479177387814;
+
+  // Use plain arrays first so we can skip NaN/Inf vertices
+  const posArr = [], colArr = [];
+  let goodCount = 0;
+
+  for (let i = 0; i < vertexCount; i++) {
+    const base = i * stride;
+    const px = xP ? readVal(data, base, xP) : 0;
+    const py = yP ? readVal(data, base, yP) : 0;
+    const pz = zP ? readVal(data, base, zP) : 0;
+
+    // Skip corrupted vertices (NaN / Inf)
+    if (!isFinite(px) || !isFinite(py) || !isFinite(pz)) continue;
+
+    posArr.push(px, py, pz);
+
+    if (rP) {
+      const isUint8 = rP.type === 'uchar' || rP.type === 'uint8';
+      const scale = isUint8 ? 1 / 255 : 1;
+      colArr.push(
+        Math.min(1, Math.max(0, readVal(data, base, rP) * scale)),
+        Math.min(1, Math.max(0, readVal(data, base, gP) * scale)),
+        Math.min(1, Math.max(0, readVal(data, base, bP) * scale))
+      );
+    } else if (dc0P) {
+      colArr.push(
+        Math.min(1, Math.max(0, 0.5 + SH_C0 * readVal(data, base, dc0P))),
+        Math.min(1, Math.max(0, 0.5 + SH_C0 * readVal(data, base, dc1P))),
+        Math.min(1, Math.max(0, 0.5 + SH_C0 * readVal(data, base, dc2P)))
+      );
+    } else {
+      colArr.push(0.7, 0.7, 0.7);
+    }
+    goodCount++;
+  }
+
+  return {
+    positions: new Float32Array(posArr),
+    colors: new Float32Array(colArr),
+    vertexCount: goodCount
+  };
+}
+
+// ─── Three.js Scene ───────────────────────────────────────────────────────────
+const container = document.getElementById('canvas-container');
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x0a0a0f);
+container.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.001, 2000);
+camera.position.set(0, 0, 5);
+
+// ─── Orbit Controls (manual) ──────────────────────────────────────────────────
+let isDragging = false, isRightDrag = false;
+let prevMouse = { x: 0, y: 0 };
+let sph = { theta: 0, phi: Math.PI / 2, radius: 5 };
+let target = new THREE.Vector3();
+
+renderer.domElement.addEventListener('mousedown', e => {
+  isDragging = true;
+  isRightDrag = e.button === 2;
+  prevMouse = { x: e.clientX, y: e.clientY };
+});
+renderer.domElement.addEventListener('contextmenu', e => e.preventDefault());
+window.addEventListener('mouseup', () => isDragging = false);
+window.addEventListener('mousemove', e => {
+  if (!isDragging) return;
+  const dx = e.clientX - prevMouse.x;
+  const dy = e.clientY - prevMouse.y;
+  if (isRightDrag) {
+    const panSpeed = 0.002 * sph.radius;
+    const right = new THREE.Vector3();
+    camera.getWorldDirection(right);
+    right.cross(camera.up).normalize();
+    target.addScaledVector(right, -dx * panSpeed);
+    target.addScaledVector(camera.up, dy * panSpeed);
+  } else {
+    sph.theta -= dx * 0.005;
+    sph.phi = Math.max(0.05, Math.min(Math.PI - 0.05, sph.phi - dy * 0.005));
+  }
+  prevMouse = { x: e.clientX, y: e.clientY };
+  updateCamera();
+});
+renderer.domElement.addEventListener('wheel', e => {
+  sph.radius = Math.max(0.05, sph.radius * (1 + e.deltaY * 0.001));
+  updateCamera();
+}, { passive: true });
+
+// Touch support
+let touches = [];
+renderer.domElement.addEventListener('touchstart', e => {
+  touches = Array.from(e.touches);
+  if (touches.length === 1) {
+    isDragging = true;
+    isRightDrag = false;
+    prevMouse = { x: touches[0].clientX, y: touches[0].clientY };
+  }
+}, { passive: true });
+renderer.domElement.addEventListener('touchmove', e => {
+  if (e.touches.length === 1 && isDragging) {
+    const dx = e.touches[0].clientX - prevMouse.x;
+    const dy = e.touches[0].clientY - prevMouse.y;
+    sph.theta -= dx * 0.005;
+    sph.phi = Math.max(0.05, Math.min(Math.PI - 0.05, sph.phi - dy * 0.005));
+    prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    updateCamera();
+  } else if (e.touches.length === 2) {
+    const d = Math.hypot(
+      e.touches[0].clientX - e.touches[1].clientX,
+      e.touches[0].clientY - e.touches[1].clientY
+    );
+    const prevD = Math.hypot(
+      touches[0].clientX - (touches[1] ? touches[1].clientX : 0),
+      touches[0].clientY - (touches[1] ? touches[1].clientY : 0)
+    );
+    if (prevD > 0) sph.radius = Math.max(0.05, sph.radius * (prevD / d));
+    touches = Array.from(e.touches);
+    updateCamera();
+  }
+}, { passive: true });
+window.addEventListener('touchend', () => { isDragging = false; touches = []; });
+
+function updateCamera() {
+  camera.position.set(
+    target.x + sph.radius * Math.sin(sph.phi) * Math.sin(sph.theta),
+    target.y + sph.radius * Math.cos(sph.phi),
+    target.z + sph.radius * Math.sin(sph.phi) * Math.cos(sph.theta)
+  );
+  camera.lookAt(target);
+}
+updateCamera();
+
+// ─── Point Cloud State ────────────────────────────────────────────────────────
+let partialCloud = null;   // THREE.Points for partial frames
+let completedCloud = null; // THREE.Points for completed frames
+
+let frames = [];           // [{positions, colors, vertexCount}, ...]
+let completedFrames = [];  // same structure for completed version
+
+let currentFrame = 0;
+let playing = false;
+let lastFrameTime = 0;
+const FPS = 12; // default playback speed
+
+// ─── Gap Viz ──────────────────────────────────────────────────────────────────
+let gapMeshes = [];
+let gapsVisible = true;
+
+function normalizeGaps(gapsJson) {
+  const gaps = Array.isArray(gapsJson) ? gapsJson : gapsJson.gaps;
+  if (!Array.isArray(gaps)) {
+    throw new Error('Gap JSON must be an array or an object with a gaps array');
+  }
+  return gaps.map(gap => ({
+    center: gap.center,
+    size: gap.size ?? gap.size_m3 ?? 1,
+  })).filter(gap => Array.isArray(gap.center) && gap.center.length >= 3);
+}
+
+function renderGaps(gapsJson) {
+  const gaps = normalizeGaps(gapsJson);
+  gapMeshes.forEach(m => { scene.remove(m); m.geometry.dispose(); m.material.dispose(); });
+  gapMeshes = [];
+  gaps.forEach(gap => {
+    const radius = Math.cbrt(gap.size || 1) * 0.15;
+    const geo = new THREE.SphereGeometry(radius, 12, 12);
+    const mat = new THREE.MeshBasicMaterial({ color: 0xff2222, opacity: 0.55, transparent: true });
+    const sphere = new THREE.Mesh(geo, mat);
+    sphere.position.set(gap.center[0], gap.center[1], gap.center[2]);
+    sphere.visible = gapsVisible;
+    scene.add(sphere);
+    gapMeshes.push(sphere);
+  });
+  return gaps.length;
+}
+
+function setGapVisibility(v) {
+  gapsVisible = v;
+  gapMeshes.forEach(m => m.visible = v);
+}
+
+// ─── Build / Update THREE.Points ─────────────────────────────────────────────
+function buildCloud(data, pointSize) {
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(data.positions, 3));
+  geo.setAttribute('color', new THREE.Float32BufferAttribute(data.colors, 3));
+  const mat = new THREE.PointsMaterial({ size: pointSize || 0.02, vertexColors: true, sizeAttenuation: true });
+  return new THREE.Points(geo, mat);
+}
+
+// Compute adaptive point size so points are ~2px wide at the default camera distance
+function adaptivePointSize(boundingSphereRadius) {
+  // Camera sits at radius * 2.5; want ~2px; screen half-height ~450px; FOV 60°
+  const dist = boundingSphereRadius * 2.5;
+  const halfH = window.innerHeight / 2;
+  const tanHalfFov = Math.tan(Math.PI / 6); // tan(30°)
+  return Math.max(0.001, (2 * dist * tanHalfFov) / halfH);
+}
+
+function displayFrame(idx) {
+  if (!frames.length) return;
+  currentFrame = Math.max(0, Math.min(idx, frames.length - 1));
+
+  // Update partial cloud geometry (reuse object to avoid GC churn)
+  if (partialCloud) {
+    partialCloud.geometry.setAttribute('position',
+      new THREE.Float32BufferAttribute(frames[currentFrame].positions, 3));
+    partialCloud.geometry.setAttribute('color',
+      new THREE.Float32BufferAttribute(frames[currentFrame].colors, 3));
+    partialCloud.geometry.attributes.position.needsUpdate = true;
+    partialCloud.geometry.attributes.color.needsUpdate = true;
+  }
+
+  // Update completed cloud if available
+  if (completedCloud && completedFrames.length) {
+    const ci = Math.min(currentFrame, completedFrames.length - 1);
+    completedCloud.geometry.setAttribute('position',
+      new THREE.Float32BufferAttribute(completedFrames[ci].positions, 3));
+    completedCloud.geometry.setAttribute('color',
+      new THREE.Float32BufferAttribute(completedFrames[ci].colors, 3));
+    completedCloud.geometry.attributes.position.needsUpdate = true;
+    completedCloud.geometry.attributes.color.needsUpdate = true;
+  }
+
+  // Update slider
+  const slider = document.getElementById('frame-slider');
+  slider.value = currentFrame;
+  document.getElementById('frame-display').textContent =
+    `Frame ${currentFrame + 1} / ${frames.length}`;
+}
+
+// ─── Mode state ───────────────────────────────────────────────────────────────
+let showCompleted = false;
+let splitMode = false;
+
+function applyVisibility() {
+  if (splitMode) {
+    // Both clouds needed — render loop handles scissoring
+    if (partialCloud) partialCloud.visible = true;
+    if (completedCloud) completedCloud.visible = false; // handled in render loop
+    gapMeshes.forEach(m => m.visible = gapsVisible);
+    document.getElementById('split-line').classList.add('visible');
+    document.body.classList.add('split-active');
+    updateModeBadge();
+  } else {
+    document.getElementById('split-line').classList.remove('visible');
+    document.body.classList.remove('split-active');
+    if (showCompleted && completedCloud) {
+      if (partialCloud) partialCloud.visible = false;
+      completedCloud.visible = true;
+      gapMeshes.forEach(m => m.visible = false);
+    } else {
+      if (partialCloud) partialCloud.visible = true;
+      if (completedCloud) completedCloud.visible = false;
+      gapMeshes.forEach(m => m.visible = gapsVisible);
+    }
+    updateModeBadge();
+  }
+
+  document.getElementById('completed-badge').style.display =
+    (!splitMode && showCompleted && completedCloud) ? 'block' : 'none';
+}
+
+function updateModeBadge() {
+  const badge = document.getElementById('mode-badge');
+  if (splitMode) {
+    badge.textContent = 'Split View';
+    badge.className = 'split';
+  } else {
+    badge.className = '';
+    badge.style.display = 'none';
+  }
+}
+
+// ─── Centre camera on loaded data ─────────────────────────────────────────────
+function centerCamera() {
+  const cloud = partialCloud || completedCloud;
+  if (!cloud) return;
+  cloud.geometry.computeBoundingSphere();
+  const bs = cloud.geometry.boundingSphere;
+  if (!bs || bs.radius === 0) return;
+  target.copy(bs.center);
+  sph.radius = bs.radius * 2.5;
+  sph.theta = 0;
+  sph.phi = Math.PI / 2;
+  updateCamera();
+
+  // Set adaptive point size on both clouds
+  const ps = adaptivePointSize(bs.radius);
+  if (partialCloud) partialCloud.material.size = ps;
+  if (completedCloud) completedCloud.material.size = ps;
+}
+
+// ─── Load frames from ArrayBuffers ───────────────────────────────────────────
+function setStatus(msg) { document.getElementById('status').textContent = msg; }
+
+function onFramesLoaded() {
+  if (!frames.length) return;
+
+  // Build the partial cloud from frame 0
+  const firstData = frames[0];
+  if (partialCloud) { scene.remove(partialCloud); partialCloud.geometry.dispose(); }
+  partialCloud = buildCloud(firstData); // point size corrected by centerCamera()
+  scene.add(partialCloud);
+  centerCamera(); // also sets adaptive point size
+
+  // Show timeline if multiple frames
+  const timelineEl = document.getElementById('timeline');
+  if (frames.length > 1) {
+    timelineEl.classList.remove('hidden');
+    const slider = document.getElementById('frame-slider');
+    slider.max = frames.length - 1;
+    slider.value = 0;
+    document.getElementById('frame-display').textContent = `Frame 1 / ${frames.length}`;
+  } else {
+    timelineEl.classList.add('hidden');
+  }
+
+  currentFrame = 0;
+  document.getElementById('controls').classList.add('visible');
+  setStatus(`${firstData.vertexCount.toLocaleString()} pts · ${frames.length} frame${frames.length > 1 ? 's' : ''}`);
+
+  applyVisibility();
+  hideLargeLoader();
+}
+
+function hideLargeLoader() {
+  const loader = document.getElementById('loader');
+  loader.style.opacity = '0';
+  setTimeout(() => loader.style.display = 'none', 500);
+}
+
+// ─── File input: PLY files ────────────────────────────────────────────────────
+async function loadPLYFiles(fileList) {
+  const files = Array.from(fileList).filter(f => f.name.toLowerCase().endsWith('.ply'));
+  if (!files.length) return;
+
+  // Sort by name so frame_0001.ply, frame_0002.ply etc. are in order
+  files.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+
+  const progressEl = document.getElementById('load-progress');
+  frames = [];
+
+  for (let i = 0; i < files.length; i++) {
+    progressEl.textContent = `Loading ${i + 1} / ${files.length}: ${files[i].name}`;
+    try {
+      const buf = await files[i].arrayBuffer();
+      frames.push(parsePLY(buf));
+    } catch (err) {
+      console.error(`Failed to parse ${files[i].name}:`, err);
+      progressEl.textContent = `Error in ${files[i].name}: ${err.message}`;
+    }
+  }
+
+  progressEl.textContent = '';
+  onFramesLoaded();
+}
+
+async function loadCompletedPLYFiles(fileList) {
+  const files = Array.from(fileList).filter(f => f.name.toLowerCase().endsWith('.ply'));
+  if (!files.length) return;
+
+  files.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+  completedFrames = [];
+  setStatus('Loading completed frames…');
+
+  for (let i = 0; i < files.length; i++) {
+    try {
+      const buf = await files[i].arrayBuffer();
+      completedFrames.push(parsePLY(buf));
+    } catch (err) {
+      console.error(`Failed to parse ${files[i].name}:`, err);
+    }
+  }
+
+  if (completedFrames.length) {
+    if (completedCloud) { scene.remove(completedCloud); completedCloud.geometry.dispose(); }
+    completedCloud = buildCloud(completedFrames[0]);
+    completedCloud.visible = false; // hidden until user toggles
+    scene.add(completedCloud);      // must be in scene for visibility toggling to work
+    // Apply same point size as partial cloud
+    if (partialCloud) completedCloud.material.size = partialCloud.material.size;
+    setStatus(`Completed loaded — press C to compare`);
+    const btn = document.getElementById('btn-completed');
+    btn.textContent = 'Completed ✓';
+    btn.classList.add('active'); // stays green to signal it's ready
+    applyVisibility();
+  }
+}
+
+// ─── Drag & drop on the loader drop zone ─────────────────────────────────────
+const dropZone = document.getElementById('drop-zone');
+
+dropZone.addEventListener('click', () => document.getElementById('file-input').click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  loadPLYFiles(e.dataTransfer.files);
+});
+
+document.getElementById('file-input').addEventListener('change', e => {
+  if (e.target.files.length) loadPLYFiles(e.target.files);
+});
+
+document.getElementById('ply-file-input').addEventListener('change', e => {
+  if (e.target.files.length) loadPLYFiles(e.target.files);
+});
+
+// Drag & drop on the whole body (after initial load)
+document.body.addEventListener('dragover', e => e.preventDefault());
+document.body.addEventListener('drop', e => {
+  e.preventDefault();
+  const files = e.dataTransfer.files;
+  if (!files.length) return;
+  if (files[0].name.toLowerCase().endsWith('.json')) {
+    loadGapsFile(files[0]);
+  } else {
+    loadPLYFiles(files);
+  }
+});
+
+// ─── Gaps JSON file input ─────────────────────────────────────────────────────
+document.getElementById('gaps-file-input').addEventListener('change', async e => {
+  if (e.target.files.length) loadGapsFile(e.target.files[0]);
+});
+
+async function loadGapsFile(file) {
+  try {
+    const text = await file.text();
+    const gaps = JSON.parse(text);
+    const gapCount = renderGaps(gaps);
+    setStatus(`Gaps loaded: ${gapCount} regions`);
+    applyVisibility();
+  } catch (err) {
+    console.error('Failed to load gaps JSON:', err);
+    setStatus('Error loading gaps file');
+  }
+}
+
+// Auto-load bundled gaps.json and test.ply when served via HTTP
+fetch('gaps.json')
+  .then(r => r.json())
+  .then(gaps => { renderGaps(gaps); })
+  .catch(() => {});
+
+fetch('test.ply')
+  .then(r => { if (!r.ok) throw new Error('not found'); return r.arrayBuffer(); })
+  .then(buf => {
+    frames = [parsePLY(buf)];
+    onFramesLoaded();
+  })
+  .catch(() => {}); // silently skip if not found or opened via file://
+
+// ─── Buttons ──────────────────────────────────────────────────────────────────
+document.getElementById('btn-gaps').addEventListener('click', function () {
+  setGapVisibility(!gapsVisible);
+  this.textContent = gapsVisible ? 'Gaps ON' : 'Gaps OFF';
+  this.classList.toggle('active', gapsVisible);
+  if (!splitMode) applyVisibility();
+});
+
+document.getElementById('btn-split').addEventListener('click', function () {
+  splitMode = !splitMode;
+  this.classList.toggle('active', splitMode);
+  applyVisibility();
+});
+
+document.getElementById('btn-completed').addEventListener('click', function () {
+  if (!completedFrames.length) {
+    // Open file picker to load completed frames
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.ply';
+    input.multiple = true;
+    input.onchange = e => loadCompletedPLYFiles(e.target.files);
+    input.click();
+    return;
+  }
+  // Toggle completed view
+  showCompleted = !showCompleted;
+  this.textContent = showCompleted ? 'COMPLETED' : 'Completed ✓';
+  this.classList.toggle('active', showCompleted);
+  applyVisibility();
+});
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  sph = { theta: 0, phi: Math.PI / 2, radius: sph.radius };
+  centerCamera();
+});
+
+// ─── Timeline controls ────────────────────────────────────────────────────────
+document.getElementById('frame-slider').addEventListener('input', e => {
+  playing = false;
+  document.getElementById('play-btn').textContent = '▶ Play';
+  displayFrame(parseInt(e.target.value));
+  applyVisibility();
+});
+
+document.getElementById('play-btn').addEventListener('click', function () {
+  if (frames.length <= 1) return;
+  playing = !playing;
+  this.textContent = playing ? '⏸ Pause' : '▶ Play';
+});
+
+// ─── Keyboard shortcuts ───────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  // Don't fire if typing in input
+  if (e.target.tagName === 'INPUT') return;
+
+  switch (e.key) {
+    case 'g': case 'G':
+      document.getElementById('btn-gaps').click();
+      break;
+    case 's': case 'S':
+      document.getElementById('btn-split').click();
+      break;
+    case 'c': case 'C':
+      if (completedFrames.length) {
+        showCompleted = !showCompleted;
+        const btn = document.getElementById('btn-completed');
+        btn.textContent = showCompleted ? 'COMPLETED' : 'Completed ✓';
+        btn.classList.toggle('active', showCompleted);
+        applyVisibility();
+      }
+      break;
+    case ' ':
+      e.preventDefault();
+      document.getElementById('play-btn').click();
+      break;
+    case 'ArrowRight':
+      playing = false;
+      document.getElementById('play-btn').textContent = '▶ Play';
+      displayFrame(currentFrame + 1);
+      break;
+    case 'ArrowLeft':
+      playing = false;
+      document.getElementById('play-btn').textContent = '▶ Play';
+      displayFrame(currentFrame - 1);
+      break;
+    case 'r': case 'R':
+      document.getElementById('btn-reset').click();
+      break;
+  }
+});
+
+// ─── Resize ───────────────────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ─── Render Loop ─────────────────────────────────────────────────────────────
+function animate(timestamp) {
+  requestAnimationFrame(animate);
+
+  // Timeline playback
+  if (playing && frames.length > 1 && timestamp - lastFrameTime > 1000 / FPS) {
+    currentFrame = (currentFrame + 1) % frames.length;
+    displayFrame(currentFrame);
+    lastFrameTime = timestamp;
+  }
+
+  if (splitMode && (partialCloud || completedCloud)) {
+    const w = Math.floor(window.innerWidth / 2);
+    const h = window.innerHeight;
+
+    renderer.setScissorTest(true);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+
+    // Left: partial + gaps
+    renderer.setViewport(0, 0, w, h);
+    renderer.setScissor(0, 0, w, h);
+    if (partialCloud) partialCloud.visible = true;
+    if (completedCloud) completedCloud.visible = false;
+    gapMeshes.forEach(m => m.visible = gapsVisible);
+    renderer.render(scene, camera);
+
+    // Right: completed (or partial without gaps if no completed loaded)
+    renderer.setViewport(w, 0, w, h);
+    renderer.setScissor(w, 0, w, h);
+    if (partialCloud) partialCloud.visible = !completedCloud; // hide partial if completed exists
+    if (completedCloud) completedCloud.visible = true;
+    gapMeshes.forEach(m => m.visible = false);
+    renderer.render(scene, camera);
+
+    renderer.setScissorTest(false);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
+  } else {
+    renderer.render(scene, camera);
+  }
+}
+
+animate(0);
+</script>
+</body>
+</html>

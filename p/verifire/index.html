@@ -1,0 +1,530 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VeriFire | Sai Vinay Bhoomireddy</title><meta name="description" content="Crowd scam-lookup and reporting platform with an anti-sybil trust engine.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#FED176;--navy:#18233F;--ink:#0e1424;--cyan:#13F2EF;--mag:#FF2EC4;--txt:#e9ecf3;--mut:#9aa3b8;--line:#26314f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--txt);font-family:Poppins,system-ui,sans-serif;line-height:1.6}
+a{color:var(--gold)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;font-size:14px}
+.top a{color:var(--mut);text-decoration:none}.top a:hover{color:var(--gold)}
+.badge{display:inline-block;background:rgba(254,209,118,.12);color:var(--gold);border:1px solid rgba(254,209,118,.35);
+ padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(40px,7vw,76px);line-height:1.02;margin:16px 0 10px;letter-spacing:.01em}
+.tag{font-size:clamp(16px,2.2vw,20px);color:#cfd5e3;max-width:820px}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 34px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;text-decoration:none;border:1px solid var(--line);color:var(--txt);background:#141c31}
+.btn svg{width:16px;height:16px}.btn.primary{background:var(--gold);color:#1b1b1b;border-color:var(--gold)}
+.btn:hover{transform:translateY(-1px)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.m{background:linear-gradient(160deg,#18233F,#121a2e);border:1px solid var(--line);border-radius:16px;padding:18px}
+.m b{display:block;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:34px;color:var(--gold);line-height:1.1}
+.m span{font-size:13px;color:var(--mut)}
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.chip{font-size:12px;padding:6px 11px;border-radius:8px;background:#141c31;border:1px solid var(--line);color:#c9d0e0}
+h2{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:28px;letter-spacing:.02em;margin:44px 0 14px;color:#fff}
+.frame{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#000}
+.frame iframe{width:100%;height:720px;border:0;display:block;background:#e6e9ef}
+.frame video{width:100%;display:block}
+.note{font-size:13px;color:var(--mut);margin:10px 2px 0}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.gallery img{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;display:block}
+.readme{background:#111830;border:1px solid var(--line);border-radius:16px;padding:28px;overflow-wrap:anywhere}
+.readme h1,.readme h2,.readme h3{font-family:Poppins,sans-serif;font-weight:700;color:#fff;margin:22px 0 10px;font-size:20px;letter-spacing:0}
+.readme h1{font-size:24px}.readme p,.readme li{color:#cdd3e1;font-size:15px}.readme ul,.readme ol{padding-left:22px;margin:8px 0}
+.readme img{max-width:100%;border-radius:8px}.readme pre{background:#0a0f1d;padding:14px;border-radius:10px;overflow-x:auto;font-size:13px;margin:10px 0}
+.readme code{font-family:ui-monospace,Menlo,monospace;font-size:13px}.readme table{border-collapse:collapse;margin:12px 0;display:block;overflow-x:auto}
+.readme th,.readme td{border:1px solid var(--line);padding:6px 10px;font-size:13px}
+@media(max-width:640px){.frame iframe{height:560px}.readme{padding:18px}}
+</style></head><body><div class="wrap">
+<div class="top"><a href="/">&larr; saivinay.me</a><a href="https://github.com/Saivinay24/verifire" target="_blank" rel="noopener">github.com/Saivinay24/verifire</a></div>
+<span class="badge">CyberForge 2026 · Top 20 of 1,300 teams</span><h1>VeriFire</h1><p class="tag">Crowd scam-lookup and reporting platform with an anti-sybil trust engine.</p>
+<div class="btns"><a class="btn primary" href="https://scammap-huii.onrender.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Open live product</a><a class="btn" href="https://github.com/Saivinay24/verifire" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>Source code</a></div><div class="metrics"><div class="m"><b>200/200</b><span>coordinated tricks blocked over 20 seeds</span></div><div class="m"><b>100/100</b><span>tricks never reach Known Scam</span></div><div class="m"><b>24h</b><span>built in a hiring hackathon</span></div><div class="m"><b>Live</b><span>deployed product</span></div></div><div class="stack"><span class="chip">Python 3.12</span><span class="chip">FastAPI</span><span class="chip">PostgreSQL</span><span class="chip">Alembic</span></div><h2>Live product</h2><div class="frame"><iframe src="https://scammap-huii.onrender.com" loading="lazy" title="VeriFire"></iframe></div><p class="note">Hosted on a free tier: first load can take up to a minute.</p><h2>Demo</h2><div class="frame"><video src="verifire.mp4" controls preload="metadata" playsinline></video></div><h2>How it works</h2><div class="readme"><h1>VeriFire</h1>
+<p>Our answer to PS 03, Community Scam Map (CyberForge 2026 by Mitigata), from Team Velosta.</p>
+<p>People report scam calls, SMS, UPI ids and links in a few taps, with no login. Anyone can look up a number before they answer or pay. The map shows where scams are rising, area by area. Fake reports from spammers, fake accounts or friends piling on never turn an honest number into a "Known scam".</p>
+<ul>
+<li><strong>Live server:</strong> https://scammap-huii.onrender.com (hosted in Singapore, so it answers fast from India)</li>
+<li><strong>App:</strong> the same address on any phone or laptop. It is a mobile website you can add to the home screen, in English and Hindi, with its own layout for laptop screens.</li>
+<li><strong>Code:</strong> https://github.com/Saivinay24/verifire</li>
+<li><strong>Demo Video:</strong> https://youtu.be/051OKV0sthI</li>
+</ul>
+<p>What the app does on top of the brief:
+- <strong>Say it instead of typing.</strong> The note box takes speech in English or Hindi, turned into text by the browser's speech service (in Chrome, that is Google's), never by our server. VeriFire stores only the note's fingerprint, never the words, the same as a typed note.
+- <strong>Prepare my complaint.</strong> After a report, the app writes a complaint from it, with blanks in [brackets] for the person to fill in. They can copy it, share it, open it as an email to their bank, or open cybercrime.gov.in. Nothing is sent by our server. If money was lost, it leads with "Call 1930 first".
+- <strong>The city at a glance.</strong> The map fills the screen. A sheet pulls up over it with alerts, trending scam types, numbers 3 or more people reported, each area's count, and a recent feed. Everything on it comes only from reports the trust engine counted, so a fake-account farm adds nothing.
+- <strong>Live on VeriFire.</strong> A statistics page for the last 7, 30 or 90 days: reports counted against reports set aside, a 14-day chart, and breakdowns by scam type, channel and city. Next to it sit official national figures, quoted with their source.</p>
+<h2>Contents</h2>
+<ol>
+<li><a href="#run-it">Run it</a></li>
+<li><a href="#tech-stack">Tech stack</a></li>
+<li><a href="#the-api">The API</a></li>
+<li><a href="#how-the-trust-rules-work">How the trust rules work</a></li>
+<li><a href="#privacy">Privacy</a></li>
+<li><a href="#how-the-licence-works">How the licence works</a></li>
+<li><a href="#how-we-tested-it">How we tested it</a></li>
+<li><a href="#known-limits">Known limits</a></li>
+<li><a href="#repository-layout">Repository layout</a></li>
+</ol>
+<h2>Run it</h2>
+<h3>Use the live server</h3>
+<p>Nothing to install. Open https://scammap-huii.onrender.com on a phone or point the test tool at it.</p>
+<p>To load demo numbers (this resets the server first):</p>
+<pre><code class="language-bash">uv run python -m judge.demo_seed --base-url https://scammap-huii.onrender.com
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Look up</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>98450 11111</code></td>
+<td>Known scam: 5 real victims, number shown</td>
+</tr>
+<tr>
+<td>UPI <code>refund.helpdesk@ybl</code></td>
+<td>Known scam: 4 real victims</td>
+</tr>
+<tr>
+<td><code>98450 22222</code></td>
+<td>Suspicious: only 2 people, number hidden</td>
+</tr>
+<tr>
+<td><code>98450 33333</code></td>
+<td>Suspicious: one person reported 6 times, counted as 1</td>
+</tr>
+<tr>
+<td><code>98450 44444</code></td>
+<td>Suspicious: 22 fake accounts on one Wi-Fi, counted as 1</td>
+</tr>
+<tr>
+<td><code>98450 55555</code></td>
+<td>Suspicious: 40 friends attacking a bakery, never Known scam</td>
+</tr>
+<tr>
+<td><code>98450 66666</code></td>
+<td>Suspicious: 10 friends with 2 accounts each, same text</td>
+</tr>
+<tr>
+<td><code>98450 88888</code></td>
+<td>Suspicious: 25 bots inside a minute</td>
+</tr>
+<tr>
+<td><code>98450 77777</code></td>
+<td>Suspicious: the owner disputed it</td>
+</tr>
+<tr>
+<td><code>1930</code></td>
+<td>Verified business (the national cybercrime helpline)</td>
+</tr>
+<tr>
+<td><code>98450 99999</code></td>
+<td>No reports</td>
+</tr>
+</tbody>
+</table>
+<p>Map: area <strong>560034</strong> (Koramangala) shows a spike alert.</p>
+<h3>Run it on your laptop</h3>
+<p>You need Python 3.12, <a href="https://docs.astral.sh/uv/">uv</a> and Postgres.</p>
+<pre><code class="language-bash">uv sync
+createdb scammap
+export DATABASE_URL=postgresql+psycopg://localhost/scammap
+export REPORTER_HMAC_SECRET=$(openssl rand -hex 32)
+uv run alembic upgrade head
+uv run uvicorn app.main:app --port 8000
+</code></pre>
+<p>Open http://127.0.0.1:8000. The server starts with a valid licence (<code>licences/bootstrap.json</code>), so it works straight away.</p>
+<h3>Checks</h3>
+<pre><code class="language-bash">uv run pytest -q          # 110 tests
+uv run ruff check . &amp;&amp; uv run ruff format --check . &amp;&amp; uv run mypy app
+</code></pre>
+<p>GitHub Actions runs the same checks against a real Postgres on every push.</p>
+<h3>Deploy your own</h3>
+<p><code>render.yaml</code> is a Render blueprint for one web service and one Postgres database, both in Singapore. It creates the HMAC secret itself. Database migrations run on every start.</p>
+<h2>Tech stack</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>What we used</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Language</td>
+<td>Python 3.12</td>
+<td>Fast to write, easy for judges to read</td>
+</tr>
+<tr>
+<td>Web framework</td>
+<td>FastAPI + Uvicorn</td>
+<td>Async server, exact control over status codes and reply shapes</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>PostgreSQL 16</td>
+<td>Real transactions, so every report and lookup is consistent</td>
+</tr>
+<tr>
+<td>Database access</td>
+<td>SQLAlchemy 2 Core + psycopg 3</td>
+<td>Plain SQL we can read, no hidden ORM queries</td>
+</tr>
+<tr>
+<td>Migrations</td>
+<td>Alembic</td>
+<td>Database changes are versioned and applied on every deploy</td>
+</tr>
+<tr>
+<td>Settings</td>
+<td>pydantic-settings</td>
+<td>Secrets come from environment variables, never from code</td>
+</tr>
+<tr>
+<td>Licence signing</td>
+<td>PyNaCl (Ed25519)</td>
+<td>Small, fast, standard signatures. Only the public key is in the code</td>
+</tr>
+<tr>
+<td>Note fingerprints</td>
+<td>MinHash + LSH, written by us</td>
+<td>Spots copied notes without storing any note text</td>
+</tr>
+<tr>
+<td>Front end</td>
+<td>Plain HTML, CSS and JavaScript (no framework, no build step)</td>
+<td>Loads fast on cheap phones and slow networks</td>
+</tr>
+<tr>
+<td>Map</td>
+<td>Leaflet 1.9.4 + OpenStreetMap tiles</td>
+<td>Free and open, loaded only when the map opens</td>
+</tr>
+<tr>
+<td>Hindi</td>
+<td>Noto Sans Devanagari, plus the browser's own speech for spoken labels</td>
+<td>Readable Hindi, and tiles read aloud for people who can't read</td>
+</tr>
+<tr>
+<td>App install</td>
+<td>Web app manifest</td>
+<td>Add to home screen on Android and iPhone, no app store</td>
+</tr>
+<tr>
+<td>Hosting</td>
+<td>Render (Singapore web service + Postgres)</td>
+<td>HTTPS by default, close to India</td>
+</tr>
+<tr>
+<td>Quality</td>
+<td>pytest, ruff, mypy (strict), GitHub Actions</td>
+<td>Every push is tested, linted and type-checked</td>
+</tr>
+<tr>
+<td>Package manager</td>
+<td>uv</td>
+<td>Locked versions, so a fresh install matches ours</td>
+</tr>
+<tr>
+<td>Test tools</td>
+<td>judge/ (written by us)</td>
+<td>A test world built only from the brief, run against the live server</td>
+</tr>
+</tbody>
+</table>
+<h2>The API</h2>
+<p>The seven addresses from Appendix A have no login, as the brief asks.</p>
+<table>
+<thead>
+<tr>
+<th>Address</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /health</code></td>
+<td><code>{"ok": true}</code>. Always works, even when the licence has expired</td>
+</tr>
+<tr>
+<td><code>POST /reports</code></td>
+<td>Saves a report. 201, 400 for bad input, 429 when someone reports too fast</td>
+</tr>
+<tr>
+<td><code>GET /lookup?type=&amp;value=</code></td>
+<td>The verdict for a number, UPI id, link or SMS sender</td>
+</tr>
+<tr>
+<td><code>GET /lookup/reports?type=&amp;value=</code></td>
+<td>Every report filed on one number, newest first: when, how, scam type, area, and yes/no proof badges (screenshot, lost money, described it). Same masking as the lookup. Never who reported, what they wrote or how much. Extra, not in Appendix A</td>
+</tr>
+<tr>
+<td><code>GET /map?pincode=&amp;days=&amp;radius_km=</code></td>
+<td>Scam clusters near an area (defaults: 7 days, 2 km)</td>
+</tr>
+<tr>
+<td><code>GET /alerts?pincode=</code></td>
+<td><code>SPIKE</code> and <code>NEW_TYPE</code> alerts for an area</td>
+</tr>
+<tr>
+<td><code>GET /city?pincode=&amp;days=</code></td>
+<td>The app's city sheet: hot areas, trending types, known scam numbers, recent feed (default 7 days). Extra, not in Appendix A</td>
+</tr>
+<tr>
+<td><code>GET /stats?days=</code></td>
+<td>Live totals and breakdowns, counted after the trust rules (default 30 days). Extra, not in Appendix A</td>
+</tr>
+<tr>
+<td><code>POST /admin/reset</code></td>
+<td>Deletes every report</td>
+</tr>
+<tr>
+<td><code>POST /challenges</code></td>
+<td>A business disputes a number (bonus). 409 if that number's last dispute ended against the claim in the past 90 days; 429 after 20 disputes from one network in a day</td>
+</tr>
+<tr>
+<td><code>GET /review/disputes</code>, <code>POST /review/disputes/{id}</code></td>
+<td>The reviewer's queue and decisions (<code>upheld</code> or <code>rejected</code>), behind the <code>REVIEW_KEY</code> header. Off when <code>REVIEW_KEY</code> is unset. Extra, not in Appendix A</td>
+</tr>
+<tr>
+<td><code>GET /license</code>, <code>POST /license</code></td>
+<td>Show or replace the licence</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Every way of typing a number gives the same answer.</strong> For example, <code>+91 98765 43210</code>, <code>098765-43210</code> and <code>9876543210</code> are all one number. The same holds for UPI ids in any letter case, links with or without <code>https://</code> and <code>www</code>, and sender ids like <code>VM-HDFCBK</code> and <code>HDFCBK</code>.</p>
+<h2>How the trust rules work</h2>
+<p>We count <strong>independent people, weighted by how much proof they gave</strong>, not raw reports. Every number goes through 5 steps. All 72 constants live in one file, <code>app/domain/constants.py</code>, and each has a written reason.</p>
+<ol>
+<li><strong>Group: who is really the same person?</strong> Reports are merged into one group when any of these holds:</li>
+<li>the same reporter</li>
+<li>accounts switched on one connection within 15 minutes</li>
+<li>3 or more accounts from one connection</li>
+<li>copied notes (similarity 0.7 or more)</li>
+<li>a burst of 8 or more reports in an hour that all say the same thing</li>
+<li>
+<p>a burst with no proof that was filed instantly, has unnaturally even notes, or has no agreement on scam type</p>
+</li>
+<li>
+<p><strong>Weigh each person.</strong></p>
+</li>
+<li>Note quality: a blank note is worth 0.5, a short one 0.8, a full one 1.0.</li>
+<li>Copied notes lose value (down to 30%).</li>
+<li>Proof adds up to 30%: a screenshot, a stated loss, or scam method words.</li>
+<li>Repeat reports and reporting too fast reduce weight.</li>
+<li>
+<p>Someone who also reported a verified bank number counts half.</p>
+</li>
+<li>
+<p><strong>Cap.</strong></p>
+</li>
+<li>People on one connection count as at most <code>min(1 + 0.15 ln n, 1.25)</code>. Two people on home Wi-Fi count as 1.10, and 22 fake accounts count as 1.25.</li>
+<li>
+<p>A group counts as at most 1.3, which is one fully proven person.</p>
+</li>
+<li>
+<p><strong>Campaign factor.</strong> Does the wave look real? Real victims trickle in over hours, from many places, with proof. Brigades arrive in minutes, from one place, with nothing. Seven bounded factors (speed, merged groups, blank notes, one area, proof, back-dating, uniform notes) multiply the score by between 0.2 and 1.1.</p>
+</li>
+<li>
+<p><strong>Pile-on check.</strong> With 8 or more people, it is a pile-on if any of these holds:</p>
+</li>
+<li>75% or more said nothing: no note, and no screenshot or stated loss (proof without words counts only when 75% or more agree on the scam type)</li>
+<li>30% or more of the notes read like shop reviews</li>
+<li>under 10% showed any harm: a screenshot, a stated loss, or the scam method named</li>
+<li>fewer than half agree on the scam type (stages of one script, like a customs parcel call that turns into a digital arrest, count as one)</li>
+</ol>
+<p>A pile-on is never "Known scam". This is how "40 friends reporting a real bakery" is stopped. If a scammer floods their own number with empty reports to trigger the check, we re-check using only the people who said something or showed harm, and only if they are independent people (not accounts the engine already tied together). The type vote is one per independent group, so fake accounts merged into one voice cannot outvote the victims.</p>
+<p><strong>Verdict.</strong>
+- A number is <strong>Known scam</strong> when there is no pile-on, at least <strong>3 groups</strong>, at least <strong>2 of them described</strong> what happened or showed proof, and the <strong>score is 1.7 or more</strong>.
+- Why 1.7: three real victims with blank notes who each lost money score 3 × 0.575 = 1.725. Three blank clicks score 1.5.
+- Verified business and helpline numbers always say <strong>Verified business</strong>.
+- A disputed number is never Known scam while it is under review. Every review ends; see "Disputes" below.</p>
+<h3>Disputes: protect a wrongly reported owner, never shield a scammer</h3>
+<p>The brief's rule (a disputed number is never Known scam while under review) would, on its own, let a scammer dispute every number he uses and turn each red warning amber for good. So every dispute ends, and each way out is decided by something the claimant does not control:</p>
+<table>
+<thead>
+<tr>
+<th>Outcome</th>
+<th>When</th>
+<th>What people then see</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Upheld</strong></td>
+<td>A reviewer accepts the owner's proof</td>
+<td>The reports so far are set aside; the number starts fresh, and new reports count as usual</td>
+</tr>
+<tr>
+<td><strong>Rejected</strong></td>
+<td>A reviewer does not</td>
+<td>The normal verdict comes back</td>
+</tr>
+<tr>
+<td><strong>Overruled</strong></td>
+<td>New people on new networks, none of whom reported before the dispute, keep reporting it, clear the full Known scam bar on their own, and are spread over at least 6 hours</td>
+<td>The normal verdict comes back</td>
+</tr>
+<tr>
+<td><strong>Lapsed</strong></td>
+<td>Nobody decided within 7 days</td>
+<td>The normal verdict comes back</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>After a dispute is rejected, overruled or lapsed, that number cannot be disputed again for 90 days.</li>
+<li>One network can open at most 20 disputes a day. The reviewer sees how many numbers the same contact or network has disputed, so one scammer disputing his whole list shows up as one pattern.</li>
+<li>While a dispute is open, the reply keeps the evidence (how many people, what scam, when) and shows the review deadline, so people are still warned. Only the strongest label waits.</li>
+<li>Times are the server's receive times, which no client can set. A burst of reports fired right after a dispute (the harassment pattern) cannot break it; an active scam keeps producing new victims over hours.</li>
+<li>Who reviews: whoever runs VeriFire (for us, the team; in production, the operator or a partner bank or telecom). The page is at <code>/review</code>. It shows the owner's proof and the counted evidence, never who reported.</li>
+<li>These 5 numbers live in <code>app/domain/disputes.py</code>, apart from the 72 trust constants, which disputes do not change. <code>tests/test_disputes.py</code> has one test per case above, and each rule was checked by removing it and watching its test fail.</li>
+</ul>
+<p><strong>Why a fake-reported number is not labelled a scam:</strong> the lookup reply only ever shows counts and evidence. Because of the steps above, <code>distinct_reporters</code> counts independent people, so 22 fake accounts show as 1.</p>
+<p><strong>Alerts use the same rules.</strong> Only reports that pass the trust rules count towards a spike, so fake reports cannot set one off.
+- <strong>SPIKE:</strong> the last 24 hours have at least 5 reports and at least twice the daily average of the 7 days before.
+- <strong>NEW_TYPE:</strong> a scam type that was not seen in the 30 days before.</p>
+<p>Full detail:
+- <a href="https://github.com/Saivinay24/verifire/blob/HEAD/docs/TRUST_PARAMETERS.md">docs/TRUST_PARAMETERS.md</a>: every constant, its value, where it came from, and the exact formula it sits in.
+- <a href="https://github.com/Saivinay24/verifire/blob/HEAD/docs/TRUST_ENGINE.md">docs/TRUST_ENGINE.md</a>: a step-by-step walk-through with worked numbers.</p>
+<h2>Privacy</h2>
+<ul>
+<li><strong>Reporter ids and IPs are never stored.</strong></li>
+<li>Each reporter id is replaced by <code>HMAC-SHA256(server secret, id)</code>.</li>
+<li>Each IP is cut to its /24 and hashed the same way.</li>
+<li>Without the secret, nobody can work backwards from these to a person.</li>
+<li><strong>Note text is never stored.</strong> We keep only its length, a 64-number fingerprint for spotting copies, and three yes/no flags. The note cannot leak because it is not there.</li>
+<li><strong>No exact location.</strong> The map shows only the official point for each area (Appendix B). On the phone, "near me" picks the nearest area on the phone itself and sends only the area code.</li>
+<li><strong>Masking.</strong> A number reported by fewer than 3 different people is shown masked, like <code>98XXXXX222</code>.</li>
+<li><strong>Evidence</strong> in a lookup shows only the time, channel, scam type and area. It never shows who reported, their IP, or their note.</li>
+<li><strong>"See all reports filed"</strong> lists every report on a number with the same fields, plus three yes/no proof badges. The number stays masked under 3 people, and verified numbers list nothing. What people wrote cannot be shown because it is never stored.</li>
+<li><strong>The city sheet and stats</strong> follow the same rules. A number shows in full only where the lookup would show it in full. Feed times are rounded to the hour, and every point is an official area point.</li>
+<li><strong>Speech and complaints stay on the phone.</strong> Speech is turned into text by the browser's own speech service, and no audio reaches our server. The complaint is built on the phone and goes only where the person sends it.</li>
+<li><strong>Logs</strong> keep only an allowed list of fields. They hold no reporter, IP, note or reported number.</li>
+<li><strong>Careful wording:</strong> "Reported by 5 people", never "fraudster". This applies in English and Hindi.</li>
+<li><strong>No login, no accounts, no analytics, no scraping.</strong></li>
+</ul>
+<p>The privacy audit loads full test worlds and then checks:
+- the database itself
+- the server log
+- every API reply
+- the app code</p>
+<p>Result: 0 failures. See <code>evidence/privacy_audit.md</code>, or run it yourself with <code>uv run python -m judge.privacy_audit</code>.</p>
+<h2>How the licence works</h2>
+<p><strong>The licence file.</strong>
+- It is a JSON document: <code>licence_id</code>, <code>licensee</code>, <code>issued_at</code>, <code>expires_at</code> and an <strong>Ed25519 signature</strong> over those four fields.
+- The server holds only the <strong>public key</strong>. The private key stays on the vendor laptop (<code>~/.scammap-keys/</code>) and is never in this repository.
+- Changing any field breaks the signature.</p>
+<p><strong>Checking.</strong> The licence is checked on <strong>every request</strong>, not only at start-up.
+- The active licence is cached for at most 5 seconds, so a new upload or an expiry takes effect within seconds, with no restart.
+- When it expires, every address except <code>/health</code> and <code>/license</code> answers <code>403 LICENSE_EXPIRED</code>, and the app shows a "Licence expired" screen.
+- <strong>Data is locked, never deleted.</strong></p>
+<p><strong>Renewing.</strong> <code>POST /license</code> with a new signed file works at once. The old data is all still there.</p>
+<p><strong>Clock rollback.</strong> The server stores the latest time it has seen, every 10 seconds, in the database.
+- If the clock is moved back more than 5 minutes behind that time, or behind the licence's issue time, the licence is refused.
+- Turning the clock back cannot make an expired licence valid again.</p>
+<p><strong>State.</strong> The licence and the high-water time live in the database, so a restart or a second server instance agrees.</p>
+<p><strong>Demo files.</strong></p>
+<pre><code class="language-bash"># long licence, ready in the repo
+licences/demo-bank-long.json
+
+# 5-minute licence, minted right before the demo so it is still fresh
+uv run python -m scripts.mint_licence --licensee &quot;Demo Bank&quot; --minutes 5 --out licences/demo-5min.json
+</code></pre>
+<p>The four-step demo from the brief can be run and timed automatically:</p>
+<pre><code class="language-bash">uv run python -m judge.licence_demo --base-url https://scammap-huii.onrender.com
+</code></pre>
+<p>It passed all 4 steps on the live server (<code>evidence/licence_demo_20261031-1528.md</code>).</p>
+<p>To present it live, one step per Enter key (it mints the 5-minute licence on the spot, shows a forged licence being refused, counts down to the expiry, then renews with the long licence):</p>
+<pre><code class="language-bash">scripts/demo_licence.sh            # MIN=2 for a shorter wait
+</code></pre>
+<h2>How we tested it</h2>
+<p><code>judge/world.py</code> builds test worlds <strong>only from the brief</strong>. Each world has:
+- real victims (3 to 30 per number)
+- spammers
+- fake-account farms
+- friends piling on
+- real verified numbers
+- area spikes and new scam types
+- every number written in many formats</p>
+<p><code>judge/run.py</code> plays a world against a server and grades every scoring row of the brief.</p>
+<p>Rule: we tuned on some seeds and <strong>tested on fresh seeds we had never tuned on</strong>.</p>
+<p>Live server, held-out seeds 9101 to 9110 (about 6,600 reports):</p>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tricks never become Known scam (friends, fake accounts, spam)</td>
+<td>100 / 100</td>
+</tr>
+<tr>
+<td>Real scams found as Known scam</td>
+<td>199 / 200</td>
+</tr>
+<tr>
+<td>Numbers with 1 or 2 reporters stay Suspicious</td>
+<td>160 / 160</td>
+</tr>
+<tr>
+<td>Under 3 people, number hidden</td>
+<td>434 / 434</td>
+</tr>
+<tr>
+<td>Every way of typing a number gives the same answer</td>
+<td>3,250 / 3,250</td>
+</tr>
+<tr>
+<td>Replies that leak a reporter, IP or note</td>
+<td>0 of 11,421</td>
+</tr>
+<tr>
+<td>Map, spike and new-type alerts</td>
+<td>all pass</td>
+</tr>
+<tr>
+<td>Fake reports never set off an alert</td>
+<td>40 / 40</td>
+</tr>
+<tr>
+<td>Lookup time</td>
+<td>p50 82 ms, p95 166 ms, p99 294 ms (inside the server: p50 1.8 ms)</td>
+</tr>
+</tbody>
+</table>
+<p>There is also a scenario catalogue (<code>judge/catalog.py</code>) with 65 stories, from "10 friends with 2 accounts each" to "a scammer floods their own number". Results: <a href="https://github.com/Saivinay24/verifire/blob/HEAD/docs/SCENARIOS.md">docs/SCENARIOS.md</a>.</p>
+<p><strong>Blind evaluation.</strong> An outside agent that saw only the brief (never our code or tests) wrote its own attack suite and ran it against the server. Every named trick, alone or combined, was stopped in 160 of 160 attack runs, and none of those fakes set off an alert. The failures it found were traced to their exact cause in the engine and fixed; the few cases we chose not to change are listed under Known limits.</p>
+<h2>Known limits</h2>
+<p>We state these rather than hide them.</p>
+<ul>
+<li><strong>Three victims with blank notes and little proof</strong> stay Suspicious. This is deliberate: the bar is 1.7, and three blank clicks must never pass.</li>
+<li><strong>Friends who each write their own convincing scam story</strong> can look like real victims. No report-only system can tell them apart. The defences are the dispute feature and the verified list.</li>
+<li><strong>In a fast viral wave</strong>, some real victims sharing one connection within 15 minutes are merged. About 24 of 30 are counted.</li>
+<li><strong>Many real victims with only blank notes</strong> (no words, no screenshot, no loss) stay Suspicious, because that is exactly the shape of the "40 friends" attack. And victims who all write the same few short Hindi or Hinglish phrases can be merged as copies; truly different Hindi notes are counted normally.</li>
+<li><strong>Say it on iPhone needs Safari.</strong> Apple lets only Safari use the speech engine, so in Chrome, Firefox or Edge on iPhone the button opens the note with the keyboard up and points to the keyboard's mic key, which works in English and Hindi.</li>
+<li><strong>The constants were tuned on our own simulator</strong>, because no public, labelled set of Indian scam reports exists. The held-out seeds were never used for tuning.</li>
+</ul>
+<h2>Repository layout</h2>
+<pre><code>app/
+  api/        routes, health, licence gate
+  domain/     trust rules, constants, number formats, notes fingerprint, licence check, alerts
+  services/   reports, lookup (with cache), areas and map, licence state, challenges
+  repos/      database tables and queries
+  static/     the mobile web app (HTML, CSS, JS)
+migrations/   Alembic database migrations
+licences/     the bootstrap and long demo licences (public, signed)
+scripts/      mint_licence.py (vendor laptop only), demo_licence.sh, keepalive.py
+judge/        test world, grader, scenario catalogue, privacy audit, licence demo, demo data
+tests/        110 unit and API contract tests
+evidence/     saved results of every live run
+docs/         trust parameters and trust engine walk-through
+</code></pre></div></div></body></html>

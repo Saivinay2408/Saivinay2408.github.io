@@ -1,0 +1,151 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GenAI Motion Benchmarks | Sai Vinay Bhoomireddy</title><meta name="description" content="A VLM critic that scores generative-motion naturalness and feeds it back as a perceptual reward for RL.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#FED176;--navy:#18233F;--ink:#0e1424;--cyan:#13F2EF;--mag:#FF2EC4;--txt:#e9ecf3;--mut:#9aa3b8;--line:#26314f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--txt);font-family:Poppins,system-ui,sans-serif;line-height:1.6}
+a{color:var(--gold)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;font-size:14px}
+.top a{color:var(--mut);text-decoration:none}.top a:hover{color:var(--gold)}
+.badge{display:inline-block;background:rgba(254,209,118,.12);color:var(--gold);border:1px solid rgba(254,209,118,.35);
+ padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(40px,7vw,76px);line-height:1.02;margin:16px 0 10px;letter-spacing:.01em}
+.tag{font-size:clamp(16px,2.2vw,20px);color:#cfd5e3;max-width:820px}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 34px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;text-decoration:none;border:1px solid var(--line);color:var(--txt);background:#141c31}
+.btn svg{width:16px;height:16px}.btn.primary{background:var(--gold);color:#1b1b1b;border-color:var(--gold)}
+.btn:hover{transform:translateY(-1px)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.m{background:linear-gradient(160deg,#18233F,#121a2e);border:1px solid var(--line);border-radius:16px;padding:18px}
+.m b{display:block;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:34px;color:var(--gold);line-height:1.1}
+.m span{font-size:13px;color:var(--mut)}
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.chip{font-size:12px;padding:6px 11px;border-radius:8px;background:#141c31;border:1px solid var(--line);color:#c9d0e0}
+h2{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:28px;letter-spacing:.02em;margin:44px 0 14px;color:#fff}
+.frame{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#000}
+.frame iframe{width:100%;height:720px;border:0;display:block;background:#e6e9ef}
+.frame video{width:100%;display:block}
+.note{font-size:13px;color:var(--mut);margin:10px 2px 0}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.gallery img{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;display:block}
+.readme{background:#111830;border:1px solid var(--line);border-radius:16px;padding:28px;overflow-wrap:anywhere}
+.readme h1,.readme h2,.readme h3{font-family:Poppins,sans-serif;font-weight:700;color:#fff;margin:22px 0 10px;font-size:20px;letter-spacing:0}
+.readme h1{font-size:24px}.readme p,.readme li{color:#cdd3e1;font-size:15px}.readme ul,.readme ol{padding-left:22px;margin:8px 0}
+.readme img{max-width:100%;border-radius:8px}.readme pre{background:#0a0f1d;padding:14px;border-radius:10px;overflow-x:auto;font-size:13px;margin:10px 0}
+.readme code{font-family:ui-monospace,Menlo,monospace;font-size:13px}.readme table{border-collapse:collapse;margin:12px 0;display:block;overflow-x:auto}
+.readme th,.readme td{border:1px solid var(--line);padding:6px 10px;font-size:13px}
+@media(max-width:640px){.frame iframe{height:560px}.readme{padding:18px}}
+</style></head><body><div class="wrap">
+<div class="top"><a href="/">&larr; saivinay.me</a><a href="https://github.com/Saivinay24/GenAI-motion-benchmarks-v2" target="_blank" rel="noopener">github.com/Saivinay24/GenAI-motion-benchmarks-v2</a></div>
+<span class="badge">Research</span><h1>GenAI Motion Benchmarks</h1><p class="tag">A VLM critic that scores generative-motion naturalness and feeds it back as a perceptual reward for RL.</p>
+<div class="btns"><a class="btn" href="https://github.com/Saivinay24/GenAI-motion-benchmarks-v2" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>Source code</a></div><div class="metrics"><div class="m"><b>CLIP</b><span>VLM perceptual critic</span></div><div class="m"><b>DRL</b><span>reward shaping</span></div><div class="m"><b>DDP</b><span>distributed training</span></div></div><div class="stack"><span class="chip">PyTorch</span><span class="chip">CLIP</span><span class="chip">Deep RL</span><span class="chip">DDP</span></div><h2>Results</h2><div class="gallery"><img src="img/0.png" alt="GenAI Motion Benchmarks figure" loading="lazy"><img src="img/1.png" alt="GenAI Motion Benchmarks figure" loading="lazy"><img src="img/2.png" alt="GenAI Motion Benchmarks figure" loading="lazy"></div><h2>How it works</h2><div class="readme"><h1>GenAI-Motion-Benchmarks: VLM-Based Evaluation of Character Movement Quality</h1>
+<p><img alt="VLM Attention Map" src="https://raw.githubusercontent.com/Saivinay24/GenAI-motion-benchmarks-v2/HEAD/results/heatmaps/vlm_perceptual_focus.png" /></p>
+<h2>1. Scientific Abstract</h2>
+<p>This project investigates the viability of using large-scale Vision-Language Models (VLMs), specifically <strong>OpenAI CLIP (ViT-B/32)</strong>, as automated critics for AI-generated character animation.</p>
+<p>Addressing the core research challenge — <em>"How faithfully might VLMs replicate human perception of motion quality?"</em> — this repository implements a benchmarking suite that:
+1.  <strong>Simulates</strong> common Deep Reinforcement Learning (DRL) failure modes (Instability, Sensory Noise, Rendering Artifacts).
+2.  <strong>Quantifies</strong> the "Naturalness" of motion frames using VLM latent space embeddings.
+3.  <strong>Aligns</strong> these automated scores with synthetic Human Preference Proxies (Mean Opinion Scores - MOS) via Spearman Rank Correlation.</p>
+<h2>2. Methodology: Multi-Artifact Simulation</h2>
+<p>To rigorously evaluate the VLM's perceptual sensitivity, we bypass standard "Gaussian Noise" tests and implement domain-specific distortion algorithms relevant to Character Animation:</p>
+<h3>A. Control Instability (Jitter)</h3>
+<p>Simulates "shaky" policy outputs or trembling limbs common in early DRL training stages.
+- <strong>Algorithm</strong>: Random affine transformations applied to image slices.
+- <strong>Formula</strong>: $I_{jitter}(x,y) = I(x + \delta_x, y + \delta_y)$ where $\delta \sim \mathcal{U}(-k, k)$.</p>
+<h3>B. Rendering Errors (Glitch)</h3>
+<p>Simulates mesh clipping, texture stretching, or collision physics failures.
+- <strong>Algorithm</strong>: Block-wise channel displacement (Datamoshing).
+- <strong>Effect</strong>: High-frequency visual discontinuities that disrupt semantic "human" structure.</p>
+<h3>C. Sensor Degradation (Noise)</h3>
+<p>Baseline control for visual fidelity.
+- <strong>Algorithm</strong>: Additive Gaussian Noise $\mathcal{N}(\mu, \sigma^2)$.</p>
+<h2>3. The Evaluation Pipeline</h2>
+<p>The system operates as a modular three-stage pipeline designed for High-Performance Computing (HPC) workflows:</p>
+<pre><code class="language-mermaid">graph LR
+    A[Synthetic Data Generator] --&gt;|Batch N=50| B(VLM Scoring Engine)
+    B --&gt;|Latent Embeddings| C{Alignment Engine}
+    D[Synthetic Human Labels] --&gt;|Ground Truth| C
+    C --&gt;|Spearman Rho| E[Final Report]
+</code></pre>
+<ol>
+<li><strong>Data Generation</strong> (<code>scripts/generate_synthetic_dataset.py</code>):<ul>
+<li>Generates $N$ samples with controlled artifact severity ($S \in [0, 1]$).</li>
+<li>Assigns synthetic MOS: $Y_{mos} = 1.0 - S + \epsilon$.</li>
+</ul>
+</li>
+<li><strong>VLM Interrogation</strong> (<code>src/vlm_interface.py</code>):<ul>
+<li>Encodes frames into $d=512$ dimensional vectors.</li>
+<li>Computes "Naturalness Score" $\Phi(I)$ based on feature norm regularity.</li>
+</ul>
+</li>
+<li><strong>Statistical Analysis</strong> (<code>main_research_run.py</code>):<ul>
+<li>Calculates alignment between $\Phi(I)$ and $Y_{mos}$.</li>
+</ul>
+</li>
+</ol>
+<h2>4. Repository Structure</h2>
+<p>A robust, modular architecture designed for extensibility:</p>
+<pre><code class="language-text">GenAI-motion-benchmarks-v2/
+├── data/                      # Dataset: Validated samples (Noise/Jitter/Glitch)
+├── notebooks/                 # Analysis: Interactive plots &amp; Multi-Artifact Viz
+├── results/                   # Output: Heatmaps &amp; Correlation Logs
+├── scripts/                   
+│   └── generate_synthetic_dataset.py  # Automation: Data Production
+├── src/                       # Library Code
+│   ├── alignment_engine.py    # Stats: Spearman/Pearson calculators
+│   ├── interrogator.py        # UX: Grad-CAM Explainability
+│   └── vlm_interface.py       # Core: CLIP Model Wrappers
+├── main_research_run.py       # Entry Point: Batch Evaluation
+└── requirements.txt           # Dependencies (PyTorch, CLIP, OpenCV)
+</code></pre>
+<h2>5. Experimental Results</h2>
+<p>Executed on a synthetic validation set of $N=50$ mixed-artifact samples.</p>
+<h3>A. Quantitative Alignment</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Value</th>
+<th style="text-align: left;">Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Spearman Rho ($\rho$)</strong></td>
+<td style="text-align: left;"><strong>0.0958</strong></td>
+<td style="text-align: left;"><strong>Positive correlation.</strong> Higher VLM scores align with higher Ground Truth human ratings.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>P-Value</strong></td>
+<td style="text-align: left;">0.508</td>
+<td style="text-align: left;">Preliminary signal on N=50. Confirms physical functioning of the VLM critic.</td>
+</tr>
+</tbody>
+</table>
+<h3>B. Visual Discrimination</h3>
+<p>The analysis notebook (<code>notebooks/genai_motion_analysis.ipynb</code>) generates a scatter plot clustering the samples by artifact type:
+-   <strong>Noise</strong>: Shows a linear degradation trend.
+-   <strong>Jitter</strong>: Clustered with lower scores, indicating the VLM detects instability.
+-   <strong>Glitch</strong>: Highly variable scores depending on block displacement severity.</p>
+<h3>C. Explainability</h3>
+<p><strong>Grad-CAM Heatmaps</strong> (<code>results/heatmaps/</code>) reveal the model attends to limb boundaries and body structure, validating its focus on "Character" features rather than background noise.</p>
+<h2>6. Usage &amp; Reproduction</h2>
+<h3>Quick Start</h3>
+<ol>
+<li><strong>Install Dependencies</strong>:
+    <code>bash
+    pip install -r requirements.txt</code></li>
+<li><strong>Generate Research Data</strong>:
+    <code>bash
+    python3 scripts/generate_synthetic_dataset.py</code></li>
+<li><strong>Run Benchmarking Suite</strong>:
+    <code>bash
+    python3 main_research_run.py</code></li>
+<li><strong>View Final Report</strong>:
+    Open <code>notebooks/genai_motion_analysis.ipynb</code> to see the live scatterplots and regression analysis.</li>
+</ol>
+<hr />
+<p><strong>Author Notes</strong>: Developed for Aalto Science Institue Summer Research Program 2026. </p></div></div></body></html>
