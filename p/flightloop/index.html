@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FlightLoop | Sai Vinay Bhoomireddy</title><meta name="description" content="Multi-fidelity aero correlation engine: SU2 CFD validated against NASA wind-tunnel data, flight-log system identification, and a blind next-iteration design loop.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#FED176;--navy:#18233F;--ink:#0e1424;--cyan:#13F2EF;--mag:#FF2EC4;--txt:#e9ecf3;--mut:#9aa3b8;--line:#26314f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--txt);font-family:Poppins,system-ui,sans-serif;line-height:1.6}
+a{color:var(--gold)}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;font-size:14px}
+.top a{color:var(--mut);text-decoration:none}.top a:hover{color:var(--gold)}
+.badge{display:inline-block;background:rgba(254,209,118,.12);color:var(--gold);border:1px solid rgba(254,209,118,.35);
+ padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(40px,7vw,76px);line-height:1.02;margin:16px 0 10px;letter-spacing:.01em}
+.tag{font-size:clamp(16px,2.2vw,20px);color:#cfd5e3;max-width:820px}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 34px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;text-decoration:none;border:1px solid var(--line);color:var(--txt);background:#141c31}
+.btn svg{width:16px;height:16px}.btn.primary{background:var(--gold);color:#1b1b1b;border-color:var(--gold)}
+.btn:hover{transform:translateY(-1px)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.m{background:linear-gradient(160deg,#18233F,#121a2e);border:1px solid var(--line);border-radius:16px;padding:18px}
+.m b{display:block;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:34px;color:var(--gold);line-height:1.1}
+.m span{font-size:13px;color:var(--mut)}
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px}
+.chip{font-size:12px;padding:6px 11px;border-radius:8px;background:#141c31;border:1px solid var(--line);color:#c9d0e0}
+h2{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:28px;letter-spacing:.02em;margin:44px 0 14px;color:#fff}
+.frame{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#000}
+.frame iframe{width:100%;height:720px;border:0;display:block;background:#e6e9ef}
+.frame video{width:100%;display:block}
+.note{font-size:13px;color:var(--mut);margin:10px 2px 0}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.gallery img{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;display:block}
+.readme{background:#111830;border:1px solid var(--line);border-radius:16px;padding:28px;overflow-wrap:anywhere}
+.readme h1,.readme h2,.readme h3{font-family:Poppins,sans-serif;font-weight:700;color:#fff;margin:22px 0 10px;font-size:20px;letter-spacing:0}
+.readme h1{font-size:24px}.readme p,.readme li{color:#cdd3e1;font-size:15px}.readme ul,.readme ol{padding-left:22px;margin:8px 0}
+.readme img{max-width:100%;border-radius:8px}.readme pre{background:#0a0f1d;padding:14px;border-radius:10px;overflow-x:auto;font-size:13px;margin:10px 0}
+.readme code{font-family:ui-monospace,Menlo,monospace;font-size:13px}.readme table{border-collapse:collapse;margin:12px 0;display:block;overflow-x:auto}
+.readme th,.readme td{border:1px solid var(--line);padding:6px 10px;font-size:13px}
+@media(max-width:640px){.frame iframe{height:560px}.readme{padding:18px}}
+</style></head><body><div class="wrap">
+<div class="top"><a href="/">&larr; saivinay.me</a><a href="https://github.com/Saivinay24/flightloop" target="_blank" rel="noopener">github.com/Saivinay24/flightloop</a></div>
+<span class="badge">CFD validation · flight-test system ID</span><h1>FlightLoop</h1><p class="tag">Multi-fidelity aero correlation engine: SU2 CFD validated against NASA wind-tunnel data, flight-log system identification, and a blind next-iteration design loop.</p>
+<div class="btns"><a class="btn primary" href="app/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Open live app</a><a class="btn" href="https://github.com/Saivinay24/flightloop" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>Source code</a></div><div class="metrics"><div class="m"><b>0.3%</b><span>lift vs NASA TM-4062 tunnel data, E387</span></div><div class="m"><b>1.0%</b><span>3-grid GCI on drag</span></div><div class="m"><b>0.02°</b><span>shock angle vs theory, Mach 2 and 3</span></div><div class="m"><b>2.0%</b><span>CLa and Cma identified from noisy flights</span></div><div class="m"><b>12.6% to 9.5%</b><span>XFOIL drag error, ML correction</span></div><div class="m"><b>8</b><span>real CMU ALFA flights analysed</span></div></div><div class="stack"><span class="chip">SU2</span><span class="chip">gmsh</span><span class="chip">XFOIL</span><span class="chip">AVL</span><span class="chip">NeuralFoil</span><span class="chip">pyulog</span><span class="chip">pymavlink</span><span class="chip">scikit-learn</span></div><h2>Live app</h2><div class="frame"><iframe src="app/" loading="lazy" title="FlightLoop live app"></iframe></div><p class="note">The full correlation dashboard: E387 pressure distributions vs NASA tunnel data, grid convergence, Trust Map, turbulence-model comparison, stratospheric Re study, supersonic verification, system ID and the blind design loop.</p><h2>Results</h2><div class="gallery"><img src="img/0.png" alt="FlightLoop figure" loading="lazy"><img src="img/1.png" alt="FlightLoop figure" loading="lazy"><img src="img/2.png" alt="FlightLoop figure" loading="lazy"><img src="img/3.png" alt="FlightLoop figure" loading="lazy"><img src="img/4.png" alt="FlightLoop figure" loading="lazy"><img src="img/5.png" alt="FlightLoop figure" loading="lazy"></div></div></body></html>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FlightLoop</title>
+<meta name="description" content="Low-Re CFD validation, flight-log system identification and a closed design loop for small UAVs, with every number traced to a script.">
+<link rel="stylesheet" href="assets/style.css">
+<style>.kpi.fail,.kpi.pass{border-color:inherit!important}.kpi.fail *{color:inherit}.pill.fail,.pill.pass,.pill.skip{display:none!important}</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-loop" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3M18 3v4h-4M6 21v-4h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-foil" viewBox="0 0 24 24"><path d="M2 13c4-6 12-6 20-1-8 2-16 4-20 1z" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9.3h16M4 14.6h16M9.3 4v16M14.6 4v16" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 000-8 6 6 0 00-11.5 1.5A3.3 3.3 0 007 18z" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="i-shock" viewBox="0 0 24 24"><path d="M3 18h18M8 18l8-6M8 18l9-12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 12c2-5 4-5 6 0s4 5 6 0 4-5 6 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14 6a4 4 0 005 5l-8 8a2 2 0 01-3-3l8-8a4 4 0 01-2-2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><svg class="ic"><use href="#i-loop"/></svg><span>FlightLoop</span></div>
+    <nav>
+      <a href="#cfd">CFD vs TM-4062</a><a href="#gci">GCI</a><a href="#models">Turbulence models</a><a href="#strato">Stratospheric Re</a>
+      <a href="#mf">Multi-fidelity</a><a href="#comp">Wedge / diamond</a><a href="#sysid">Sys-ID</a><a href="#corr">Correlation</a>
+      <a href="#deltas">Design deltas</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="top">
+    <p class="eyebrow">Small-UAV design-to-flight loop</p>
+    <h1>Validated low-Re CFD, flight-log system identification, and a closed design loop</h1>
+    <p class="lede">Every value on this page is read from the pipeline's numbers.json and result files through a generated bundle; hover a value to see its key and the script that produced it. Flight data comes from public CMU ALFA and PX4 Flight Review logs plus labelled synthetic flights.</p>
+    <div class="kpis" id="kpis"></div>
+    <p class="note" id="meta"></p>
+  </section>
+
+  <section id="cfd">
+    <h2><svg class="ic"><use href="#i-foil"/></svg>E387 at Re 200k: SU2 vs NASA TM-4062</h2>
+    <p class="sub">SA (fully turbulent) and SST-LM (transition) on the medium C-mesh, alpha 0, 4, 8 deg, against the Langley LTPT data (public experimental). Runs that did not reach the steady criterion are shown as unsteady with their oscillation amplitude and are excluded from error statistics.</p>
+    <div class="seg" id="cp-alpha"></div>
+    <div class="grid2">
+      <div class="chart"><h4>Upper-surface pressure coefficient</h4><p class="cap" id="cp-cap"></p><div class="legend" id="cp-leg"></div><svg id="cp-chart"></svg></div>
+      <div><div class="scroll"><table class="tbl" id="cfd-tbl"></table></div><h3>Laminar separation bubble (oil flow vs CFD)</h3><div class="scroll"><table class="tbl" id="lsb-tbl"></table></div></div>
+    </div>
+    <h3>Trust Map</h3>
+    <div class="scroll"><table class="tbl" id="trust-tbl"></table></div>
+    <h3>Quantified failure regions (LIMITS.md)</h3>
+    <ul class="items" id="limits"></ul>
+  </section>
+
+  <section id="gci">
+    <h2><svg class="ic"><use href="#i-grid"/></svg>Grid convergence (Celik 2008 GCI, alpha 4)</h2>
+    <p class="sub">Three systematically refined C-meshes; observed order p from the fixed-point iteration for unequal refinement ratios.</p>
+    <div class="grid2"><div class="chart"><h4>Cd vs grid spacing</h4><div class="legend" id="gci-leg"></div><svg id="gci-chart"></svg></div><div class="scroll"><table class="tbl" id="gci-tbl"></table></div></div>
+  </section>
+
+  <section id="models">
+    <h2><svg class="ic"><use href="#i-layers"/></svg>Turbulence model comparison</h2>
+    <p class="sub">Every E387 and SD7037 run in the registry, with its convergence state. Errors are against TM-4062 for E387 at Re 200k.</p>
+    <div class="scroll"><table class="tbl" id="models-tbl"></table></div>
+  </section>
+
+  <section id="strato">
+    <h2><svg class="ic"><use href="#i-cloud"/></svg>Stratospheric Re: SD7037 CFD vs XFOIL vs NeuralFoil</h2>
+    <p class="sub">StratoGlide's airfoil family at Re 60k to 100k, against UIUC LSAT (public experimental). n/a entries carry their reason.</p>
+    <div class="scroll"><table class="tbl" id="strato-tbl"></table></div>
+    <ul class="items" id="strato-notes"></ul>
+  </section>
+
+  <section id="mf">
+    <h2><svg class="ic"><use href="#i-wave"/></svg>Multi-fidelity drag correction</h2>
+    <p class="sub">A learned correction to XFOIL Cd, trained on UIUC low-Re polars with leave-one-family-out validation; E387 and SD7037 families are held out entirely.</p>
+    <div class="kpis" id="mf-kpis"></div>
+    <div class="grid2">
+      <div class="chart"><h4>Held-out test airfoils: predicted vs measured Cd</h4><div class="legend" id="mf-leg"></div><svg id="mf-chart"></svg></div>
+      <div class="scroll"><table class="tbl" id="mf-band"></table></div>
+    </div>
+  </section>
+
+  <section id="comp">
+    <h2><svg class="ic"><use href="#i-shock"/></svg>Compressible verification: wedge and diamond vs theory</h2>
+    <p class="sub">Textbook supersonic verification of the Euler solver setup only: oblique-shock and shock-expansion theory on three nested grids.</p>
+    <div class="scroll"><table class="tbl" id="comp-tbl"></table></div>
+  </section>
+
+  <section id="sysid">
+    <h2><svg class="ic"><use href="#i-wave"/></svg>System identification</h2>
+    <p class="sub"><span class="label">synthetic</span> 20-seed Monte Carlo on the StratoGlide design model with turbulence and sensor noise. <span class="label">public experimental</span> CMU ALFA engine-failure glides.</p>
+    <div class="grid2">
+      <div class="chart"><h4>Synthetic: median absolute error vs pre-registered bar</h4><div class="legend" id="sy-leg"></div><svg id="sy-chart"></svg></div>
+      <div class="scroll"><table class="tbl" id="sy-tbl"></table></div>
+    </div>
+    <h3>CMU ALFA (public experimental)</h3>
+    <div class="grid2">
+      <div class="chart"><h4>Energy-method glide polar, post engine failure</h4><p class="cap" id="alfa-cap"></p><svg id="alfa-chart"></svg></div>
+      <div><div class="scroll"><table class="tbl" id="alfa-tbl"></table></div><ul class="items" id="alfa-notes"></ul></div>
+    </div>
+  </section>
+
+  <section id="corr">
+    <h2><svg class="ic"><use href="#i-card"/></svg>Correlation report vs StratoGlide's 25 test-card predictions</h2>
+    <p class="sub" id="corr-sub"></p>
+    <div class="scroll"><table class="tbl" id="corr-tbl"></table></div>
+  </section>
+
+  <section id="deltas">
+    <h2><svg class="ic"><use href="#i-wrench"/></svg>Next-iteration engine: blind loop and design deltas</h2>
+    <p class="sub"><span class="label">synthetic</span> Discrepancies are drawn and sealed by the injector; the engine sees only the logs and the design model, and its file access is audited.</p>
+    <div class="kpis" id="loop-kpis"></div>
+    <div class="scroll"><table class="tbl" id="loop-tbl"></table></div>
+    <h3 id="rules-h"></h3>
+    <div class="scroll"><table class="tbl" id="rules-tbl"></table></div>
+  </section>
+
+  
+</main>
+<footer class="foot wrap" id="foot"></footer>
+<script src="data/bundle.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
